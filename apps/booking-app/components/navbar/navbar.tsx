@@ -22,7 +22,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   flexWrap: 'wrap',
   // Override media queries injected by theme.mixins.toolbar
   '@media all': {
-    minHeight: 128,
+    minHeight: 100,
   },
 }));
 
@@ -71,7 +71,7 @@ export function Navbar(props: NavbarProps) {
                   shrink: true,
                 }}
               />
-              <Button variant="contained" endIcon={<Search />}>
+              <Button variant="contained" endIcon={<Search />} href="search-result">
                 Wyszukaj
               </Button>
             </Box>

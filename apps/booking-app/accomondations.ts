@@ -15,7 +15,7 @@ export interface Accommodation {
     description: string;
 }
 
-export const accommodation: Accommodation[] = [
+export const accomondation: Accommodation[] = [
     {
         id: '1',
         mainImage: {
@@ -49,7 +49,7 @@ export const accommodation: Accommodation[] = [
         location: 'Sundsvall, Szwecja',
         price: 850,
         rate: 4,
-        description: 'Ta urocza skandynawska chatka położona jest w spokojnej okolicy i oferuje gościom wiele udogodnień. Chatka składa się z dwóch przytulnych sypialni, salonu z kominkiem oraz w pełni wyposażonej kuchni i łazienki. Dom posiada również przestronny taras, który zapewnia wspaniałe widoki na okolicę oraz miejsce do relaksu na świeżym powietrzu. Chatka jest idealnym miejscem na romantyczny wypad dla pary lub spokojny wypoczynek dla niewielkiej grupy przyjaciół lub rodziny. Wykończenie wnętrza w stylu skandynawskim nadaje chatce przytulnego charakteru, a drewniane elementy dodają uroku i ciepła.'
+        description: 'Ta urocza skandynawska chatka położona jest w spokojnej okolicy. Składa się z dwóch przytulnych sypialni, salonu z kominkiem oraz w pełni wyposażonej kuchni i łazienki. Dom posiada również przestronny taras. Wykończenie wnętrza w stylu skandynawskim nadaje chatce przytulnego charakteru, a drewniane elementy dodają uroku i ciepła.'
     },
     {
         id: '2',
