@@ -1,24 +1,84 @@
 import * as React from 'react';
+import { Dayjs } from 'dayjs';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Search from '@mui/icons-material/Search';
 
 export interface NavbarProps { }
 
+const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  gap: 10,
+  paddingTop: theme.spacing(1),
+  paddingBottom: theme.spacing(2),
+  flexWrap: 'wrap',
+  // Override media queries injected by theme.mixins.toolbar
+  '@media all': {
+    minHeight: 128,
+  },
+}));
+
 export function Navbar(props: NavbarProps) {
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = React.useState<Dayjs | null>(null);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Booking-app
-          </Typography>
-          <Button color="inherit">Zaloguj się</Button>
-          <Button color="inherit">Zarejestruj się</Button>
-        </Toolbar>
+      <AppBar position="static" color="default">
+        <StyledToolbar>
+          <Button color="inherit" href='/'>Booking-app</Button>
+          <Box component="div" sx={{ flexGrow: 1, alignSelf: 'flex-end', display: 'flex', justifyContent: 'center' }}>
+            <Box
+              component="form"
+              sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 2 }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField id="outlined-basic" label="Gdzie?" color="primary" variant="outlined" />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Od kiedy?"
+                  value={startDate}
+                  onChange={(newValue) => {
+                    setStartDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Do kiedy?"
+                  value={endDate}
+                  onChange={(newValue) => {
+                    setEndDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+              <TextField
+                id="outlined-number"
+                label="Liczba osób"
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <Button variant="contained" endIcon={<Search />}>
+                Wyszukaj
+              </Button>
+            </Box>
+          </Box>
+          <Button color="inherit" href='/login'>Zaloguj się</Button>
+          <Button color="inherit" href='/register'>Zarejestruj się</Button>
+        </StyledToolbar>
       </AppBar>
     </Box>
   );

@@ -6,7 +6,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
-import { Accommodation } from 'apps/booking-app/pages';
+import { Accommodation } from 'apps/booking-app/accomondations';
 
 export interface AccommodationMainPageProps {
   accomondation: Accommodation;
@@ -17,8 +17,8 @@ export function AccommodationMainPage(props: AccommodationMainPageProps) {
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         sx={{ height: 250 }}
-        image={props.accomondation.image}
-        title="green iguana"
+        image={props.accomondation.mainImage.src}
+        title={props.accomondation.mainImage.title}
       />
       <CardContent>
         <Rating name="read-only" size="small" value={props.accomondation.rate} precision={0.5} readOnly />
@@ -33,7 +33,7 @@ export function AccommodationMainPage(props: AccommodationMainPageProps) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="medium">Zobacz szczegóły</Button>
+        <Button size="medium" href={`/accomondation-details/${props.accomondation.id}`}>Zobacz szczegóły</Button>
       </CardActions>
     </Card>
   );

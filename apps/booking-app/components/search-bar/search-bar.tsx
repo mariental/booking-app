@@ -1,0 +1,13 @@
+import styles from './search-bar.module.css';
+
+export interface SearchBarProps {}
+
+export function SearchBar(props: SearchBarProps) {
+  return (
+    <div className={styles['container']}>
+      <h1>Welcome to SearchBar!</h1>
+    </div>
+  );
+}
+
+export default SearchBar;
