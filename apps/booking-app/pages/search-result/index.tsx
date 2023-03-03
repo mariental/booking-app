@@ -20,6 +20,7 @@ import Container from '@mui/material/Container';
 import ListItemText from '@mui/material/ListItemText';
 import { Theme, useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import Pagination from '@mui/material/Pagination';
 
 const category = [
   'Domy i apartamenty na wyłączność', 'Apartamenty', 'Hotele', 'Domy wakacyjne', 'Kwatery prywatne'
@@ -87,7 +88,7 @@ export function SearchResult(props: SearchResultProps) {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ mx: 'auto', mt: 6, display: 'flex' }}>
+    <Container maxWidth="xl" sx={{ mx: 'auto', my: 6, display: 'flex' }}>
       <Grid container spacing={{ xs: 2, md: 6 }} columns={{ xs: 1, md: 12 }} sx={{ justifyContent: 'center' }}>
         <Grid item xs={1} md={3}>
           <div>
@@ -157,7 +158,7 @@ export function SearchResult(props: SearchResultProps) {
             </Accordion>
           </div>
         </Grid>
-        <Grid item xs={1} md={7}>
+        <Grid item xs={1} md={8}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={0} sx={{ mb: 1 }}>
             <FormControl sx={{ m: 1, width: 300 }} size="small">
               <InputLabel id="demo-simple-select-label">Typ obiektu</InputLabel>
@@ -198,6 +199,9 @@ export function SearchResult(props: SearchResultProps) {
           {accomondation.map((item) =>
             <AccomondationSearchListItem accomondation={item} />
           )}
+          <Stack alignItems="center">
+            <Pagination count={10} shape="rounded" size="large" color="primary" sx={{ alignContent: 'center' }} />
+          </Stack>
         </Grid>
       </Grid>
     </Container>
