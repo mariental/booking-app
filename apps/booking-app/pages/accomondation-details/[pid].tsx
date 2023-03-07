@@ -1,5 +1,6 @@
-import { useRouter } from 'next/router';
 import * as React from 'react';
+import { accommodation } from 'apps/booking-app/accomondations';
+import { useRouter } from 'next/router';
 import Container from '@mui/material/Container';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -7,7 +8,6 @@ import Box from '@mui/system/Box';
 import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import DetailsInfo from 'apps/booking-app/components/details-info/details-info';
-import { accommodation } from 'apps/booking-app/accomondations';
 import InformationsAndPrices from 'apps/booking-app/components/informations-and-prices/informations-and-prices';
 
 export interface AccomondationDetailsProps { }
@@ -58,6 +58,10 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
     setValue(index);
   };
 
+  React.useEffect(() => {
+    console.log(accommodation.find(item => item.id === pid))
+  })
+
   return (
     <Container maxWidth="xl" sx={{ mx: 'auto', mt: 4, display: 'flex' }}>
       <Box sx={{ width: '100%' }}>
@@ -79,7 +83,6 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <DetailsInfo currentAccommodation={accommodation.find((item) => item.id === pid)}/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <InformationsAndPrices/>

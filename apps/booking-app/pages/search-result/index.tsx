@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
-import { accomondation } from '../../accomondations';
+import { accommodation } from '../../accomondations';
 import AccomondationSearchListItem from '../../components/accomondation-search-list-item/accomondation-search-list-item';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -196,7 +196,7 @@ export function SearchResult(props: SearchResultProps) {
               </Select>
             </FormControl>
           </Stack>
-          {accomondation.map((item) =>
+          {accommodation.map((item) =>
             <AccomondationSearchListItem accomondation={item} />
           )}
           <Stack alignItems="center">
