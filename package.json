@@ -11,6 +11,7 @@
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.11",
     "@mui/styled-engine-sc": "^5.11.11",
+    "@mui/x-data-grid": "^6.0.0",
     "@mui/x-date-pickers": "^5.0.20",
     "@nrwl/next": "15.8.1",
     "dayjs": "^1.11.7",

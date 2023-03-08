@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import DetailsInfo from 'apps/booking-app/components/details-info/details-info';
 import InformationsAndPrices from 'apps/booking-app/components/informations-and-prices/informations-and-prices';
+import AccommondationFacilities from 'apps/booking-app/components/accommondation-facilities/accommondation-facilities';
 
 export interface AccomondationDetailsProps { }
 
@@ -88,7 +89,7 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
           <InformationsAndPrices/>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Item Three
+          <AccommondationFacilities/>
         </TabPanel>
       </Box>
     </Container>

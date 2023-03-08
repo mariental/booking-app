@@ -1,17 +1,23 @@
 import * as React from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
+import AccommondationRoom from '../accommondation-room/accommondation-room';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import Alert from '@mui/material/Alert';
-import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
-import SingleBedIcon from '@mui/icons-material/SingleBed';
-import WeekendOutlinedIcon from '@mui/icons-material/WeekendOutlined';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import SendIcon from '@mui/icons-material/Send';
 
 export interface InformationsAndPricesProps { }
+
 
 const facilities = [
   '1 domek na wyłączność',
@@ -30,81 +36,67 @@ const moreFacilties = [
   'toaleta', 'sofa', 'wanna lub prysznic', 'ręczniki', 'pościel', 'środki czystości', 'przyjazny alergikom', 'prywatne wejście', 'telewizor', 'lodówka', 'moskitiera', 'kuchenka mikrofalowa', 'ogrzewanie', 'suszarka do włosów', 'przybory kuchenne', 'aneks kuchenny', 'długie łóżka (> 2 metry)', 'czajnik elektryczny', 'meble ogrodowe', 'stół na świeżym powietrzu', ' szafa lub garderoba', 'płyta kuchenna', 'stół', 'całość zlokalizowana na parterze', 'wieszak na ubrania', 'papier toaletowy', 'rozkładana sofa', 'żel antybakteryjny'
 ]
 
+const beds = [{ type: 'podwójne', quantity: 1 }]
+const beds2 = [{ type: 'podwójne', quantity: 1 }, { type: 'pojedyncze', quantity: 2 }]
+
+const reservationDetails = []
+
+const name = 'Pokój Dwuosobowy z balkonem'
+
 export function InformationsAndPrices(props: InformationsAndPricesProps) {
+  const [reservationRoomsNumber, setReservationRoomsNumber] = React.useState(2)
+  const [reservationPrice, setreservationPrice] = React.useState(472)
+
   return (
-    <div>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-          sx={{ boxShadow: 1}}
-        >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Domek z 3 sypialniami
-          </Typography>
-          <Stack direction="row" spacing={2}>
-            <Alert severity="info" iconMapping={{ info: <BedOutlinedIcon fontSize="inherit" /> }}>1 łóżko podwójne</Alert>
-            <Alert severity="info" iconMapping={{ info: <SingleBedIcon fontSize="inherit" /> }}>1 łóżko pojedyncze</Alert>
-            <Alert severity="info" iconMapping={{ info: <WeekendOutlinedIcon fontSize="inherit" /> }}> 1 rozkładana sofa</Alert>
-          </Stack>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Stack direction="row" spacing={2} sx={{ mb: 2, maxWidth: 600 }}>
-            <Alert variant="outlined" severity="success" icon={false}>
-              Polecany dla 2 dorosłych, 1 dziecka
-            </Alert>
-            <Alert variant="outlined" severity="error" icon={false}>
-              Został tylko 1 pokój na naszej stronie
-            </Alert>
-          </Stack>
-          <Stack direction="row" spacing={2}>
-            {facilities.map((item) =>
-              <Chip label={item} variant="outlined" />
-            )}
-          </Stack>
-          <Accordion sx={{ mt: 2, maxWidth: 500 }}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1bh-content"
-              id="panel1bh-header"
-            >
-              <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                Dodatki
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {moreFacilties.map((item) =>
-                <Chip label={item} sx={{ m: 1 }} size="small" />
-              )}
-            </AccordionDetails>
-          </Accordion>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2bh-content"
-          id="panel2bh-header"
-        >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Domek z 4 sypialniami
-          </Typography>
-          <Stack direction="row" spacing={2}>
-            <Alert severity="info" iconMapping={{ info: <BedOutlinedIcon fontSize="inherit" /> }}>2 łóżka podwójne</Alert>
-            <Alert severity="info" iconMapping={{ info: <SingleBedIcon fontSize="inherit" /> }}>1 łóżko pojedyncze</Alert>
-            <Alert severity="info" iconMapping={{ info: <WeekendOutlinedIcon fontSize="inherit" /> }}> 1 rozkładana sofa</Alert>
-          </Stack>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus,
-            varius pulvinar diam eros in elit. Pellentesque convallis laoreet
-            laoreet.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-    </div>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={9}>
+          <AccommondationRoom name={name} facilities={facilities} moreFacilties={moreFacilties} beds={beds} />
+          <AccommondationRoom name={name} facilities={facilities} moreFacilties={moreFacilties} beds={beds2} />
+        </Grid>
+        <Grid item xs={3}>
+          <Card sx={{ maxWidth: 345 }}>
+            <CardContent>
+              <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Typography variant="h6" textAlign="center">
+                  {reservationRoomsNumber} {reservationRoomsNumber === 1 ? 'pokój' : 'pokoje'}
+                </Typography>
+                <Typography variant="h5" textAlign="center">
+                  {reservationPrice} zł
+                </Typography>
+              </Stack>
+              <Button variant="contained" size="large" endIcon={<SendIcon />} fullWidth sx={{ mt: 3, mb: 2}}>Rezerwuję</Button>
+              <List>
+                <ListItem sx={{ py: 0 }}>
+                  <ListItemIcon sx={{ minWidth: 25 }}>
+                    <CircleOutlinedIcon fontSize='inherit' />
+                  </ListItemIcon>
+                  <ListItemText
+                    secondary="Cena zawiera opłaty i podatki"
+                  />
+                </ListItem>
+                <ListItem sx={{ py: 0 }}>
+                  <ListItemIcon sx={{ minWidth: 25 }}>
+                    <CircleOutlinedIcon fontSize='inherit' />
+                  </ListItemIcon>
+                  <ListItemText
+                    secondary="Natychmiastowe potwierdzenie"
+                  />
+                </ListItem>
+                <ListItem sx={{ py: 0 }}>
+                  <ListItemIcon sx={{ minWidth: 25 }}>
+                    <CircleOutlinedIcon fontSize='inherit' />
+                  </ListItemIcon>
+                  <ListItemText
+                    secondary="Brak opłat rezerwacyjnych i prowizji za płatność kartą kredytową!"
+                  />
+                </ListItem>
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 
