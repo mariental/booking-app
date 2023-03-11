@@ -32,9 +32,9 @@ export function Navbar(props: NavbarProps) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color='inherit'>
         <StyledToolbar>
-          <Button color="inherit" href='/'>Booking-app</Button>
+          <Button variant="outlined" href='/'>Booking-app</Button>
           <Box component="div" sx={{ flexGrow: 1, alignSelf: 'flex-end', display: 'flex', justifyContent: 'center' }}>
             <Box
               component="form"
@@ -50,7 +50,7 @@ export function Navbar(props: NavbarProps) {
                   onChange={(newValue) => {
                     setStartDate(newValue);
                   }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField {...params}/>}
                 />
               </LocalizationProvider>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -76,8 +76,8 @@ export function Navbar(props: NavbarProps) {
               </Button>
             </Box>
           </Box>
-          <Button color="inherit" href='/login'>Zaloguj się</Button>
-          <Button color="inherit" href='/register'>Zarejestruj się</Button>
+          <Button variant="outlined" href='/login' >Zaloguj się</Button>
+          <Button variant="outlined" href='/register'>Zarejestruj się</Button>
         </StyledToolbar>
       </AppBar>
     </Box>

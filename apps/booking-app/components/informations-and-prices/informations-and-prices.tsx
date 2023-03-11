@@ -65,7 +65,7 @@ export function InformationsAndPrices(props: InformationsAndPricesProps) {
                   {reservationPrice} zł
                 </Typography>
               </Stack>
-              <Button variant="contained" size="large" endIcon={<SendIcon />} fullWidth sx={{ mt: 3, mb: 2}}>Rezerwuję</Button>
+              <Button variant="contained" size="large" endIcon={<SendIcon />} fullWidth sx={{ mt: 3, mb: 2}} href="/reservation">Rezerwuję</Button>
               <List>
                 <ListItem sx={{ py: 0 }}>
                   <ListItemIcon sx={{ minWidth: 25 }}>
