@@ -37,112 +37,112 @@ const facilitiesCategories = [
   {
     name: 'Parking',
     details: 'Bezpłatny parking prywatny jest dostępny na miejscu (nie jest konieczna rezerwacja).',
-    icon: <LocalParkingOutlinedIcon/>
+    icon: <LocalParkingOutlinedIcon />
   },
   {
     name: 'Internet',
     details: 'Wi-Fi jest dostępne w pomieszczeniach ogólnodostępnych i jest bezpłatne.',
-    icon: <WifiOutlinedIcon/>
-  },  
+    icon: <WifiOutlinedIcon />
+  },
   {
     name: 'Kuchnia',
     details: '',
     facilities: ['stół', 'płyta kuchenna', 'czajnik elektryczny', 'lodówka', 'aneks kuchenny', 'przybory kuchenne', 'piekarnik', 'pralka'],
-    icon: <KitchenOutlinedIcon/>
-  },  
+    icon: <KitchenOutlinedIcon />
+  },
   {
     name: 'Sypialnia',
     details: '',
     facilities: ['pościel', 'szafa lub garderoba ', 'długie łóżka (> 2 metry'],
-    icon: <BedOutlinedIcon/>
-  },  
+    icon: <BedOutlinedIcon />
+  },
   {
     name: 'Łazienka',
     details: '',
     facilities: ['papier toaletowy', 'ręczniki', 'wanna lub prysznic ', 'prywatna łazienka ', 'toaleta', 'suszarka do włosów', 'bezpłatny zestaw kosmetyków'],
-    icon: <BathtubOutlinedIcon/>
+    icon: <BathtubOutlinedIcon />
   },
   {
     name: 'Salon',
     details: '',
     facilities: ['część jadalna', 'kominek', 'sofa'],
-    icon: <ChairOutlinedIcon/>
+    icon: <ChairOutlinedIcon />
   },
   {
     name: 'Media/Technologia',
     details: '',
     facilities: ['telewizor z płaskim ekranem ', 'kanały kablowe ', 'radio', 'telewizor', 'serwis z filmami online (np. Netflix)'],
-    icon: <TvOutlinedIcon/>
+    icon: <TvOutlinedIcon />
 
   },
   {
     name: 'Udogodnienia w pokoju',
     details: '',
     facilities: ['gniazdko koło łóżka ', 'suszarka na ubrania ', 'moskitiera ', 'wieszak na ubrania', 'prywatne wejście', 'żelazko'],
-    icon: <HotelOutlinedIcon/>
+    icon: <HotelOutlinedIcon />
   },
   {
     name: 'Zwierzęta',
     details: 'Zwierzęta są akceptowane. Mogą obowiązywać dodatkowe opłaty.',
-    icon: <PetsOutlinedIcon/>
+    icon: <PetsOutlinedIcon />
 
   },
   {
     name: 'Udogodnienia dla niepełnosprawnych',
     details: '',
     facilities: ['całość dostępna dla wózków inwalidzkich', 'całość zlokalizowana na parterze '],
-    icon: <AccessibleOutlinedIcon/>
+    icon: <AccessibleOutlinedIcon />
 
   },
   {
     name: 'Okolica',
     details: '',
     facilities: ['miejsce na piknik ', 'miejsce na ognisko', 'meble ogrodowe', 'stół na świeżym powietrzu', 'sprzęt do grillowania', 'balkon', 'taras', 'ogród'],
-    icon: <LocalFloristOutlinedIcon/>
+    icon: <LocalFloristOutlinedIcon />
 
   },
   {
     name: 'Bezpieczeństwo',
     details: '',
     facilities: ['czujnik dymu', 'system alarmowy', 'gaśnice', 'monitoring wokół obiektu'],
-    icon: <LockOutlinedIcon/>
+    icon: <LockOutlinedIcon />
 
   },
   {
     name: 'Okolica i widok',
     details: '',
     facilities: ['widok na góry ', 'widok na ogród ', 'widok'],
-    icon: <ForestOutlinedIcon/>
+    icon: <ForestOutlinedIcon />
   },
   {
     name: 'Cechy budynku',
     details: '',
-    facilities: ['bliźniak', 'wolnostojący'], 
-    icon: <HouseOutlinedIcon/>
+    facilities: ['bliźniak', 'wolnostojący'],
+    icon: <HouseOutlinedIcon />
   },
   {
     name: 'Usługi recepcji',
     details: '',
     facilities: ['indywidualne zameldowanie / wymeldowanie', 'ekspresowe zameldowanie / wymeldowanie', 'całodobowa recepcja'],
-    icon: <StoreOutlinedIcon/>
+    icon: <StoreOutlinedIcon />
   },
   {
     name: 'Usługi dla rodzin i oferta rozrywkowa',
     details: '',
     facilities: ['plac zabaw dla dzieci', 'książki, DVD lub muzyka dla dzieci', 'gry planszowe / puzzle'],
-    icon: <FamilyRestroomOutlinedIcon/>
+    icon: <FamilyRestroomOutlinedIcon />
   },
   {
     name: 'Różne',
     details: '',
     facilities: ['całkowity zakaz palenia', 'ogrzewanie', 'pokoje rodzinne', 'pokoje dla niepalących '],
-    icon: <ForestOutlinedIcon/>
+    icon: <ForestOutlinedIcon />
   },
   {
     name: 'Języki',
     details: '',
     facilities: ['angielski', 'polski', 'ukraiński'],
-    icon: <ForumOutlinedIcon/>
+    icon: <ForumOutlinedIcon />
   },
 ]
 
@@ -198,40 +198,48 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
   })
 
   return (
-    <Container maxWidth="xl" sx={{ mx: 'auto', mt: 4, display: 'flex' }}>
-      <Box sx={{ width: '100%' }}>
-        <AppBar position="static">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            indicatorColor="secondary"
-            textColor="inherit"
-            variant="fullWidth"
-            aria-label="full width tabs example"
-          >
-            <Tab label="Ogólne informacje" {...a11yProps(0)} />
-            <Tab label="Informacje i ceny" {...a11yProps(1)} />
-            <Tab label="Udogodnienia" {...a11yProps(2)} />
-            <Tab label="Zasady pobytu" {...a11yProps(3)} />
-            <Tab label="Opinie gości" {...a11yProps(4)} />
-          </Tabs>
-        </AppBar>
-        <TabPanel value={value} index={0}>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <InformationsAndPrices/>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <AccommondationFacilities facilitiesCategories={facilitiesCategories}/>
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <RulesOfStay/>
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          <GuestReviews/>
-        </TabPanel>
-      </Box>
-    </Container>
+    <Box sx={{ width: '100%' }}>
+      <AppBar position="static">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="secondary"
+          textColor="inherit"
+          variant="fullWidth"
+          aria-label="full width tabs example"
+        >
+          <Tab label="Ogólne informacje" {...a11yProps(0)} />
+          <Tab label="Informacje i ceny" {...a11yProps(1)} />
+          <Tab label="Udogodnienia" {...a11yProps(2)} />
+          <Tab label="Zasady pobytu" {...a11yProps(3)} />
+          <Tab label="Opinie gości" {...a11yProps(4)} />
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+        <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+        </Container>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+          <InformationsAndPrices />
+        </Container>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+          <AccommondationFacilities facilitiesCategories={facilitiesCategories} />
+        </Container>
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+          <RulesOfStay />
+        </Container>
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+          <GuestReviews />
+        </Container>
+      </TabPanel>
+    </Box>
   );
 }
 

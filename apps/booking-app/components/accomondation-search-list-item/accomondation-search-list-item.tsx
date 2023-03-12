@@ -15,7 +15,12 @@ import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import StarsIcon from '@mui/icons-material/Stars';
-import Popover from '@mui/material/Popover';
+import KingBedOutlinedIcon from '@mui/icons-material/KingBedOutlined';
+import ChairOutlinedIcon from '@mui/icons-material/ChairOutlined';
+import BathtubOutlinedIcon from '@mui/icons-material/BathtubOutlined';
+import KitchenOutlinedIcon from '@mui/icons-material/KitchenOutlined';
+import HeightOutlinedIcon from '@mui/icons-material/HeightOutlined';
+import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 
 const Grid = styled(MuiGrid)(({ theme }) => ({
   width: '100%',
@@ -67,12 +72,12 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
                 {props.accomondation.location}
               </Typography>
               <Stack direction="row" spacing={1} sx={{ mt: 3 }}>
-                <Chip label="2 sypialnie" variant="outlined" />
-                <Chip label="1 salon" variant="filled" />
-                <Chip label="1 łazienka" variant="outlined" />
-                <Chip label="1 kuchnia" variant="filled" />
-                <Chip label="60 m2" variant="outlined" />
-                <Chip label="3 łóżka" variant="filled" />
+                <Chip label="2 sypialnie" variant="outlined" icon={<KingBedOutlinedIcon />} />
+                <Chip label="1 salon" variant="filled" icon={<ChairOutlinedIcon />} />
+                <Chip label="1 łazienka" variant="outlined" icon={<BathtubOutlinedIcon />} />
+                <Chip label="1 kuchnia" variant="filled" icon={<KitchenOutlinedIcon />} />
+                <Chip label="60 m2" variant="outlined" icon={<HeightOutlinedIcon />} />
+                <Chip label="3 łóżka" variant="filled" icon={<BedOutlinedIcon />} />
               </Stack>
             </Box>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={6}>
