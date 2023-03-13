@@ -2,7 +2,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';
 import Layout from '../components/layout/layout';
-import { ThemeOptions } from '@mui/material/styles';
+import { responsiveFontSizes, ThemeOptions } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 export const themeOptions: ThemeOptions = {
@@ -21,10 +21,11 @@ export const themeOptions: ThemeOptions = {
   }
 };
 
-const theme = createTheme({
+let theme = createTheme({
   ...themeOptions
 });
 
+theme = responsiveFontSizes(theme);
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (

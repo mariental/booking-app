@@ -49,7 +49,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
 
   return (
     <Box sx={{ mb: 3 }}>
-      <Card sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Card sx={{ display: 'flex', justifyContent: 'space-between', maxHeight: 300 }} >
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
           <CardContent sx={{ flex: '1 0 auto', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <Box>
@@ -62,9 +62,12 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
                   <StarsIcon color='primary' />
                 </Stack>
                 <Stack>
-                  <Rating name="read-only" value={props.accomondation.rate} precision={0.5} readOnly />
+                  <Stack direction="row" spacing={0.5}>
+                    <Rating name="read-only" value={props.accomondation.rate} precision={0.5} readOnly />
+                    <Typography>{props.accomondation.rate}</Typography>
+                  </Stack>
                   <Typography variant="caption" color="text.secondary" textAlign="end">
-                    103 opinie
+                    (103 opinie)
                   </Typography>
                 </Stack>
               </Stack>
@@ -72,11 +75,11 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
                 {props.accomondation.location}
               </Typography>
               <Stack direction="row" spacing={1} sx={{ mt: 3 }}>
-                <Chip label="2 sypialnie" variant="outlined" icon={<KingBedOutlinedIcon />} />
+                <Chip label="2 sypialnie" variant="filled" icon={<KingBedOutlinedIcon />} />
                 <Chip label="1 salon" variant="filled" icon={<ChairOutlinedIcon />} />
-                <Chip label="1 łazienka" variant="outlined" icon={<BathtubOutlinedIcon />} />
+                <Chip label="1 łazienka" variant="filled" icon={<BathtubOutlinedIcon />} />
                 <Chip label="1 kuchnia" variant="filled" icon={<KitchenOutlinedIcon />} />
-                <Chip label="60 m2" variant="outlined" icon={<HeightOutlinedIcon />} />
+                <Chip label="60 m2" variant="filled" icon={<HeightOutlinedIcon />} />
                 <Chip label="3 łóżka" variant="filled" icon={<BedOutlinedIcon />} />
               </Stack>
             </Box>
@@ -96,7 +99,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
                   Zawiera opłaty i podatki
                 </Typography>
                 <Divider sx={{ my: 1 }} />
-                <Button variant='contained'>Zobacz dostępność</Button>
+                <Button variant='contained' href={`/accomondation-details/${props.accomondation.id}`}>Zobacz dostępność</Button>
               </Stack>
             </Stack>
           </CardContent>

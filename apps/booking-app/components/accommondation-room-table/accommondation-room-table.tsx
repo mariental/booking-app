@@ -70,7 +70,7 @@ export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
             <StyledTableCell>Dla</StyledTableCell>
             <StyledTableCell align="right">Dzisiejsza cena</StyledTableCell>
             <StyledTableCell align="right">Twoje opcje</StyledTableCell>
-            <StyledTableCell align="right">Wybierz liczbę</StyledTableCell>
+            <StyledTableCell align="right">Wybierz liczbę pokoi</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>

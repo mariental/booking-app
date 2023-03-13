@@ -21,6 +21,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { Theme, useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Pagination from '@mui/material/Pagination';
+import SearchBar from 'apps/booking-app/components/search-bar/search-bar';
 
 const category = [
   'Domy i apartamenty na wyłączność', 'Apartamenty', 'Hotele', 'Domy wakacyjne', 'Kwatery prywatne'
@@ -88,7 +89,8 @@ export function SearchResult(props: SearchResultProps) {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ mx: 'auto', my: 6, display: 'flex' }}>
+    <Container maxWidth="xl" sx={{ mx: 'auto', mb: 4}}>
+      <SearchBar/>
       <Grid container spacing={{ xs: 2, md: 6 }} columns={{ xs: 1, md: 12 }} sx={{ justifyContent: 'center' }}>
         <Grid item xs={1} md={3}>
           <div>
@@ -98,7 +100,7 @@ export function SearchResult(props: SearchResultProps) {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography>Rodzaj obiektu</Typography>
+                <Typography fontWeight={600}>Rodzaj obiektu</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <FormGroup>
@@ -114,7 +116,7 @@ export function SearchResult(props: SearchResultProps) {
                 aria-controls="panel2a-content"
                 id="panel2a-header"
               >
-                <Typography>Udogodnienia</Typography>
+                <Typography fontWeight={600}>Udogodnienia</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <FormGroup>
@@ -130,7 +132,7 @@ export function SearchResult(props: SearchResultProps) {
                 aria-controls="panel3a-content"
                 id="panel3a-header"
               >
-                <Typography>Ocena</Typography>
+                <Typography fontWeight={600}>Ocena</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <FormGroup>
@@ -146,7 +148,7 @@ export function SearchResult(props: SearchResultProps) {
                 aria-controls="panel3a-content"
                 id="panel3a-header"
               >
-                <Typography>Cena</Typography>
+                <Typography fontWeight={600}>Cena</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <FormGroup>

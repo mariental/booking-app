@@ -12,6 +12,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Search from '@mui/icons-material/Search';
 import { ButtonGroup, Divider, Fade, Paper, Popper, PopperPlacementType, Stack, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import TravelExploreOutlinedIcon from '@mui/icons-material/TravelExploreOutlined';
 
 export interface NavbarProps { }
 
@@ -24,7 +25,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   flexWrap: 'wrap',
   // Override media queries injected by theme.mixins.toolbar
   '@media all': {
-    minHeight: 70,
+    minHeight: 60,
   },
 }));
 
@@ -89,8 +90,8 @@ export function Navbar(props: NavbarProps) {
       </Popper>
       <AppBar position="static" color='transparent' sx={{ boxShadow: 0 }}>
         <StyledToolbar>
-          <Button variant="outlined" href='/' color='inherit'>Booking-app</Button>
-          <Box component="div" sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button variant="text" href='/' color='primary' startIcon={<TravelExploreOutlinedIcon />} size="large" sx={{ fontWeight: 700 }}>Booking-app</Button>
+          {/*<Box component="div" sx={{ display: 'flex', justifyContent: 'center' }}>
             <Box
               component="form"
               sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 2 }}
@@ -125,14 +126,13 @@ export function Navbar(props: NavbarProps) {
                 Wyszukaj
               </Button>
             </Box>
-          </Box>
+                </Box>*/}
           <Stack direction="row" spacing={1} justifyContent="center">
-            <Button variant="outlined" href='/login' color='inherit'>Zaloguj się</Button>
-            <Button variant="outlined" href='/register' color='inherit'>Zarejestruj się</Button>
+            <Button variant="outlined" href='/login' color='primary'>Zaloguj się</Button>
+            <Button variant="contained" href='/register' color='primary'>Zarejestruj się</Button>
           </Stack>
         </StyledToolbar>
       </AppBar>
-      <Divider/>
     </Box>
   );
 }

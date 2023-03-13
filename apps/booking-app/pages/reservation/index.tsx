@@ -78,10 +78,12 @@ export function Reservation(props: ReservationProps) {
                     <Typography>Podatek miejski:</Typography>
                     <Typography fontWeight={600}>3,20 zł</Typography>
                   </Stack>
+                  <Divider sx={{ my: 1, borderWidth: 1, borderColor: '#2f5785' }}/>
                   <Stack direction="row" justifyContent="space-between" sx={{ my: 1 }}>
                     <Typography variant="h6" color="primary" fontWeight={600}>Cena:</Typography>
                     <Typography variant="h6" color="primary" fontWeight={600}>348,20 zł</Typography>
-                  </Stack>
+                  </Stack>                  
+                  <Divider sx={{ my: 1, borderWidth: 1, borderColor: '#2f5785' }}/>
                   <Stack>
                     <Typography variant="caption" letterSpacing={0}>
                       Zaoszczędź co najmniej 10% na tej opcji zakwaterowania po zalogowaniu z Genius, programem lojalnościowym Booking.com.
