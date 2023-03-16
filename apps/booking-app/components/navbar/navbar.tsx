@@ -18,7 +18,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
   flexWrap: 'wrap',
   '@media all': {
-    minHeight: 60,
+    minHeight: 60
   },
 }));
 

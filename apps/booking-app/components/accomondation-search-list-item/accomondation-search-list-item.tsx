@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 import MuiGrid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
-import { Button } from '@mui/material';
+import { Button, CardActions } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
@@ -22,14 +22,7 @@ import KitchenOutlinedIcon from '@mui/icons-material/KitchenOutlined';
 import HeightOutlinedIcon from '@mui/icons-material/HeightOutlined';
 import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-
-const Grid = styled(MuiGrid)(({ theme }) => ({
-  width: '100%',
-  ...theme.typography.body2,
-  '& [role="separator"]': {
-    margin: theme.spacing(0, 2),
-  },
-}));
+import StarIcon from '@mui/icons-material/Star';
 
 export interface AccomondationSearchListItemProps {
   accomondation: Accommodation;
@@ -49,82 +42,59 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
   const open = Boolean(anchorEl);
 
   return (
-    <Box sx={{ mb: 3 }}>
-      <Card sx={{ display: 'flex', justifyContent: 'space-between', maxHeight: 320 }} >
-        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-          <CardContent sx={{ flex: '1 0 auto', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <Box>
-              <Stack direction="row" justifyContent="space-between" alignItems="strech">
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  <Typography component="div" variant="h5">
-                    {props.accomondation.name}
-                  </Typography>
-                  <ThumbUpIcon color='primary' />
-                  <StarsIcon color='primary' />
-                </Stack>
-                <Stack>
-                  <Stack direction="row" spacing={0.5} alignItems="center">
-                    <Rating name="read-only" value={props.accomondation.rate} precision={0.01} readOnly />
-                    <Typography variant="h5"color="primary">{props.accomondation.rate}</Typography>
-                  </Stack>
-                  <Typography variant="caption" color="text.secondary" textAlign="end">
-                    (103 opinie)
-                  </Typography>
-                </Stack>
-              </Stack>
-              <Stack direction="row" alignItems="center">
-                <LocationOnOutlinedIcon color='primary' fontSize="large"/>
-                <Typography variant="body1" color="text.secondary" component="div">
-                  {props.accomondation.location}
-                </Typography>
-              </Stack>
-              <Stack direction="row" spacing={1} sx={{ mt: 3 }}>
-                {/*<Chip label="2 sypialnie" variant="filled" icon={<KingBedOutlinedIcon />} />
-                <Chip label="1 salon" variant="filled" icon={<ChairOutlinedIcon />} />
-                <Chip label="1 łazienka" variant="filled" icon={<BathtubOutlinedIcon />} />
-                <Chip label="1 kuchnia" variant="filled" icon={<KitchenOutlinedIcon />} />
-                <Chip label="60 m2" variant="filled" icon={<HeightOutlinedIcon />} />
-  <Chip label="3 łóżka" variant="filled" icon={<BedOutlinedIcon />} />*/}
-              </Stack>
-            </Box>
-            <Stack direction="row" justifyContent="space-between" alignItems="end" spacing={6}>
-              <Stack spacing={1}>
-                <Stack direction="row" spacing={1} alignContent="end">
-                  <Typography color="text.secondary">Proponowana opcja:</Typography>
-                  <Typography>Apartament z balkonem</Typography>
-                </Stack>
-                <Stack direction="row" spacing={1} sx={{ mt: 3 }}>
-                  <Chip label="1 łóżko podwójne" variant="filled" icon={<KingBedOutlinedIcon />} />
-                  <Chip label="1 łazienka" variant="filled" icon={<BathtubOutlinedIcon />} />
-                  <Chip label="1 kuchnia" variant="filled" icon={<KitchenOutlinedIcon />} />
-                </Stack>
-                <Alert severity="success" icon={false} variant="outlined" sx={{ fontSize: 12, maxWidth: 400 }}>BEZPŁATNE odwołanie rezerwacji • Bez przedpłaty</Alert>
-                <Alert severity="error" icon={false} variant="outlined" sx={{ fontSize: 12, maxWidth: 400 }}>Na naszej stronie został tylko 1 w tej cenie</Alert>
-              </Stack>
-              <Stack justifyContent="flex-end">
-                <Typography variant="h6" color="text.primary" textAlign="end">
-                  {props.accomondation.price} PLN
-                </Typography>
-                <Typography variant="overline" color="text.primary" textAlign="end">
-                  &#40;1 noc, 2 dorosłych&#41;
-                </Typography>
-                <Typography variant="caption" color="text.secondary" textAlign="end">
-                  Zawiera opłaty i podatki
-                </Typography>
-                <Divider sx={{ my: 1 }} />
-                <Button variant='contained' href={`/accomondation-details/${props.accomondation.id}`}>Zobacz dostępność</Button>
-              </Stack>
+    <Card elevation={5} sx={{ width: 470, my: 2 }}>
+      <CardMedia
+        component="img"
+        sx={{ height: 300 }}
+        image={props.accomondation.mainImage.src}
+        alt={props.accomondation.mainImage.title}
+      />
+      <CardContent sx={{ paddingBottom: 0}}>
+        <Stack direction="row" justifyContent="space-between">
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography component="div" variant="h6">
+              {props.accomondation.name}
+            </Typography>
+            <ThumbUpIcon color='primary' />
+            <StarsIcon color='primary' />
+          </Stack>
+          <Stack alignItems="flex-start">
+            <Stack direction="row" spacing={0.5} alignItems="center">
+              <StarIcon sx={{ color: '#faaf00' }} />
+              <Typography variant="h5" color="primary">{props.accomondation.rate}</Typography>
             </Stack>
-          </CardContent>
-        </Box>
-        <CardMedia
-          component="img"
-          sx={{ width: 250 }}
-          image={props.accomondation.mainImage.src}
-          alt={props.accomondation.mainImage.title}
-        />
-      </Card>
-    </Box>
+          </Stack>
+        </Stack>
+        <Stack direction="row" alignItems="center" mb={2}>
+          <LocationOnOutlinedIcon color="action" />
+          <Typography variant="body1" color="text.secondary" component="div">
+            {props.accomondation.location}
+          </Typography>
+        </Stack>
+        <Stack spacing={1}>
+          <Stack direction="row" spacing={1} alignContent="end">
+            <Typography color="text.secondary">Proponowana opcja:</Typography>
+            <Typography>Apartament z balkonem</Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} sx={{ mt: 3 }}>
+            <Chip label="1 łóżko podwójne" variant="filled" icon={<KingBedOutlinedIcon />} />
+            <Chip label="1 łazienka" variant="filled" icon={<BathtubOutlinedIcon />} />
+            <Chip label="1 kuchnia" variant="filled" icon={<KitchenOutlinedIcon />} />
+          </Stack>
+        </Stack>
+        <Stack mt={2}>
+          <Typography variant="h5" color="primary.light" textAlign="end" fontWeight={600}>
+            {props.accomondation.price} PLN / noc
+          </Typography>
+          <Typography variant="caption" color="text.secondary" textAlign="end">
+            Zawiera opłaty i podatki
+          </Typography>
+        </Stack>
+      </CardContent>
+      <CardActions sx={{ padding: 0, mt: 2 }}>
+        <Button variant='contained' href={`/accomondation-details/${props.accomondation.id}`} size="large" fullWidth sx={{ height: 50 }}>Zobacz dostępność</Button>
+      </CardActions>
+    </Card>
   );
 }
 

@@ -30,6 +30,7 @@ import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import RulesOfStay from 'apps/booking-app/components/rules-of-stay/rules-of-stay';
 import GuestReviews from 'apps/booking-app/components/guest-reviews/guest-reviews';
 import SearchBar from 'apps/booking-app/components/search-bar/search-bar';
+import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
 
 
 export interface AccomondationDetailsProps { }
@@ -200,7 +201,7 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <SearchBar/>
+      <SearchBarHorizontal/>
       <AppBar position="static">
         <Tabs
           value={value}
@@ -218,27 +219,27 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+        <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           <DetailsInfo/>
         </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+        <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           <InformationsAndPrices />
         </Container>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+        <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           <AccommondationFacilities facilitiesCategories={facilitiesCategories} />
         </Container>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+        <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           <RulesOfStay />
         </Container>
       </TabPanel>
       <TabPanel value={value} index={4}>
-        <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+        <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           <GuestReviews />
         </Container>
       </TabPanel>

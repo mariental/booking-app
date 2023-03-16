@@ -8,16 +8,12 @@ import { Dayjs } from 'dayjs';
 import React from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export interface SearchBarProps { }
-
 const Item = styled(Paper)(({ theme }) => ({
   display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'left',
+  justifyContent: 'center',
   gap: 24,
   padding: 24,
   flexWrap: 'wrap',
-  maxWidth: '700px',
   '@media (max-width:600px)': {
     gap: 12,
   },
@@ -33,20 +29,19 @@ const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
 const CustomTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      border: `2px solid ${theme.palette.primary.light}`,
+      border: `2px solid ${theme.palette.primary.main}`,
     },
     '&:hover fieldset': {
       borderColor: `${theme.palette.secondary.light}`,
     },
-  }
+    width: 260,  }
 }));
 
 const CustomButton = styled(Button)(({ theme }) => ({
-  border: `2px solid ${theme.palette.primary.light}`,
+  border: `2px solid ${theme.palette.primary.main}`,
   '&:hover': {
     border: `2px solid ${theme.palette.secondary.light}`,
   },
-  color: 'rgba(0, 0, 0, 0.6)',
   textTransform: 'none',
   fontSize: '1rem'
 }));
@@ -58,7 +53,10 @@ const locations = [
   { label: 'Zakopane', year: 2008 }
 ]
 
-export function SearchBar(props: SearchBarProps) {
+
+export interface SearchBarHorizontalProps {}
+
+export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
   const [startDate, setStartDate] = React.useState<Dayjs | null>(null);
   const [endDate, setEndDate] = React.useState<Dayjs | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -73,9 +71,8 @@ export function SearchBar(props: SearchBarProps) {
         setPlacement(newPlacement);
       };
 
-
   return (
-    <Item elevation={5}>
+    <Item elevation={0}>
       <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
@@ -115,10 +112,9 @@ export function SearchBar(props: SearchBarProps) {
         disablePortal
         id="chooseLocation"
         options={locations}
-        fullWidth
+        sx={{ width: 260 }}
         renderInput={(params) => <CustomTextField {...params} label="Dokąd się wybierasz?"/>}
       />
-      <Stack direction="row" justifyContent="space-between" spacing={2}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Data zameldowania"
@@ -127,7 +123,7 @@ export function SearchBar(props: SearchBarProps) {
               setStartDate(newValue);
             }}
             inputFormat="DD-MM-YYYY"
-            renderInput={(params) => <CustomTextField {...params} fullWidth/>}
+            renderInput={(params) => <CustomTextField {...params}/>}
           />
         </LocalizationProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -138,18 +134,17 @@ export function SearchBar(props: SearchBarProps) {
               setEndDate(newValue);
             }}
             inputFormat="DD-MM-YYYY"
-            renderInput={(params) => <CustomTextField {...params} fullWidth/>}
+            renderInput={(params) => <CustomTextField {...params}/>}
           />
         </LocalizationProvider>
-      </Stack>
-      <CustomButton variant="outlined" onClick={handleClick('bottom')} endIcon={<ExpandMoreIcon />} sx={{ height: 56 }} fullWidth>
+      <CustomButton variant="outlined" onClick={handleClick('bottom')} endIcon={<ExpandMoreIcon />} sx={{ height: 56 }}>
         2 dorosłych &#x2022; 0 dzieci &#x2022; 1 pokój
       </CustomButton>
-      <Button variant="contained" endIcon={<Search />} href="search-result" color='secondary' sx={{ height: 56, fontSize: 16 }} fullWidth>
+      <Button variant="contained" endIcon={<Search />} href="search-result" color='secondary' sx={{ height: 56, fontSize: 16, width: 260}}>
         Wyszukaj
       </Button>
     </Item>
   );
 }
 
-export default SearchBar;
+export default SearchBarHorizontal;
