@@ -1,7 +1,6 @@
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { AccountCircle, Search } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+import { Search } from '@mui/icons-material';
 import { TextField, Button, ButtonGroup, Fade, Popper, PopperPlacementType, Stack, Typography, ButtonProps, Autocomplete, InputAdornment } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -48,17 +47,16 @@ const CustomButton = styled(Button)(({ theme }) => ({
    '&:hover': {
     border: `2px solid ${theme.palette.secondary.light}`,
   },
-  color: 'rgba(0, 0, 0, 0.6)'
+  color: 'rgba(0, 0, 0, 0.6)',
+  textTransform: 'none',
+  fontSize: '1rem'
 }));
 
 const locations = [
-  { label: 'The Shawshank Redemption', year: 1994 },
-  { label: 'The Godfather', year: 1972 },
-  { label: 'The Godfather: Part II', year: 1974 },
-  { label: 'The Dark Knight', year: 2008 },
-  { label: '12 Angry Men', year: 1957 },
-  { label: "Schindler's List", year: 1993 },
-  { label: 'Pulp Fiction', year: 1994 }
+  { label: 'Szwecja', year: 1994 },
+  { label: 'Warszawa', year: 1972 },
+  { label: 'Kraków', year: 1974 },
+  { label: 'Zakopane', year: 2008 }
 ]
 
 export function SearchBar(props: SearchBarProps) {
@@ -119,32 +117,34 @@ export function SearchBar(props: SearchBarProps) {
         id="chooseLocation"
         options={locations}
         sx={{ width: 280 }}
-        renderInput={(params) => <CustomTextField {...params} label="Location" />}
+        renderInput={(params) => <CustomTextField {...params} label="Dokąd się wybierasz?" />}
       />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          label="Od kiedy?"
+          label="Data zameldowania"
           value={startDate}
           onChange={(newValue) => {
             setStartDate(newValue);
           }}
+          inputFormat="DD-MM-YYYY"
           renderInput={(params) => <CustomTextField {...params} sx={{ width: 280 }} />}
         />
       </LocalizationProvider>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          label="Do kiedy?"
+          label="Data wymeldowania"
           value={endDate}
           onChange={(newValue) => {
             setEndDate(newValue);
           }}
+          inputFormat="DD-MM-YYYY"
           renderInput={(params) => <CustomTextField {...params} sx={{ width: 280 }} />}
         />
       </LocalizationProvider>
       <CustomButton variant="outlined" onClick={handleClick('bottom')} endIcon={<ExpandMoreIcon />} sx={{ height: 56 }}>
         2 dorosłych &#x2022; 0 dzieci &#x2022; 1 pokój
       </CustomButton>
-      <Button variant="contained" endIcon={<Search />} href="search-result" color='secondary' sx={{ width: 180, height: 56 }}>
+      <Button variant="contained" endIcon={<Search />} href="search-result" color='secondary' sx={{ width: 180, height: 56, fontSize: 16 }}>
         Wyszukaj
       </Button>
     </Item>

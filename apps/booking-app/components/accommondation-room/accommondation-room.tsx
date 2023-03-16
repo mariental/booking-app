@@ -15,23 +15,23 @@ import AccommondationRoomTable from '../accommondation-room-table/accommondation
 
 
 interface bed {
-  type: string; 
+  type: string;
   quantity: number;
 }
 
-export interface AccommondationRoomProps { 
+export interface AccommondationRoomProps {
   name: string;
   facilities: string[];
   moreFacilties: string[];
   beds: bed[];
 }
 
-function bedAlert (b: bed) {
+function bedAlert(b: bed) {
   let text = "łóżka"
-  if(b.quantity === 1){
+  if (b.quantity === 1) {
     text = 'łóżko'
   }
-  return <Alert severity="info" iconMapping={{ info: b.type === 'łóżko podwójne' ? <BedOutlinedIcon fontSize="inherit" /> : <SingleBedIcon fontSize="inherit" />}}>{b.quantity} {b.type} {text}</Alert>
+  return <Alert severity="info" iconMapping={{ info: b.type === 'łóżko podwójne' ? <BedOutlinedIcon fontSize="inherit" /> : <SingleBedIcon fontSize="inherit" /> }}>{b.quantity} {b.type} {text}</Alert>
 }
 
 export function AccommondationRoom(props: AccommondationRoomProps) {
@@ -47,41 +47,20 @@ export function AccommondationRoom(props: AccommondationRoomProps) {
           {props.name}
         </Typography>
         <Stack direction="row" spacing={2}>
-          {props.beds.map(bed => 
+          {props.beds.map(bed =>
             bedAlert(bed)
           )}
-          <Alert severity="error" icon={false}>
-            Został tylko 1 pokój na naszej stronie
-          </Alert>
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <AccommondationRoomTable/>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid item xs={6}>
-            {props.facilities.map((item) =>
-              <Chip label={item} variant="outlined" sx={{ m: 0.5 }} />
-            )}
-          </Grid>
-          <Grid item xs={6}>
-            <Accordion sx={{ my: 2 }}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
-              >
-                <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                  Dodatki
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                {props.moreFacilties.map((item) =>
-                  <Chip label={item} sx={{ m: 1 }} size="small" />
-                )}
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-        </Grid>
+      <Stack direction="row" sx={{ flexWrap: 'wrap'}}>
+            <Chip label={'WiFi'} variant="outlined" sx={{ m: 0.5 }} />
+            <Chip label={'telewizor'} variant="outlined" sx={{ m: 0.5 }} />
+            <Chip label={'łazienka'} variant="outlined" sx={{ m: 0.5 }} />
+            <Chip label={'30m2'} variant="outlined" sx={{ m: 0.5 }} />
+            <Chip label={'klimatyzacja'} variant="outlined" sx={{ m: 0.5 }} />
+        </Stack>
+        <AccommondationRoomTable />
       </AccordionDetails>
     </Accordion>
   );

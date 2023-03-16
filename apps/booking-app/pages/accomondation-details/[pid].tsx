@@ -29,6 +29,7 @@ import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import RulesOfStay from 'apps/booking-app/components/rules-of-stay/rules-of-stay';
 import GuestReviews from 'apps/booking-app/components/guest-reviews/guest-reviews';
+import SearchBar from 'apps/booking-app/components/search-bar/search-bar';
 
 
 export interface AccomondationDetailsProps { }
@@ -199,6 +200,7 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <SearchBar/>
       <AppBar position="static">
         <Tabs
           value={value}
@@ -217,6 +219,7 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
       </AppBar>
       <TabPanel value={value} index={0}>
         <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
+          <DetailsInfo/>
         </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>

@@ -68,41 +68,35 @@ export function Reservation(props: ReservationProps) {
                 <Stack>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography>Pokój i oferta:</Typography>
-                    <Typography fontWeight={600}> 319,44 zł </Typography>
+                    <Typography fontWeight={600}> 712 zł </Typography>
                   </Stack>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography>8 % VAT:</Typography>
-                    <Typography fontWeight={600}>25,56 zł</Typography>
+                    <Typography fontWeight={600}> 24 zł</Typography>
                   </Stack>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography>Podatek miejski:</Typography>
-                    <Typography fontWeight={600}>3,20 zł</Typography>
+                    <Typography fontWeight={600}>4 zł</Typography>
                   </Stack>
-                  <Divider sx={{ my: 1, borderWidth: 1, borderColor: '#2f5785' }}/>
+                  <Divider sx={{ my: 1, borderWidth: 1, borderColor: '#2f5785' }} />
                   <Stack direction="row" justifyContent="space-between" sx={{ my: 1 }}>
                     <Typography variant="h6" color="primary" fontWeight={600}>Cena:</Typography>
-                    <Typography variant="h6" color="primary" fontWeight={600}>348,20 zł</Typography>
-                  </Stack>                  
-                  <Divider sx={{ my: 1, borderWidth: 1, borderColor: '#2f5785' }}/>
-                  <Stack>
-                    <Typography variant="caption" letterSpacing={0}>
-                      Zaoszczędź co najmniej 10% na tej opcji zakwaterowania po zalogowaniu z Genius, programem lojalnościowym Booking.com.
-                      &nbsp;<Link href="/login" underline="none">Przejdź do strony logowania</Link>
-                    </Typography>
+                    <Typography variant="h6" color="primary" fontWeight={600}>740 zł</Typography>
                   </Stack>
+                  <Divider sx={{ my: 1, borderWidth: 1, borderColor: '#2f5785' }} />
                 </Stack>
                 <Button variant="contained">Potwierdź rezerwację</Button>
                 <Stack>
+                  <Typography mb={1}>Odwołania rezerwacji: </Typography>
                   <Typography variant="caption" color="green">
                     Bezpłatne odwołanie do 18 kwi. do godziny 23:59&nbsp;<Typography variant="caption" fontWeight={600}>wraz ze zwrotem kosztów</Typography>
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant="caption">
                     Od 19 kwi. od godziny 00:00 345 zł
                   </Typography>
                 </Stack>
-                <Typography variant="caption" color="error">
-                  <Typography variant="caption" fontWeight={600}>Dostępność w wybranym terminie spada:</Typography>
-                  &nbsp;Rezerwujesz ostatni dostępny przez naszą stronę Pokój dwuosobowy z prywatną łazienką w obiekcie Centrum Bieszczad.
+                <Typography variant="caption" color="green">
+                  Płatność nie jest dzisiaj wymagana. Zapłacisz podczas pobytu.
                 </Typography>
               </Stack>
             </CardContent>
@@ -115,12 +109,12 @@ export function Reservation(props: ReservationProps) {
                 <Stack>
                   <Typography variant="body2" color="text.secondary">Wybrana opcja:</Typography>
                   <Typography component="div" variant="h5">
-                    Pokój dwuosobowy z prywatną łazienką
+                    Pokój dwuosobowy
                   </Typography>
                   <Stack direction="row" alignItems="center" spacing={0.5}>
                     <PlaceOutlinedIcon color="primary" />
                     <Typography>
-                      Sundsvall, Szwecja
+                      Klimatyczny hotel | Sztokholm, Szwecja
                     </Typography>
                   </Stack>
                 </Stack>
@@ -134,9 +128,8 @@ export function Reservation(props: ReservationProps) {
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
                   <Chip label="1 łazienka" variant="outlined" icon={<BathtubOutlinedIcon />} />
-                  <Chip label="1 kuchnia" variant="filled" icon={<KitchenOutlinedIcon />} />
-                  <Chip label="40 m2" variant="outlined" icon={<HeightOutlinedIcon />} />
-                  <Chip label="3 łóżka" variant="filled" icon={<BedOutlinedIcon />} />
+                  <Chip label="20 m2" variant="outlined" icon={<HeightOutlinedIcon />} />
+                  <Chip label="1 łóżko" variant="filled" icon={<BedOutlinedIcon />} />
                 </Stack>
                 <Button variant="contained">Zmień wybór</Button>
               </Stack>
@@ -144,7 +137,7 @@ export function Reservation(props: ReservationProps) {
             <CardMedia
               component="img"
               sx={{ width: 250, maxHeight: 180 }}
-              image="https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80"
+              image="https://images.unsplash.com/photo-1535312800630-1c173409799a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
               alt="Dom"
             />
           </Card>

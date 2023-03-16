@@ -91,9 +91,9 @@ export function SearchResult(props: SearchResultProps) {
   return (
     <Container maxWidth="xl" sx={{ mx: 'auto', mb: 4}}>
       <SearchBar/>
-      <Grid container spacing={{ xs: 2, md: 6 }} columns={{ xs: 1, md: 12 }} sx={{ justifyContent: 'center' }}>
-        <Grid item xs={1} md={3}>
-          <div>
+      <Grid container spacing={{ xs: 2, md: 6 }} columns={{ xs: 1, md: 12 }} sx={{ justifyContent: 'center', position: 'relative' }}>
+        <Grid item xs={1} md={3}> 
+          <Stack sx={{ position: 'sticky', top: 20}}>
             <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -158,7 +158,7 @@ export function SearchResult(props: SearchResultProps) {
                 </FormGroup>
               </AccordionDetails>
             </Accordion>
-          </div>
+          </Stack>
         </Grid>
         <Grid item xs={1} md={8}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={0} sx={{ mb: 1 }}>

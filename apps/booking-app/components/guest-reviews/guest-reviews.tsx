@@ -12,6 +12,7 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import StarIcon from '@mui/icons-material/Star';
+import AddIcon from '@mui/icons-material/Add';
 
 const overallRating =
 {
@@ -191,36 +192,41 @@ export function GuestReviews(props: GuestReviewsProps) {
           >
             <Stack direction="row" sx={{ px: 2 }} justifyContent="space-between" alignItems="center">
               <Stack direction="row" spacing={1}>
-                <Button variant="outlined" startIcon={<StarIcon sx={{ color: '#faaf00' }} />}>
-                  1
-                </Button>
-                <Button variant="outlined" startIcon={<StarIcon sx={{ color: '#faaf00' }} />} >
-                  2
-                </Button>
-                <Button variant="outlined" startIcon={<StarIcon sx={{ color: '#faaf00' }} />} >
-                  3
-                </Button>
-                <Button variant="outlined" startIcon={<StarIcon sx={{ color: '#faaf00' }} />} >
-                  4
-                </Button>
-                <Button variant="outlined" startIcon={<StarIcon sx={{ color: '#faaf00' }} />} >
-                  5
+                <Button variant="outlined" endIcon={<AddIcon />}>
+                  Napisz opinię
                 </Button>
               </Stack>
-              <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
-                <InputLabel id="demo-simple-select-label">Sortuj według</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={sort}
-                  label="Sortuj według"
-                  onChange={(e) => setSort(e.target.value)}
-                >
-                  {sortOptions.map((item) =>
-                    <MenuItem value={item}>{item}</MenuItem>
-                  )}
-                </Select>
-              </FormControl>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+                  <InputLabel id="demo-simple-select-label">Filtruj</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={sort}
+                    label="Filtruj"
+                    onChange={(e) => setSort(e.target.value)}
+                  >
+                    {sortOptions.map((item) =>
+                      <MenuItem value={item}>{item}</MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+                  <InputLabel id="demo-simple-select-label">Sortuj według</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={sort}
+                    label="Sortuj według"
+                    onChange={(e) => setSort(e.target.value)}
+                  >
+                    {sortOptions.map((item) =>
+                      <MenuItem value={item}>{item}</MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+              </Stack>
+
             </Stack>
             {
               reviews.map((item) => (
@@ -271,12 +277,12 @@ export function GuestReviews(props: GuestReviewsProps) {
                       </Typography>
                     </CardContent>
                     <CardActions sx={{ justifyContent: "right" }}>
-                      <IconButton color="primary" aria-label="like" component="label">
-                        <ThumbUpOffAltIcon />
-                      </IconButton>
-                      <IconButton color="primary" aria-label="unlike" component="label">
-                        <ThumbDownOffAltIcon />
-                      </IconButton>
+                      <Button variant="text" startIcon={<ThumbUpOffAltIcon />}>
+                        Pomocna
+                      </Button>
+                      <Button variant="text" startIcon={<ThumbDownOffAltIcon />}>
+                        Niezbyt pomocna
+                      </Button>
                     </CardActions>
                   </Card>
                 </ListItem>

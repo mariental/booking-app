@@ -10,7 +10,7 @@ export function Index() {
     <Container maxWidth="xl" sx={{ mx: 'auto', mt: 4}}>
       <Stack sx={{ mb: 4 }}>
         <Typography variant="h3" textAlign="center" color='primary'>Znajdź miejsce na kolejny pobyt</Typography>
-        <Typography variant="h6" textAlign="center" color='primary'>Szukaj ofert hoteli, domów i wielu innych obiektów...</Typography>
+        <Typography variant="h4" textAlign="center" color='primary'>Szukaj ofert hoteli, domów i wielu innych obiektów...</Typography>
       </Stack>
       <SearchBar />
       <Box
