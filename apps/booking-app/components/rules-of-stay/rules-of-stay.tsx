@@ -180,17 +180,6 @@ export function RulesOfStay(props: RulesOfStayProps) {
         </Item>
         <Item>
           <Stack direction="row" spacing={1} alignItems="center">
-            <PaymentOutlinedIcon />
-            <Typography variant="subtitle2" fontWeight="600" minWidth={250}>
-              Płatności poprzez Booking.com
-            </Typography>
-            <Typography variant="body2">
-              Booking.com pobiera od Ciebie płatność za pobyt w imieniu obiektu. Pamiętaj, by wziąć ze sobą pieniądze do wykorzystania na dodatkowe usługi.
-            </Typography>
-          </Stack>
-        </Item>
-        <Item>
-          <Stack direction="row" spacing={1} alignItems="center">
             <SmokeFreeOutlinedIcon />
             <Typography variant="subtitle2" fontWeight="600" minWidth={250}>
               Palenie tytoniu

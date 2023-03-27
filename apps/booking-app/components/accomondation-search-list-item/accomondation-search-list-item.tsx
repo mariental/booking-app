@@ -23,6 +23,7 @@ import HeightOutlinedIcon from '@mui/icons-material/HeightOutlined';
 import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import StarIcon from '@mui/icons-material/Star';
+import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
 
 export interface AccomondationSearchListItemProps {
   accomondation: Accommodation;
@@ -49,28 +50,33 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
         image={props.accomondation.mainImage.src}
         alt={props.accomondation.mainImage.title}
       />
-      <CardContent sx={{ paddingBottom: 0}}>
+      <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography component="div" variant="h6">
-              {props.accomondation.name}
-            </Typography>
-            <ThumbUpIcon color='primary' />
-            <StarsIcon color='primary' />
+          <Stack>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Typography component="div" variant="h6">
+                {props.accomondation.name}
+              </Typography>
+              <ThumbUpIcon color='primary' />
+              <StarsIcon color='primary' />
+            </Stack>
+            <Stack direction="row" alignItems="center" mb={2}>
+              <LocationOnOutlinedIcon color="action" />
+              <Typography variant="body1" color="text.secondary" component="div">
+                {props.accomondation.location}
+              </Typography>
+            </Stack>
           </Stack>
-          <Stack alignItems="flex-start">
+
+          <Stack alignItems="flex-end">
             <Stack direction="row" spacing={0.5} alignItems="center">
               <StarIcon sx={{ color: '#faaf00' }} />
               <Typography variant="h5" color="primary">{props.accomondation.rate}</Typography>
             </Stack>
+            <Typography variant="caption">(103 opinie)</Typography>
           </Stack>
         </Stack>
-        <Stack direction="row" alignItems="center" mb={2}>
-          <LocationOnOutlinedIcon color="action" />
-          <Typography variant="body1" color="text.secondary" component="div">
-            {props.accomondation.location}
-          </Typography>
-        </Stack>
+
         <Stack spacing={1}>
           <Stack direction="row" spacing={1} alignContent="end">
             <Typography color="text.secondary">Proponowana opcja:</Typography>
@@ -92,7 +98,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
         </Stack>
       </CardContent>
       <CardActions sx={{ padding: 0, mt: 2 }}>
-        <Button variant='contained' href={`/accomondation-details/${props.accomondation.id}`} size="large" fullWidth sx={{ height: 50 }}>Zobacz dostępność</Button>
+        <Button variant='contained' href={`/accomondation-details/${props.accomondation.id}`} size="large" fullWidth sx={{ height: 50 }} endIcon={<ArrowForwardOutlinedIcon />} >Zobacz dostępność</Button>
       </CardActions>
     </Card>
   );

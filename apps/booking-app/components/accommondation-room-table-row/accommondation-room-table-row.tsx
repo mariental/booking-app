@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
+import { Checkbox } from '@mui/material';
 
 export interface AccommondationRoomTableRowProps {
   row: any;
@@ -37,12 +38,10 @@ export function AccommondationRoomTableRow(props: AccommondationRoomTableRowProp
       <StyledTableCell component="th" scope="row">
         <Stack direction="row" spacing={1}>
           <Typography variant='subtitle2'>{props.row.numberOfPeople}</Typography>
-          <Person2OutlinedIcon fontSize='small' />
+          {[...Array(props.row.numberOfPeople)].map((x, i) =>
+            <Person2OutlinedIcon fontSize='small' />
+          )}
         </Stack>
-      </StyledTableCell>
-      <StyledTableCell align="right">
-        <Typography>{props.row.price} zł</Typography>
-        <Typography variant="caption" color="text.secondary"> Zawiera opłaty i podatki </Typography>
       </StyledTableCell>
       <StyledTableCell align="right">
         {props.row.options.map(option =>
@@ -50,7 +49,15 @@ export function AccommondationRoomTableRow(props: AccommondationRoomTableRowProp
         )}
       </StyledTableCell>
       <StyledTableCell align="right">
-        {props.row.select}
+        <Typography variant='h6' fontWeight={600}>{props.row.price} zł</Typography>
+        <Typography variant="caption" color="text.secondary"> Zawiera opłaty i podatki </Typography>
+      </StyledTableCell>
+      <StyledTableCell align="right">
+        <Checkbox
+          aria-label='choose-room'
+          defaultChecked
+          sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+        />
       </StyledTableCell>
     </StyledTableRow>
   );

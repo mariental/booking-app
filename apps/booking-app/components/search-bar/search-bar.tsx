@@ -13,6 +13,7 @@ export interface SearchBarProps { }
 const Item = styled(Paper)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
+  backgroundColor: 'white',
   alignItems: 'left',
   gap: 24,
   padding: 24,

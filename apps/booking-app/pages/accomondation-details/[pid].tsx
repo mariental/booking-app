@@ -31,7 +31,56 @@ import RulesOfStay from 'apps/booking-app/components/rules-of-stay/rules-of-stay
 import GuestReviews from 'apps/booking-app/components/guest-reviews/guest-reviews';
 import SearchBar from 'apps/booking-app/components/search-bar/search-bar';
 import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
+import { styled } from '@mui/material/styles';
 
+const AntTabs = styled(Tabs)({
+  borderBottom: '1px solid #e8e8e8',
+  '& .MuiTabs-indicator': {
+    backgroundColor: '#1890ff',
+  },
+});
+
+const AntTab = styled((props: StyledTabsProps) => <Tab disableRipple {...props} />)(
+  ({ theme }) => ({
+    textTransform: 'none',
+    minWidth: 0,
+    [theme.breakpoints.up('sm')]: {
+      minWidth: 0,
+    },
+    fontWeight: theme.typography.fontWeightRegular,
+    marginRight: theme.spacing(1),
+    color: 'rgba(0, 0, 0, 0.85)',
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    '&:hover': {
+      color: '#40a9ff',
+      opacity: 1,
+    },
+    '&.Mui-selected': {
+      color: '#1890ff',
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+    '&.Mui-focusVisible': {
+      backgroundColor: '#d1eaff',
+    },
+  }),
+);
+
+interface StyledTabsProps {
+  children?: React.ReactNode;
+  value: number;
+  onChange: (event: React.SyntheticEvent, newValue: number) => void;
+}
 
 export interface AccomondationDetailsProps { }
 
@@ -168,7 +217,7 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -212,7 +261,7 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
           aria-label="full width tabs example"
         >
           <Tab label="Ogólne informacje" {...a11yProps(0)} />
-          <Tab label="Informacje i ceny" {...a11yProps(1)} />
+          <Tab label="Pokoje" {...a11yProps(1)} />
           <Tab label="Udogodnienia" {...a11yProps(2)} />
           <Tab label="Zasady pobytu" {...a11yProps(3)} />
           <Tab label="Opinie gości" {...a11yProps(4)} />

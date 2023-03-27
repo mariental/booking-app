@@ -15,7 +15,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: 'center',
   gap: 10,
   paddingTop: theme.spacing(1),
-  paddingBottom: theme.spacing(2),
+  paddingBottom: theme.spacing(1),
   flexWrap: 'wrap',
   '@media all': {
     minHeight: 60
@@ -25,7 +25,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 export function Navbar(props: NavbarProps) {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color='transparent' sx={{ boxShadow: 0 }}>
+      <AppBar position="static" color='transparent' sx={{ boxShadow: 2, mb: 1}}>
         <StyledToolbar>
           <Stack direction="row" justifyContent="center">
             <IconButton edge="start" color="primary" aria-label="menu">

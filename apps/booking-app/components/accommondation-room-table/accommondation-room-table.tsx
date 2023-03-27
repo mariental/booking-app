@@ -55,8 +55,9 @@ function createData(
 }
 
 const rows = [
-  createData(1, 155, ['Oferta bezzwrotna', 'Zapłać z wyprzedzeniem'], <BasicSelect />),
+  createData(2, 200, ['Oferta bezzwrotna', 'Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], <BasicSelect />),
   createData(2, 236, ['Bezpłatne odwołanie do godz. 23:59 w dniu 18 kwietnia 2023', 'Nie płacisz nic do 16 kwietnia 2023'], <BasicSelect />),
+  createData(2, 272, ['Bezpłatne odwołanie do godz. 23:59 w dniu 18 kwietnia 2023', 'Nie płacisz nic do 16 kwietnia 2023', 'Wliczona cena śniadania'], <BasicSelect />),
 ];
 
 export interface AccommondationRoomTableProps { }
@@ -67,10 +68,10 @@ export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Dla</StyledTableCell>
+            <StyledTableCell>Liczba osób</StyledTableCell>
+            <StyledTableCell align="right">Opcje pokoju</StyledTableCell>
             <StyledTableCell align="right">Dzisiejsza cena</StyledTableCell>
-            <StyledTableCell align="right">Twoje opcje</StyledTableCell>
-            <StyledTableCell align="right">Wybierz liczbę pokoi</StyledTableCell>
+            <StyledTableCell align="right">Wybierz pokój</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>

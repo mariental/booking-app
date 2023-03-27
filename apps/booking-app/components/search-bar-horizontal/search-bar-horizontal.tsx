@@ -11,6 +11,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 const Item = styled(Paper)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
+  marginTop: 12,
+  marginBottom: 12,
   gap: 24,
   padding: 24,
   flexWrap: 'wrap',
@@ -72,7 +74,7 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
       };
 
   return (
-    <Item elevation={0}>
+    <Item elevation={3}>
       <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
@@ -113,7 +115,7 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
         id="chooseLocation"
         options={locations}
         sx={{ width: 260 }}
-        renderInput={(params) => <CustomTextField {...params} label="Dokąd się wybierasz?"/>}
+        renderInput={(params) => <CustomTextField {...params} label="Miejsce docelowe"/>}
       />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker

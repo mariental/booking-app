@@ -25,7 +25,7 @@ import SearchBar from 'apps/booking-app/components/search-bar/search-bar';
 import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
 
 const category = [
-  'Domy i apartamenty na wyłączność', 'Apartamenty', 'Hotele', 'Domy wakacyjne', 'Kwatery prywatne'
+  'Domy i apartamenty na wyłączność', 'Apartament', 'Hotel', 'Dom wakacyjny'
 ]
 
 const facilities = [
@@ -41,17 +41,9 @@ const prices = [
 ]
 
 const sortOptions = [
-  'Wybrane przez nas', 'Najpierw domy potem apartamenty', 'Cena (od najniższej)', 'Najlepsza ocena i najniższa cena', 'Cena (od najwyższej)',
-  'Ocena obiektu (od najwyższej)', 'Ocena obiektu (od najniższej)', 'Ocena obiektu i cena', 'Odległość od wybranego miejsca', 'Najczęściej i najlepiej oceniane'
+  'Najpopularniejsze', 'Cena (od najniższej)', 'Cena (od najwyższej)', 'Ocena obiektu (od najwyższej)', 'Ocena obiektu (od najniższej)'
 ]
 
-const types = [
-  'Hotele',
-  'Domy wakacyjne',
-  'Styl apartamentowy',
-  'Miejsce współdzielone',
-  'Pobyt na łonie natury'
-];
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -91,9 +83,9 @@ export function SearchResult(props: SearchResultProps) {
 
   return (
     <>
-      <SearchBarHorizontal />
-      <Container maxWidth="xl" sx={{ mx: 'auto', my: 4 }}>
-        <Grid container spacing={{ xs: 2, md: 6 }} columns={{ xs: 1, md: 12 }} sx={{ justifyContent: 'center', position: 'relative' }}>
+      <Container maxWidth="xl" sx={{ mx: 'auto', my: 2 }}>
+        <SearchBarHorizontal/>
+        <Grid container spacing={{ xs: 2, md: 6 }} columns={{ xs: 1, md: 12 }} sx={{ justifyContent: 'center', position: 'relative', marginTop: 2}}>
           <Grid item xs={1} md={3}>
             <Stack sx={{ position: 'sticky', top: 20 }}>
               <Accordion>
@@ -164,28 +156,7 @@ export function SearchResult(props: SearchResultProps) {
           </Grid>
           <Grid item xs={1} md={8}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={0} sx={{ mb: 2 }}>
-              <FormControl sx={{ m: 1, width: 300, margin: 0 }} size="small">
-                <InputLabel id="demo-simple-select-label">Typ obiektu</InputLabel>
-                <Select
-                  labelId="demo-multiple-checkbox-label"
-                  id="demo-multiple-checkbox"
-                  multiple
-                  value={type}
-                  onChange={handleChange}
-                  input={<OutlinedInput label="Typ obiektu" />}
-                  renderValue={(selected) => selected.join(', ')}
-                  MenuProps={MenuProps}
-                >
-                  {types.map((name) => (
-                    <MenuItem key={name} value={name}>
-                      <Checkbox checked={type.indexOf(name) > -1} />
-                      <ListItemText primary={name} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl sx={{ m: 1, minWidth: 150, margin: 0 }} size="small">
+              <FormControl sx={{ m: 1, minWidth: 250, margin: 0 }}>
                 <InputLabel id="demo-simple-select-label">Sortuj według</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -193,6 +164,7 @@ export function SearchResult(props: SearchResultProps) {
                   value={sort}
                   label="Sortuj według"
                   onChange={(e) => setSort(e.target.value)}
+                  fullWidth
                 >
                   {sortOptions.map((item) =>
                     <MenuItem value={item}>{item}</MenuItem>

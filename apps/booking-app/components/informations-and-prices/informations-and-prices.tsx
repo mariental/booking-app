@@ -15,6 +15,13 @@ import ListItemText from '@mui/material/ListItemText';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import SendIcon from '@mui/icons-material/Send';
+import WifiIcon from '@mui/icons-material/Wifi';
+import BathtubOutlinedIcon from '@mui/icons-material/BathtubOutlined';
+import TvOutlinedIcon from '@mui/icons-material/TvOutlined';
+import PanoramaOutlinedIcon from '@mui/icons-material/PanoramaOutlined';
+import AcUnitOutlinedIcon from '@mui/icons-material/AcUnitOutlined';
+import HeightOutlinedIcon from '@mui/icons-material/HeightOutlined';
+
 
 export interface InformationsAndPricesProps { }
 
@@ -43,20 +50,52 @@ const reservationDetails = []
 
 const name = 'Pokój Dwuosobowy z balkonem'
 
+const rooms = [
+  {
+    id: 1,
+    name: 'Pokój dwuosobowy z balkonem',
+    image: 'https://images.unsplash.com/photo-1535312800630-1c173409799a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    facilities: [ {name: '35 m²', icon: <HeightOutlinedIcon/>},
+    {name: 'WiFi', icon: <WifiIcon/>},
+    {name: 'Widok na miasto', icon: <PanoramaOutlinedIcon/>},
+    {name: 'Prywatna łazienka', icon: <BathtubOutlinedIcon/>},
+    {name: 'Telewizor', icon: <TvOutlinedIcon/>},
+    ],
+    beds: [{ type: 'podwójne', quantity: 1 }]
+  },
+  {
+    id: 1,
+    name: 'Pokój trzyosobowy',
+    image: 'https://images.unsplash.com/photo-1559508551-44bff1de756b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+    facilities: [  
+    {name: '46 m²', icon: <HeightOutlinedIcon/>},
+    {name: 'WiFi', icon: <WifiIcon/>},
+    {name: 'Prywatna łazienka', icon:  <BathtubOutlinedIcon/>},
+    {name: 'Klimatyzacja', icon: <AcUnitOutlinedIcon/>},
+    ],
+    beds: [{ type: 'podwójne', quantity: 1 }, { type: 'pojedyncze', quantity: 2 }]
+  }
+]
+
 export function InformationsAndPrices(props: InformationsAndPricesProps) {
-  const [reservationRoomsNumber, setReservationRoomsNumber] = React.useState(2)
-  const [reservationPrice, setreservationPrice] = React.useState(472)
+  const [reservationRoomsNumber, setReservationRoomsNumber] = React.useState(1)
+  const [reservationPrice, setreservationPrice] = React.useState(236)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         <Grid item xs={9}>
-          <AccommondationRoom name={name} facilities={facilities} moreFacilties={moreFacilties} beds={beds} />
-          <AccommondationRoom name={name} facilities={facilities} moreFacilties={moreFacilties} beds={beds2} />
+          {rooms.map(room => 
+            <AccommondationRoom  room={room}/>
+          )}
+        
         </Grid>
         <Grid item xs={3}>
           <Card sx={{ maxWidth: 345 }}>
             <CardContent>
+                <Typography variant="h5" mb={2}>
+                  Pokój dwuosobowy z balkonem
+                </Typography>
               <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography variant="h6" textAlign="center">
                   {reservationRoomsNumber} {reservationRoomsNumber === 1 ? 'pokój' : 'pokoje'}
