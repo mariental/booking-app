@@ -4,142 +4,27 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import { Avatar, Button, CardActions, Divider, FormControl, IconButton, InputLabel, LinearProgress, MenuItem, Rating, Select, Slider, Stack, Typography } from '@mui/material';
+import { Avatar, Button, CardActions, Divider, FormControl, InputLabel, LinearProgress, MenuItem, Rating, Select, Stack, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
-import StarIcon from '@mui/icons-material/Star';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme } from '@mui/material/styles';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import BedtimeOutlinedIcon from '@mui/icons-material/BedtimeOutlined';
-
-const overallRating =
-{
-  rate: 4.8,
-  rateNumber: 104,
-  individualRatings: [
-    {
-      value: 1,
-      rateNumber: 0
-    },
-    {
-      value: 2,
-      rateNumber: 0
-    },
-    {
-      value: 3,
-      rateNumber: 0
-    },
-    {
-      value: 4,
-      rateNumber: 2
-    },
-    {
-      value: 5,
-      rateNumber: 102
-    },
-  ]
-}
-
-const categoryRating = [
-  {
-    name: 'Personel',
-    rate: 4.1
-  },
-  {
-    name: 'Udogodnienia',
-    rate: 4.9
-  },
-  {
-    name: 'Czystość',
-    rate: 4.8
-  },
-  {
-    name: 'Komfort',
-    rate: 4.6
-  },
-  {
-    name: 'Stosunek jakości do ceny ',
-    rate: 4.6
-  },
-  {
-    name: 'Lokalizacja',
-    rate: 4.4
-  },
-]
-
-const reviews = [
-  {
-    id: 1,
-    title: 'Wyjątkowy',
-    description: 'Po raz kolejny w tym samym miejscu i ciągle pozytywnie.',
-    author: 'Anna Nowak',
-    location: 'Polska',
-    date: '01-03-2023',
-    rate: 5.0,
-    reservation: {
-      room: 'Apartament z 1 sypialnią',
-      duration: '1 noc',
-      date: 'luty 2023',
-      option: 'rodzina'
-    }
-  },
-  {
-    id: 2,
-    title: 'Polecam do pracy i odpoczynku',
-    description: 'Rewelacyjne miejsce pod każdym względem.',
-    author: 'Tomasz Kowalski',
-    location: 'Polska',
-    date: '12-01-2023',
-    rate: 4.5,
-    reservation: {
-      room: 'Pokój trzyosobowy',
-      duration: '3 noce',
-      date: 'styczeń 2023',
-      option: 'rodzina'
-    }
-  },
-  {
-    id: 3,
-    title: 'Wyjątkowy',
-    description: 'Po raz kolejny w tym samym miejscu i ciągle pozytywnie.',
-    author: 'Anna Nowak',
-    location: 'Polska',
-    date: '01-03-2023',
-    rate: 5.0,
-    reservation: {
-      room: 'Apartament z 1 sypialnią',
-      duration: '1 noc',
-      date: 'luty 2023',
-      option: 'rodzina'
-    }
-  },
-  {
-    id: 4,
-    title: 'Wyjątkowy',
-    description: 'Po raz kolejny w tym samym miejscu i ciągle pozytywnie.',
-    author: 'Anna Nowak',
-    location: 'Polska',
-    date: '01-03-2023',
-    rate: 5.0,
-    reservation: {
-      room: 'Apartament z 1 sypialnią',
-      duration: '1 noc',
-      date: 'luty 2023',
-      option: 'rodzina'
-    }
-  }
-]
+import { Rate, Review } from 'apps/booking-app/store/accomondationSlice';
 
 const sortOptions = [
   'Najtrafniejsze', 'Najnowsze', 'Najstarsze', 'Najwyższe oceny', 'Najniższe oceny',
 ]
 
-export interface GuestReviewsProps { }
+export interface GuestReviewsProps { 
+  accommodationReviews: Review[];
+  accommodationRatings: Rate[];
+}
 
 export function GuestReviews(props: GuestReviewsProps) {
   const [sort, setSort] = React.useState('');
@@ -153,15 +38,15 @@ export function GuestReviews(props: GuestReviewsProps) {
             <Stack direction="row" spacing={2}>
               <Stack alignItems="center">
                 <Typography variant="h3">4.8</Typography>
-                <Rating name="read-only" value={overallRating.rate} readOnly precision={0.1} />
-                <Typography color="text.secondary" variant="body2">{overallRating.rateNumber} opinie</Typography>
+                <Rating name="read-only" value={props.accommodationRatings.find(item => item.name === 'Overall').value} readOnly precision={0.1} />
+                <Typography color="text.secondary" variant="body2">{props.accommodationRatings.find(item => item.name === 'Overall').quantity} opinie</Typography>
               </Stack>
               <Stack direction="column-reverse" sx={{ width: '100%' }}>
-                {overallRating.individualRatings.map(item =>
+                {props.accommodationRatings.map(item =>
                   <Stack direction="row" alignItems="center" justifyContent="space-around" spacing={1}>
                     <Typography variant="caption">{item.value}</Typography>
                     <Box sx={{ minWidth: 120 }}>
-                      <LinearProgress variant="determinate" value={item.rateNumber} />
+                      <LinearProgress variant="determinate" value={item.quantity} />
                     </Box>
                   </Stack>
                 )}
@@ -169,12 +54,12 @@ export function GuestReviews(props: GuestReviewsProps) {
             </Stack>
             <Divider variant="middle" sx={{ my: 3 }} />
             <Stack spacing={1}>
-              {categoryRating.map(item =>
+              {props.accommodationRatings.map(item =>
                 <Stack direction="row" justifyContent="space-between">
                   <Typography color="text.secondary" variant="body2">{item.name}</Typography>
                   <Stack direction="row" justifyContent="space-between">
-                    <Rating name="read-only" value={item.rate} readOnly sx={{ mr: 2 }} size="small" precision={0.1} />
-                    <Typography>{item.rate}</Typography>
+                    <Rating name="read-only" value={item.value} readOnly sx={{ mr: 2 }} size="small" precision={0.1} />
+                    <Typography>{item.value}</Typography>
                   </Stack>
                 </Stack>
               )}
@@ -229,7 +114,7 @@ export function GuestReviews(props: GuestReviewsProps) {
             </Stack>
           </Stack>
           {
-            reviews.map((item) => (
+            props.accommodationReviews.map((item) => (
               <ListItem key={`item-${item.id}`}>
                 <Card sx={{ width: '100%', mb: 1, paddingTop: 3, paddingBottom: 3, paddingLeft: 1, paddingRight: 1 }}>
                   <CardHeader
@@ -240,7 +125,7 @@ export function GuestReviews(props: GuestReviewsProps) {
                     }
                     title={item.author}
                     titleTypographyProps={{ fontSize: 18 }}
-                    subheader={`Opublikowano: ${item.date}`}
+                    subheader={`Opublikowano: ${item.publicationDate}`}
                     subheaderTypographyProps={{ fontSize: 16 }}
                     action={
                       <Stack>
@@ -255,29 +140,29 @@ export function GuestReviews(props: GuestReviewsProps) {
                     <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 3 }}>
                       <BedOutlinedIcon fontSize='small' color="disabled" />
                       <Typography variant="body2" color="text.secondary">
-                        {item.reservation.room}
+                        {item.reservationInfo.name}
                       </Typography>
                       <Divider orientation="vertical" flexItem />
                       <CalendarMonthOutlinedIcon fontSize='small' color="disabled" />
                       <Typography variant="body2" color="text.secondary">
-                        {item.reservation.date}
+                        {item.reservationInfo.date}
                       </Typography>
                       <Divider orientation="vertical" flexItem />
                       <BedtimeOutlinedIcon fontSize='small' color="disabled" />
                       <Typography variant="body2" color="text.secondary">
-                        {item.reservation.duration}
+                        {item.reservationInfo.duration}
                       </Typography>
                       <Divider orientation="vertical" flexItem />
                       <FamilyRestroomIcon fontSize='small' color="disabled" />
                       <Typography variant="body2" color="text.secondary">
-                        {item.reservation.option}
+                        {item.reservationInfo.option}
                       </Typography>
                     </Stack>
                     <Typography variant="h5" component="div" gutterBottom>
                       {item.title}
                     </Typography>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      {item.description}
+                      {item.content}
                     </Typography>
                   </CardContent>
                   <CardActions sx={{ justifyContent: "right" }}>

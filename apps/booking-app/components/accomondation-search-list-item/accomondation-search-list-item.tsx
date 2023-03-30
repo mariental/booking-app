@@ -1,29 +1,20 @@
 import * as React from 'react';
-import { Accommodation } from '../../accomondations';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import Rating from '@mui/material/Rating';
-import MuiGrid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
 import { Button, CardActions } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import Alert from '@mui/material/Alert';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import StarsIcon from '@mui/icons-material/Stars';
 import KingBedOutlinedIcon from '@mui/icons-material/KingBedOutlined';
-import ChairOutlinedIcon from '@mui/icons-material/ChairOutlined';
 import BathtubOutlinedIcon from '@mui/icons-material/BathtubOutlined';
 import KitchenOutlinedIcon from '@mui/icons-material/KitchenOutlined';
-import HeightOutlinedIcon from '@mui/icons-material/HeightOutlined';
-import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import StarIcon from '@mui/icons-material/Star';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
+import { Accommodation } from 'apps/booking-app/store/accomondationSlice';
 
 export interface AccomondationSearchListItemProps {
   accomondation: Accommodation;
@@ -48,7 +39,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
         component="img"
         sx={{ height: 300 }}
         image={props.accomondation.mainImage.src}
-        alt={props.accomondation.mainImage.title}
+        alt={props.accomondation.mainImage.alt}
       />
       <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">
@@ -63,7 +54,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
             <Stack direction="row" alignItems="center" mb={2}>
               <LocationOnOutlinedIcon color="action" />
               <Typography variant="body1" color="text.secondary" component="div">
-                {props.accomondation.location}
+                {props.accomondation.city}, {props.accomondation.country}
               </Typography>
             </Stack>
           </Stack>
@@ -71,9 +62,9 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
           <Stack alignItems="flex-end">
             <Stack direction="row" spacing={0.5} alignItems="center">
               <StarIcon sx={{ color: '#faaf00' }} />
-              <Typography variant="h5" color="primary">{props.accomondation.rate}</Typography>
+              <Typography variant="h5" color="primary">{props.accomondation.ratings.find((item) => item.name === 'Overall').value}</Typography>
             </Stack>
-            <Typography variant="caption">(103 opinie)</Typography>
+            <Typography variant="caption">({props.accomondation.ratings.find((item) => item.name === 'Overall').quantity} opinii)</Typography>
           </Stack>
         </Stack>
 
@@ -90,7 +81,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
         </Stack>
         <Stack mt={2}>
           <Typography variant="h5" color="primary.light" textAlign="end" fontWeight={600}>
-            {props.accomondation.price} PLN / noc
+            {props.accomondation.pricePerNight} PLN / noc
           </Typography>
           <Typography variant="caption" color="text.secondary" textAlign="end">
             Zawiera opłaty i podatki

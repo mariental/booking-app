@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
-import { accommodation } from '../../accomondations';
 import AccomondationSearchListItem from '../../components/accomondation-search-list-item/accomondation-search-list-item';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -17,12 +16,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Container from '@mui/material/Container';
-import ListItemText from '@mui/material/ListItemText';
 import { Theme, useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Pagination from '@mui/material/Pagination';
-import SearchBar from 'apps/booking-app/components/search-bar/search-bar';
 import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
+import { Accommodation } from 'apps/booking-app/store/accomondationSlice';
+import { useAppSelector } from 'apps/booking-app/store';
+
 
 const category = [
   'Domy i apartamenty na wyłączność', 'Apartament', 'Hotel', 'Dom wakacyjny'
@@ -71,6 +70,8 @@ export function SearchResult(props: SearchResultProps) {
   const [type, setType] = React.useState<string[]>([]);
   const [sort, setSort] = React.useState('');
   const theme = useTheme();
+
+  const accommodation: Accommodation[] = useAppSelector((state) => state.accomondation);
 
   const handleChange = (event: SelectChangeEvent<typeof type>) => {
     const {

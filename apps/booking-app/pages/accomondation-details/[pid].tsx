@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { accommodation } from 'apps/booking-app/accomondations';
 import { useRouter } from 'next/router';
 import Container from '@mui/material/Container';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/system/Box';
-import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import DetailsInfo from 'apps/booking-app/components/details-info/details-info';
 import InformationsAndPrices from 'apps/booking-app/components/informations-and-prices/informations-and-prices';
@@ -29,9 +27,10 @@ import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import RulesOfStay from 'apps/booking-app/components/rules-of-stay/rules-of-stay';
 import GuestReviews from 'apps/booking-app/components/guest-reviews/guest-reviews';
-import SearchBar from 'apps/booking-app/components/search-bar/search-bar';
 import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
 import { styled } from '@mui/material/styles';
+import { useAppSelector } from 'apps/booking-app/store';
+import { Accommodation } from 'apps/booking-app/store/accomondationSlice';
 
 const AntTabs = styled(Tabs)({
   borderBottom: '1px solid #e8e8e8',
@@ -235,6 +234,15 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
   const router = useRouter()
   const { pid } = router.query
   const [value, setValue] = React.useState(0);
+  const [accommodation, setAccommodation] = React.useState<Accommodation>()
+
+  const accommodations: Accommodation[] = useAppSelector((state) => state.accomondation);
+
+  React.useEffect(() => {
+    if (pid) {
+      setAccommodation(accommodations.find(item => item.id === pid))
+    }
+  }, [pid])
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -244,13 +252,9 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
     setValue(index);
   };
 
-  React.useEffect(() => {
-    console.log(accommodation.find(item => item.id === pid))
-  })
-
   return (
     <Box sx={{ width: '100%' }}>
-      <SearchBarHorizontal/>
+      <SearchBarHorizontal />
       <AppBar position="static">
         <Tabs
           value={value}
@@ -269,7 +273,9 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
       </AppBar>
       <TabPanel value={value} index={0}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-          <DetailsInfo/>
+          {
+            accommodation === undefined ? <></> : <DetailsInfo accommodation={accommodation} />
+          }
         </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -289,7 +295,9 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
       </TabPanel>
       <TabPanel value={value} index={4}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-          <GuestReviews />
+          {
+            accommodation === undefined ? <></> : <GuestReviews accommodationReviews={accommodation.reviews} accommodationRatings={accommodation.ratings}/>
+          }
         </Container>
       </TabPanel>
     </Box>
