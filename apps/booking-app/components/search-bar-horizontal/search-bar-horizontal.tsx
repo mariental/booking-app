@@ -5,8 +5,10 @@ import { TextField, Button, ButtonGroup, Fade, Popper, PopperPlacementType, Stac
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
+import * as dayjs from 'dayjs';
 import React from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useRouter } from 'next/router';
 
 const Item = styled(Paper)(({ theme }) => ({
   display: 'flex',
@@ -36,7 +38,8 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
     '&:hover fieldset': {
       borderColor: `${theme.palette.secondary.light}`,
     },
-    width: 260,  }
+    width: 260,
+  }
 }));
 
 const CustomButton = styled(Button)(({ theme }) => ({
@@ -49,29 +52,38 @@ const CustomButton = styled(Button)(({ theme }) => ({
 }));
 
 const locations = [
-  { label: 'Szwecja', year: 1994 },
-  { label: 'Warszawa', year: 1972 },
-  { label: 'Kraków', year: 1974 },
-  { label: 'Zakopane', year: 2008 }
+  'Szwecja',
+  'Polska',
 ]
 
+interface GuestOptions {
+  adults: number;
+  kids: number;
+  rooms: number;
+}
 
-export interface SearchBarHorizontalProps {}
+export interface SearchBarHorizontalProps { }
 
 export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
-  const [startDate, setStartDate] = React.useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = React.useState<Dayjs | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
+  const [location, setLocation] = React.useState<string | null>(null);
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = React.useState<Dayjs | null>(null);
+  const [guestOptions, setGuestOptions] = React.useState<GuestOptions>({
+    adults: 1,
+    kids: 0,
+    rooms: 1
+  });
 
-  const handleClick =
-    (newPlacement: PopperPlacementType) =>
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-        setOpen((prev) => placement !== newPlacement || !prev);
-        setPlacement(newPlacement);
-      };
+  const handleClick = (newPlacement: PopperPlacementType) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+    setOpen((prev) => placement !== newPlacement || !prev);
+    setPlacement(newPlacement);
+  };
+
+  const router = useRouter()
 
   return (
     <Item elevation={3}>
@@ -83,25 +95,25 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography>Dorośli</Typography>
                   <ButtonGroup variant="outlined" aria-label="outlined button group">
-                    <Button>+</Button>
-                    <ColorButton disabled>0</ColorButton>
-                    <Button>-</Button>
+                    <Button onClick={() => {setGuestOptions({...guestOptions, adults: guestOptions.adults+1})}}>+</Button>
+                    <ColorButton disabled>{guestOptions.adults}</ColorButton>
+                    <Button onClick={() => {setGuestOptions({...guestOptions, adults: guestOptions.adults-1})}}>-</Button>
                   </ButtonGroup>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography>Dzieci</Typography>
                   <ButtonGroup variant="outlined" aria-label="outlined button group">
-                    <Button>+</Button>
-                    <ColorButton disabled>0</ColorButton>
-                    <Button>-</Button>
+                    <Button onClick={() => {setGuestOptions({...guestOptions, kids: guestOptions.kids+1})}}>+</Button>
+                    <ColorButton disabled>{guestOptions.kids}</ColorButton>
+                    <Button onClick={() => {setGuestOptions({...guestOptions, kids: guestOptions.kids-1})}}>-</Button>
                   </ButtonGroup>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography>Pokoje</Typography>
                   <ButtonGroup variant="outlined" aria-label="outlined button group">
-                    <Button>+</Button>
-                    <ColorButton disabled>0</ColorButton>
-                    <Button>-</Button>
+                    <Button onClick={() => {setGuestOptions({...guestOptions, rooms: guestOptions.rooms+1})}}>+</Button>
+                    <ColorButton disabled>{guestOptions.rooms}</ColorButton>
+                    <Button onClick={() => {setGuestOptions({...guestOptions, rooms: guestOptions.rooms-1})}}>-</Button>
                   </ButtonGroup>
                 </Stack>
                 <Button variant="contained">Gotowe</Button>
@@ -114,35 +126,46 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
         disablePortal
         id="chooseLocation"
         options={locations}
+        value={location}
+        onChange={(event: any, newValue: string | null) => {
+          setLocation(newValue);
+        }}
         sx={{ width: 260 }}
         renderInput={(params) => <CustomTextField {...params} label="Miejsce docelowe"/>}
       />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Data zameldowania"
-            value={startDate}
-            onChange={(newValue) => {
-              setStartDate(newValue);
-            }}
-            inputFormat="DD-MM-YYYY"
-            renderInput={(params) => <CustomTextField {...params}/>}
-          />
-        </LocalizationProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Data wymeldowania"
-            value={endDate}
-            onChange={(newValue) => {
-              setEndDate(newValue);
-            }}
-            inputFormat="DD-MM-YYYY"
-            renderInput={(params) => <CustomTextField {...params}/>}
-          />
-        </LocalizationProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label="Data zameldowania"
+          value={startDate}
+          onChange={(newValue) => {
+            setStartDate(newValue);
+          }}
+          inputFormat="DD-MM-YYYY"
+          minDate={dayjs()}
+          renderInput={(params) => <CustomTextField {...params} />}
+          disableHighlightToday
+        />
+      </LocalizationProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label="Data wymeldowania"
+          value={endDate}
+          minDate={startDate === null ? dayjs().add(1, 'day') : startDate.add(1, 'day')}
+          onChange={(newValue) => {
+            setEndDate(newValue);
+          }}
+          inputFormat="DD-MM-YYYY"
+          renderInput={(params) => <CustomTextField {...params} />}
+          disableHighlightToday
+        />
+      </LocalizationProvider>
       <CustomButton variant="outlined" onClick={handleClick('bottom')} endIcon={<ExpandMoreIcon />} sx={{ height: 56 }}>
-        2 dorosłych &#x2022; 0 dzieci &#x2022; 1 pokój
+        1 dorosłych &#x2022; 0 dzieci &#x2022; 1 pokój
       </CustomButton>
-      <Button variant="contained" endIcon={<Search />} href="search-result" color='secondary' sx={{ height: 56, fontSize: 16, width: 260}}>
+      <Button variant="contained" endIcon={<Search />} 
+        onClick={() => router.push(`/search-result?location=${location}&checkIn=${startDate.format('DD-MM-YYYY')}&checkOut=${endDate.format('DD-MM-YYYY')}&adults=${guestOptions.adults}&kids=${guestOptions.kids}&rooms=${guestOptions.rooms}`)} 
+        color='secondary' sx={{ height: 56, fontSize: 16, width: 260 }}
+        >
         Wyszukaj
       </Button>
     </Item>

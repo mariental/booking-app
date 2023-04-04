@@ -45,6 +45,9 @@ export interface RoomOption {
     numberOfPeople: number;
     options: string[];
     price: number;
+    maxPersons: number;
+    cancellationType: string;
+    mealIncluded: string | null;
 }
 
 export interface Room {
@@ -54,6 +57,9 @@ export interface Room {
     beds: Bed[];
     facilities: Facility[];
     options: RoomOption[];
+    unavailabilityDates: Date[];
+    isAvailable: boolean;
+    maxPersons: number;
 }
 
 export interface Accommodation {
@@ -228,8 +234,11 @@ const initialState = [
                     { id: '4',  name: 'Prywatna łazienka', icon: 'BathtubOutlinedIcon'},
                     { id: '5',  name: 'Telewizor', icon: 'TvOutlinedIcon'},
                 ],
-                options: []
-                },
+                options: [],
+                unavailabilityDates: [],
+                maxPersons: 2,
+                isAvailable: true,
+            },
             {
                 id: '1',
                 name: 'Pokój trzyosobowy',
@@ -245,7 +254,10 @@ const initialState = [
                     { id: '8',  name: 'Prywatna łazienka', icon: 'BathtubOutlinedIcon'},
                     { id: '9',  name: 'Klimatyzacja', icon: 'AcUnitOutlinedIcon'},
                 ],
-                options: []
+                options: [],
+                unavailabilityDates: [],
+                maxPersons: 3,
+                isAvailable: true,
             }
         ]
     },
@@ -513,7 +525,49 @@ const initialState = [
         ],
         description: 'Ta urocza drewniana chatka położona jest wśród pięknych lasów i zapewnia idealny wypoczynek z dala od zgiełku miasta. Składa się z jednego przytulnego pokoju z kominkiem, aneksu kuchennego i łazienki. Dom posiada również obszerny taras, który zapewnia wspaniałe widoki na okolicę oraz miejsce do relaksu na świeżym powietrzu. To idealne miejsce na romantyczny wypad dla pary lub na spokojny odpoczynek wśród natury.',
         facilities: [],
-        rooms: []
+        rooms: [
+            {
+                id: '1',
+                name: 'Pokój dwuosobowy z balkonem',
+                mainImage: {
+                    id: '0',
+                    src: 'https://images.unsplash.com/photo-1535312800630-1c173409799a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+                    alt: 'Room image'
+                },
+                beds: [{ type: 'podwójne', quantity: 1 }],
+                facilities: [
+                    { id: '1',  name: '35 m²', icon: 'HeightOutlinedIcon'},
+                    { id: '2',  name: 'WiFi', icon: 'WifiIcon'},
+                    { id: '3',  name: 'Widok na miasto', icon: 'PanoramaOutlinedIcon'},
+                    { id: '4',  name: 'Prywatna łazienka', icon: 'BathtubOutlinedIcon'},
+                    { id: '5',  name: 'Telewizor', icon: 'TvOutlinedIcon'},
+                ],
+                options: [],
+                unavailabilityDates: [],
+                maxPersons: 1,
+                isAvailable: true,
+            },
+            {
+                id: '1',
+                name: 'Pokój trzyosobowy',
+                mainImage: {
+                    id: '0',
+                    src: 'https://images.unsplash.com/photo-1559508551-44bff1de756b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+                    alt: 'Room image'
+                },
+                beds: [{ type: 'podwójne', quantity: 1 }, { type: 'pojedyncze', quantity: 2 }],
+                facilities: [
+                    { id: '6',  name: '46 m²', icon: 'HeightOutlinedIcon'},
+                    { id: '7',  name: 'WiFi', icon: 'WifiIcon'},
+                    { id: '8',  name: 'Prywatna łazienka', icon: 'BathtubOutlinedIcon'},
+                    { id: '9',  name: 'Klimatyzacja', icon: 'AcUnitOutlinedIcon'},
+                ],
+                options: [],
+                unavailabilityDates: [],
+                maxPersons: 1,
+                isAvailable: true,
+            }
+        ]
     },
     {
         id: '4',
