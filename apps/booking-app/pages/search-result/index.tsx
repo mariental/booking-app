@@ -61,8 +61,31 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 
 export interface SearchResultProps { }
 
+
 export function SearchResult(props: SearchResultProps) {
-  const [type, setType] = React.useState<string[]>([]);
+  const [types, setTypes] = React.useState<string[]>([]);
+  const [typeCategory, setTypeCategory] = React.useState([
+    {
+      name: 'houseForExclusivity',
+      value: 'Domy i apartamenty na wyłączność',
+      checked: false
+    },
+    {
+      name: 'apartment',
+      value: 'Apartament',
+      checked: false
+    },
+    {
+      name: 'hotel',
+      value: 'Hotel',
+      checked: false
+    },
+    {
+      name: 'holidayHouse',
+      value: 'Dom wakacyjny',
+      checked: false
+    }
+  ]);
   const [sort, setSort] = React.useState('');
   const [accommodations, setAccommondations] = React.useState<Accommodation[]>([]);
 
@@ -72,16 +95,85 @@ export function SearchResult(props: SearchResultProps) {
 
   let allAccommodations: Accommodation[] = useAppSelector((state) => state.accomondation);
 
-  const handleChange = (event: SelectChangeEvent<typeof type>) => {
-    const {
-      target: { value },
-    } = event;
-    setType(
-      typeof value === 'string' ? value.split(',') : value,
-    );
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updateTypeCategory = typeCategory.map(item => {
+      if(item.name === event.target.name) {
+        return {
+            ...item,
+            checked: event.target.checked 
+        }
+      } else {
+        return item;
+      }
+    })
+    setTypeCategory(updateTypeCategory);
+    if(!event.target.checked) {
+      setTypes(prevState => [...prevState, event.target.value]);
+    } else {
+      setTypes(types.filter(type => type !== event.target.value));
+    }
+    filterByType();
   };
 
-  function containsObject(obj, array) {
+  const sortAccommondations = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSort(event.target.value);
+    if(event.target.value === 'Cena (od najniższej)') {
+      accommodations.sort((a,b) => {
+        const nameA = a.pricePerNight;
+        const nameB = b.pricePerNight; 
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+      
+        return 0;
+      })
+    } else if (event.target.value === 'Cena (od najwyższej)') {
+      accommodations.sort((a,b) => {
+        const nameA = a.pricePerNight;
+        const nameB = b.pricePerNight; 
+        if (nameA > nameB) {
+          return -1;
+        }
+        if (nameA < nameB) {
+          return 1;
+        }
+      
+        return 0;
+      })
+    }  else if (event.target.value === 'Ocena obiektu (od najniższej)') {
+      accommodations.sort((a,b) => {
+        const nameA = a.ratings.find(rating => rating.name === 'Overall').value;
+        const nameB = b.ratings.find(rating => rating.name === 'Overall').value; 
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+      
+        return 0;
+      })
+    }  else if (event.target.value === 'Ocena obiektu (od najwyższej)') {
+      accommodations.sort((a,b) => {
+        const nameA = a.ratings.find(rating => rating.name === 'Overall').value;
+        const nameB = b.ratings.find(rating => rating.name === 'Overall').value; 
+        if (nameA > nameB) {
+          return -1;
+        }
+        if (nameA < nameB) {
+          return 1;
+        }
+      
+        return 0;
+      })
+    }
+  }
+
+
+  const containsObject = (obj, array) => {
     var i;
     for (i = 0; i < array.length; i++) {
         if (array[i] === obj) {
@@ -91,6 +183,14 @@ export function SearchResult(props: SearchResultProps) {
     return false;
   }
 
+  const filterByType = () => {
+    if(types.length > 0) {
+      types.forEach(accType => {
+        setAccommondations(accommodations.filter(acc => acc.type === accType));
+      });
+    }
+  }
+
   React.useEffect(() => {
     const accommondationByLocation: Accommodation[] = allAccommodations.filter((item) => item.country === location || item.city === location);
     const accommondationByGuestNumber: Accommodation[] = [];
@@ -98,7 +198,7 @@ export function SearchResult(props: SearchResultProps) {
     if (typeof adults === 'string' && typeof kids === 'string' && typeof rooms === 'string') {
       accommondationByLocation.forEach(accommondation => {
         if (accommondation.rooms.length >= parseInt(rooms)) {
-          let guestNumber = parseInt(adults) + parseInt(kids)
+          let guestNumber = parseInt(adults) + parseInt(kids);
           accommondation.rooms.forEach(room => {
             if (room.maxPersons >= parseInt(adults) + parseInt(kids) && accommondationByGuestNumber.find(acc => acc.id === accommondation.id) === undefined) {
               accommondationByGuestNumber.push(accommondation);
@@ -112,13 +212,12 @@ export function SearchResult(props: SearchResultProps) {
     }
     setAccommondations(prevState => [...prevState, ...accommondationByGuestNumber]);
     setAccommondations(prevState => [...prevState, ...accommondationByRoomsNumber]);
-    console.log(accommodations);
   }, [location, checkIn, checkOut, adults, kids, rooms])
 
   return (
     <>
       <Container maxWidth="xl" sx={{ mx: 'auto', my: 2 }}>
-        <SearchBarHorizontal />
+        <SearchBarHorizontal location={location.toString()} checkIn={checkIn.toString()} checkOut={checkOut.toString()} adults={adults.toString()} kids={kids.toString()} rooms={rooms.toString()}/>
         <Grid container spacing={{ xs: 2, md: 6 }} columns={{ xs: 1, md: 12 }} sx={{ justifyContent: 'center', position: 'relative', marginTop: 2 }}>
           <Grid item xs={1} md={3}>
             <Stack sx={{ position: 'sticky', top: 20 }}>
@@ -132,8 +231,8 @@ export function SearchResult(props: SearchResultProps) {
                 </AccordionSummary>
                 <AccordionDetails>
                   <FormGroup>
-                    {category.map((item) =>
-                      <FormControlLabel control={<Checkbox name={item} value={item} />} label={item} key={item} />
+                    {typeCategory.map(item => 
+                      <FormControlLabel control={<Checkbox name={item.name} value={item.value} checked={item.checked} onChange={handleChange}/>} label={item.value} key={item.name} />
                     )}
                   </FormGroup>
                 </AccordionDetails>
@@ -197,11 +296,11 @@ export function SearchResult(props: SearchResultProps) {
                   id="demo-simple-select"
                   value={sort}
                   label="Sortuj według"
-                  onChange={(e) => setSort(e.target.value)}
+                  onChange={sortAccommondations}
                   fullWidth
                 >
                   {sortOptions.map((item) =>
-                    <MenuItem value={item}>{item}</MenuItem>
+                    <MenuItem key={item} value={item}>{item}</MenuItem>
                   )}
                 </Select>
               </FormControl>

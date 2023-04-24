@@ -62,19 +62,26 @@ interface GuestOptions {
   rooms: number;
 }
 
-export interface SearchBarHorizontalProps { }
+export interface SearchBarHorizontalProps { 
+  location?: string;
+  checkIn?: string;
+  checkOut?: string;
+  adults?: string;
+  kids?: string;
+  rooms?: string;
+}
 
 export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
-  const [location, setLocation] = React.useState<string | null>(null);
-  const [startDate, setStartDate] = React.useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = React.useState<Dayjs | null>(null);
+  const [location, setLocation] = React.useState<string | null>(props.location !== undefined ? props.location : null);
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(props.checkIn !== undefined ? dayjs(props.checkIn, 'DD-MM-YYYY') : null);
+  const [endDate, setEndDate] = React.useState<Dayjs | null>(props.checkOut !== undefined ? dayjs(props.checkOut, 'DD-MM-YYYY') : null);
   const [guestOptions, setGuestOptions] = React.useState<GuestOptions>({
-    adults: 1,
-    kids: 0,
-    rooms: 1
+    adults: props.adults !== undefined ? parseInt(props.adults) : 1,
+    kids: props.kids !== undefined ? parseInt(props.kids) : 0,
+    rooms: props.rooms !== undefined ? parseInt(props.rooms) : 1
   });
 
   const handleClick = (newPlacement: PopperPlacementType) => (event: React.MouseEvent<HTMLButtonElement>) => {

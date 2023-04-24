@@ -109,7 +109,7 @@ const initialState = [
             }
         ],
         name: 'Skandynawski domek',
-        type: 'Dom',
+        type: 'Domy i apartamenty na wyłączność',
         city: 'Sundsvall',
         country: 'Szwecja',
         pricePerNight: 675,
@@ -424,14 +424,14 @@ const initialState = [
             }
         ],
         name: 'Leśna chata',
-        type: 'Dom',
+        type: 'Dom wakacyjny',
         city: 'Franshammar, Hrabstwo Gavleborg',
         country: 'Szwecja',
         pricePerNight: 630,
         ratings: [
             {
                 name: 'Overall',
-                value: 4.8,
+                value: 4.7,
                 quantity: 6
             },
             {
@@ -599,7 +599,7 @@ const initialState = [
             }
         ],
         name: 'Dom nad jeziorem',
-        type: 'Dom',
+        type: 'Dom wakacyjny',
         city: 'Rimbo',
         country: 'Szwecja',
         pricePerNight: 550,
