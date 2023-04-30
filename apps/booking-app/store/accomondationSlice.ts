@@ -210,7 +210,7 @@ const initialState = [
         ],
         description: 'Ta urocza skandynawska chatka położona jest w spokojnej okolicy i oferuje gościom wiele udogodnień. Chatka składa się z dwóch przytulnych sypialni, salonu z kominkiem oraz w pełni wyposażonej kuchni i łazienki. Dom posiada również przestronny taras, który zapewnia wspaniałe widoki na okolicę oraz miejsce do relaksu na świeżym powietrzu. Chatka jest idealnym miejscem na romantyczny wypad dla pary lub spokojny wypoczynek dla niewielkiej grupy przyjaciół lub rodziny. Wykończenie wnętrza w stylu skandynawskim nadaje chatce przytulnego charakteru, a drewniane elementy dodają uroku i ciepła.',
         facilities: [
-            { id: '1', name: 'Wi-Fi', icon: 'wifi' },
+            { id: '1', name: 'WiFi', icon: 'wifi' },
             { id: '2',  name: 'Zwierzęta są akceptowane', icon: 'pets'},
             { id: '3',  name: 'Pokoje z balkonami', icon: 'balcony' },
             { id: '4',  name: 'Całodobowa recepcja', icon: 'hotel'},
@@ -431,7 +431,7 @@ const initialState = [
         ratings: [
             {
                 name: 'Overall',
-                value: 4.7,
+                value: 3.7,
                 quantity: 6
             },
             {
