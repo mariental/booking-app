@@ -31,6 +31,7 @@ import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizont
 import { styled } from '@mui/material/styles';
 import { useAppSelector } from 'apps/booking-app/store';
 import { Accommodation } from 'apps/booking-app/store/accomondationSlice';
+import { SearchParams } from '../search-result';
 
 const AntTabs = styled(Tabs)({
   borderBottom: '1px solid #e8e8e8',
@@ -235,6 +236,7 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
   const { pid } = router.query
   const [value, setValue] = React.useState(0);
   const [accommodation, setAccommodation] = React.useState<Accommodation>()
+  const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
 
   const accommodations: Accommodation[] = useAppSelector((state) => state.accomondation);
 
@@ -243,6 +245,19 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
       setAccommodation(accommodations.find(item => item.id === pid))
     }
   }, [pid])
+
+  React.useEffect(() => {
+    if (router.isReady) {
+      setSearchParams({
+        location: router.query.location.toString(),
+        checkIn: router.query.checkIn.toString(),
+        checkOut: router.query.checkOut.toString(),
+        adults: parseInt(router.query.adults.toString()),
+        kids: parseInt(router.query.rooms.toString()),
+        rooms: parseInt(router.query.rooms.toString()),
+      });
+    }
+  }, [router])
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -254,7 +269,9 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <SearchBarHorizontal />
+      {searchParams !== null ?
+        <SearchBarHorizontal location={searchParams.location} checkIn={searchParams.checkIn} checkOut={searchParams.checkOut} adults={searchParams.adults} kids={searchParams.kids} rooms={searchParams.rooms} />
+        : <></>}
       <AppBar position="static">
         <Tabs
           value={value}
@@ -274,7 +291,7 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
       <TabPanel value={value} index={0}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation === undefined ? <></> : <DetailsInfo accommodation={accommodation} />
+            accommodation === undefined ? <></> : <DetailsInfo accommodation={accommodation}/>
           }
         </Container>
       </TabPanel>
@@ -296,7 +313,7 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
       <TabPanel value={value} index={4}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation === undefined ? <></> : <GuestReviews accommodationReviews={accommodation.reviews} accommodationRatings={accommodation.ratings}/>
+            accommodation === undefined ? <></> : <GuestReviews accommodationReviews={accommodation.reviews} accommodationRatings={accommodation.ratings} />
           }
         </Container>
       </TabPanel>

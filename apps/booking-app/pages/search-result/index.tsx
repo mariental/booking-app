@@ -10,40 +10,19 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/material/Stack';
-import { Box, Button } from '@mui/material';
+import { Alert, AlertTitle, Box, Button } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Container from '@mui/material/Container';
-import { Theme, useTheme } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
 import { Accommodation } from 'apps/booking-app/store/accomondationSlice';
 import { useAppSelector } from 'apps/booking-app/store';
 import { useRouter } from 'next/router';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-function getStyles(name: string, personName: readonly string[], theme: Theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
-interface SearchParams {
+export interface SearchParams {
   location: string,
   checkIn: string,
   checkOut: string,
@@ -162,12 +141,11 @@ export function SearchResult(props: SearchResultProps) {
       checked: false
     }
   ])
-  
+
   const [sort, setSort] = React.useState('');
   const [accommodations, setAccommondations] = React.useState<Accommodation[]>([]);
   const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
 
-  const theme = useTheme();
   const router = useRouter();
 
   let allAccommodations: Accommodation[] = useAppSelector((state) => state.accomondation);
@@ -305,39 +283,42 @@ export function SearchResult(props: SearchResultProps) {
       })
     }
   }
-  const filterByTypes = () => {
-    if (types.length > 0) {
-      types.forEach(accType => {
-        setAccommondations(accommodations.filter(acc => acc.type === accType));
-      });
-    }
+  const filterByTypes = (accommondationsToFilter: Accommodation[]) => {
+    const filterArray = [];
+    types.forEach(accType => {
+      console.log(accType)
+      filterArray.push(...accommondationsToFilter.filter(acc => acc.type === accType));
+    });
+    return filterArray;
   }
-  const filterByPrices = () => {
-    if (prices.length > 0) {
-      prices.forEach(accPrice => {
-        const limits = accPrice.split("-");
-        const limit1 = parseInt(limits[0].replace(/\D/g, ""));
-        const limit2 = parseInt(limits[1].replace(/\D/g, ""));
-        setAccommondations(accommodations.filter(acc => acc.pricePerNight >= limit1 && acc.pricePerNight <= limit2));
-      });
-    }
+  const filterByPrices = (accommondationsToFilter: Accommodation[]) => {
+    const filterArray = [];
+    prices.forEach(accPrice => {
+      const limits = accPrice.split("-");
+      const limit1 = parseInt(limits[0].replace(/\D/g, ""));
+      const limit2 = parseInt(limits[1].replace(/\D/g, ""));
+      filterArray.push(...accommondationsToFilter.filter(acc => acc.pricePerNight >= limit1 && acc.pricePerNight <= limit2));
+    });
+    return filterArray;
   }
-  const filterByReviews = () => {
-    if (reviews.length > 0) {
-      reviews.forEach(accReview => {
-        const reviewValue = parseInt(accReview.replace(/\D/g, ""));
-        setAccommondations(accommodations.filter(acc => Number(String(acc.ratings.find(rating => rating.name === 'Overall').value).charAt(0)) === reviewValue));
-      });
-    }
+  const filterByReviews = (accommondationsToFilter: Accommodation[]) => {
+    const filterArray = [];
+    reviews.forEach(accReview => {
+      const reviewValue = parseInt(accReview.replace(/\D/g, ""));
+      filterArray.push(...accommondationsToFilter.filter(acc => Number(String(acc.ratings.find(rating => rating.name === 'Overall').value).charAt(0)) === reviewValue));
+    });
+    return filterArray;
   }
-  const filterByFacilities = () => {
-    if (facilities.length > 0) {
-      facilities.forEach(accFacility => {
-        setAccommondations(accommodations.filter(acc => (acc.facilities.filter(e => e.name === accFacility).length > 0)));
-      });
-    }
+  const filterByFacilities = (accommondationsToFilter: Accommodation[]) => {
+    const filterArray = [];
+    facilities.forEach(accFacility => {
+      const tmpArr = getData().filter(acc => (acc.facilities.filter(e => e.name === accFacility).length > 0));
+      filterArray.push(...tmpArr.filter(e => !filterArray.includes(e)));
+    });
+    return filterArray;
   }
-  const getData = () => {
+  const getData = async () => {
+    const filteredAccommondations: Accommodation[] = [];
     const accommondationByLocation: Accommodation[] = allAccommodations.filter((item) => item.country === searchParams.location || item.city === searchParams.location);
     const accommondationByGuestNumber: Accommodation[] = [];
     const accommondationByRoomsNumber: Accommodation[] = [];
@@ -354,9 +335,15 @@ export function SearchResult(props: SearchResultProps) {
         })
       }
     })
-    setAccommondations(prevState => [...prevState, ...accommondationByGuestNumber]);
-    setAccommondations(prevState => [...prevState, ...accommondationByRoomsNumber]);
+    filteredAccommondations.push(...accommondationByGuestNumber);
+    filteredAccommondations.push(...accommondationByRoomsNumber);
+    return filteredAccommondations;
   }
+
+  const setData = async() => {
+    setAccommondations(await getData());
+  }
+
   React.useEffect(() => {
     if (router.isReady) {
       setSearchParams({
@@ -368,29 +355,28 @@ export function SearchResult(props: SearchResultProps) {
         rooms: parseInt(router.query.rooms.toString()),
       });
     }
-  }, [router.isReady])
+  }, [router])
 
   React.useEffect(() => {
-    if (searchParams !== null && accommodations.length === 0) {
-      getData();
+    if (searchParams !== null) {
+      setData();
     }
   }, [searchParams])
 
   React.useEffect(() => {
-    filterByTypes();
-  }, [typesCategories])
-
-  React.useEffect(() => {
-    filterByReviews();
-  }, [reviewsCategories])
-
-  React.useEffect(() => {
-    filterByPrices();
-  }, [pricesCategories])
-
-  React.useEffect(() => {
-    filterByFacilities();
-  }, [facilitiesCategories])
+    if (searchParams !== null) {
+      console.log('acc1', accommodations)
+      setData().then(() => {
+        console.log('acc2', accommodations)
+        if (types.length > 0) {
+          setAccommondations(filterByTypes(accommodations));
+        }
+        if (reviews.length > 0) {
+          setAccommondations(filterByReviews(accommodations));
+        }
+      })
+    }
+  }, [types, reviews])
 
   return (
     <>
@@ -485,16 +471,21 @@ export function SearchResult(props: SearchResultProps) {
                 </Select>
               </FormControl>
             </Stack>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-              {
-                accommodations.length === 0 ? <></> :
-                  accommodations.map((item) =>
-                    <AccomondationSearchListItem key={item.id} accomondation={item} />
-                  )
-              }
-            </Box>
+            {accommodations.length === 0 ?
+              <Alert severity="info" sx={{ mb: 2 }}>
+                <AlertTitle>Brak miejsc dla podanych parametrów</AlertTitle>
+              </Alert> :
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                {
+                  accommodations.length === 0 ? <></> :
+                    accommodations.map((item) =>
+                      <AccomondationSearchListItem key={item.id} accomondation={item} searchParams={searchParams}/>
+                    )
+                }
+              </Box>
+            }
             <Stack alignItems="center">
-              <Pagination count={10} shape="rounded" size="large" color="primary" sx={{ alignContent: 'center' }} />
+              <Pagination count={1} shape="rounded" size="large" color="primary" sx={{ alignContent: 'center' }} />
             </Stack>
           </Grid>
         </Grid>

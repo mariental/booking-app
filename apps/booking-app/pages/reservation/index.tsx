@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ExpandMore } from "@mui/icons-material";
-import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Chip, Container, Divider, FormControl, Grid, IconButton, InputLabel, Link, MenuItem, Rating, Stack, Step, StepLabel, Stepper, styled, TextField, Typography } from "@mui/material";
+import { Alert, Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Chip, Container, Divider, FormControl, Grid, IconButton, InputLabel, Link, MenuItem, Rating, Stack, Step, StepLabel, Stepper, styled, TextField, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import BathtubOutlinedIcon from '@mui/icons-material/BathtubOutlined';
@@ -8,6 +8,14 @@ import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import KitchenOutlinedIcon from '@mui/icons-material/KitchenOutlined';
 import HeightOutlinedIcon from '@mui/icons-material/HeightOutlined';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useRouter } from 'next/router';
+
+interface ReservationData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  emailConfirm: string;
+}
 
 export interface ReservationProps { }
 
@@ -29,11 +37,62 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 }));
 
 export function Reservation(props: ReservationProps) {
-  const [hour, sethour] = React.useState('');
+  const [reservationData, setReservationData] = React.useState<ReservationData>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    emailConfirm: ''
+  });
+  const [lengthError, setLengthError] = React.useState<boolean>(false)
+  const [emailMatchError, setEmailMatchError] = React.useState<boolean>(false)
 
-  const handleChange = (event: SelectChangeEvent) => {
-    sethour(event.target.value as string);
-  };
+  const handleChangeFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReservationData({
+      ...reservationData,
+      firstName: event.target.value
+    });
+    validateData();
+  }
+  const handleChangeLastName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReservationData({
+      ...reservationData,
+      lastName: event.target.value
+    });
+    validateData();
+  }
+  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReservationData({
+      ...reservationData,
+      email: event.target.value
+    });
+    validateData();
+  }
+  const handleChangeEmailConfirm = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReservationData({
+      ...reservationData,
+      emailConfirm: event.target.value
+    });
+    validateData();
+  }
+
+  const validateData = () => {
+    if (reservationData.firstName.length !== 0 && reservationData.lastName.length !== 0 && reservationData.email.length !== 0 && reservationData.emailConfirm.length !== 0) {
+      setLengthError(false);
+    } else {
+      setLengthError(true);
+    }
+    if (reservationData.email !== reservationData.emailConfirm) {
+      setEmailMatchError(true);
+    } else {
+      setEmailMatchError(false);
+    }
+  }
+
+  const handleClick = () => {
+    validateData();
+  }
+
+  const router = useRouter();
 
   return (
     <Container maxWidth="xl" sx={{ mx: 'auto', my: 4, display: 'flex', flexDirection: 'column' }}>
@@ -95,7 +154,7 @@ export function Reservation(props: ReservationProps) {
                     <Typography variant="h5" color="primary" fontWeight={600}>740 zł</Typography>
                   </Stack>
                 </Stack>
-                <Button variant="contained" size='large' color="secondary" sx={{ height: 56 }}>Potwierdź rezerwację</Button>
+                <Button variant="contained" size='large' color="secondary" sx={{ height: 56 }} onClick={handleClick}>Potwierdź rezerwację</Button>
               </Stack>
             </CardContent>
           </Card>
@@ -129,7 +188,7 @@ export function Reservation(props: ReservationProps) {
                   <Chip label="20 m2" variant="outlined" icon={<HeightOutlinedIcon />} />
                   <Chip label="1 łóżko" variant="filled" icon={<BedOutlinedIcon />} />
                 </Stack>
-                <Button variant="contained">Zmień wybór</Button>
+                <Button variant="contained" onClick={() => router.back()}>Zmień wybór</Button>
               </Stack>
             </CardContent>
             <CardMedia
@@ -156,14 +215,18 @@ export function Reservation(props: ReservationProps) {
                   </Typography>
                 </Stack>
                 <Stack direction="row" spacing={4}>
-                  <CustomTextField id="firstName" label="Imię" variant="outlined" fullWidth />
-                  <CustomTextField id="outlined-basic" label="Nazwisko" variant="outlined" fullWidth />
+                  <CustomTextField id="firstName" label="Imię" variant="outlined" name="firstName" type="text" value={reservationData.firstName} onChange={handleChangeFirstName} fullWidth required />
+                  <CustomTextField id="outlined-basic" label="Nazwisko" variant="outlined" name="lastName" type="text" value={reservationData.lastName} onChange={handleChangeLastName} fullWidth required />
                 </Stack>
                 <Stack direction="row" spacing={4}>
-                  <CustomTextField id="outlined-basic" label="Adres email" variant="outlined" fullWidth />
-                  <CustomTextField id="outlined-basic" label="Potwierdź adres email" variant="outlined" fullWidth />
+                  <CustomTextField id="outlined-basic" label="Adres email" variant="outlined" name="email" type="email" value={reservationData.email} onChange={handleChangeEmail} fullWidth required />
+                  <CustomTextField id="outlined-basic" label="Potwierdź adres email" variant="outlined" name="emailConfirm" type="email" value={reservationData.emailConfirm} onChange={handleChangeEmailConfirm} fullWidth required />
                 </Stack>
               </Box>
+              <Stack sx={{ mt: 2 }} spacing={2}>
+                {lengthError ? <Alert severity="error">Wypełnij wymagane pola</Alert> : <></>}
+                {emailMatchError ? <Alert severity="error">Podane adresy email nie są takie same</Alert> : <></>}
+              </Stack>
             </CardContent>
           </Card>
         </Grid>

@@ -84,13 +84,23 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
     rooms: props.rooms !== undefined ? props.rooms : 1
   });
 
+  const router = useRouter()
+
   const handleClick = (newPlacement: PopperPlacementType) => (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     setOpen((prev) => placement !== newPlacement || !prev);
     setPlacement(newPlacement);
   };
 
-  const router = useRouter()
+  const handleSearch = () => {
+    if(location !== null && startDate !== null && endDate !== null) {
+      if(router.pathname === '/accomondation-details/[pid]'){
+
+      } else {
+        router.push(`/search-result?location=${location}&checkIn=${startDate.format('DD-MM-YYYY')}&checkOut=${endDate.format('DD-MM-YYYY')}&adults=${guestOptions.adults}&kids=${guestOptions.kids}&rooms=${guestOptions.rooms}`)
+      }
+    }
+  }
 
   return (
     <Item elevation={3}>
@@ -167,10 +177,10 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
         />
       </LocalizationProvider>
       <CustomButton variant="outlined" onClick={handleClick('bottom')} endIcon={<ExpandMoreIcon />} sx={{ height: 56 }}>
-        1 dorosłych &#x2022; 0 dzieci &#x2022; 1 pokój
+        {guestOptions.adults} dorosłych &#x2022; {guestOptions.kids} dzieci &#x2022; {guestOptions.rooms} pokój
       </CustomButton>
       <Button variant="contained" endIcon={<Search />} 
-        onClick={() => router.push(`/search-result?location=${location}&checkIn=${startDate.format('DD-MM-YYYY')}&checkOut=${endDate.format('DD-MM-YYYY')}&adults=${guestOptions.adults}&kids=${guestOptions.kids}&rooms=${guestOptions.rooms}`)} 
+        onClick={handleSearch} 
         color='secondary' sx={{ height: 56, fontSize: 16, width: 260 }}
         >
         Wyszukaj

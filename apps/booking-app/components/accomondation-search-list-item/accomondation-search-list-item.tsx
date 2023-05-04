@@ -15,9 +15,13 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import StarIcon from '@mui/icons-material/Star';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
 import { Accommodation } from 'apps/booking-app/store/accomondationSlice';
+import { useRouter } from 'next/router';
+import { SearchParams } from 'apps/booking-app/pages/search-result';
+
 
 export interface AccomondationSearchListItemProps {
   accomondation: Accommodation;
+  searchParams: SearchParams;
 }
 
 export function AccomondationSearchListItem(props: AccomondationSearchListItemProps) {
@@ -32,6 +36,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
   };
 
   const open = Boolean(anchorEl);
+  const router = useRouter();
 
   return (
     <Card elevation={5} sx={{ width: 470, my: 2 }}>
@@ -89,7 +94,10 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
         </Stack>
       </CardContent>
       <CardActions sx={{ padding: 0, mt: 2 }}>
-        <Button variant='contained' href={`/accomondation-details/${props.accomondation.id}`} size="large" fullWidth sx={{ height: 50 }} endIcon={<ArrowForwardOutlinedIcon />} >Zobacz dostępność</Button>
+        {props.searchParams !== null ?
+          <Button variant='contained' href={`/accomondation-details/${props.accomondation.id}?location=${props.searchParams.location}&checkIn=${props.searchParams.checkIn}&checkOut=${props.searchParams.checkOut}&adults=${props.searchParams.adults}&kids=${props.searchParams.kids}&rooms=${props.searchParams.rooms}`} size="large" fullWidth sx={{ height: 50 }} endIcon={<ArrowForwardOutlinedIcon />} >Zobacz dostępność</Button>
+          : <></>
+        }
       </CardActions>
     </Card>
   );
