@@ -9,6 +9,7 @@ import KitchenOutlinedIcon from '@mui/icons-material/KitchenOutlined';
 import HeightOutlinedIcon from '@mui/icons-material/HeightOutlined';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useRouter } from 'next/router';
+import { useAppSelector } from 'apps/booking-app/store';
 
 interface ReservationData {
   firstName: string;
@@ -43,8 +44,10 @@ export function Reservation(props: ReservationProps) {
     email: '',
     emailConfirm: ''
   });
-  const [lengthError, setLengthError] = React.useState<boolean>(false)
-  const [emailMatchError, setEmailMatchError] = React.useState<boolean>(false)
+  const [lengthError, setLengthError] = React.useState<boolean>(false);
+  const [emailMatchError, setEmailMatchError] = React.useState<boolean>(false);
+
+  const reservationPrice = useAppSelector((state) => state.reservation.totalPrice);
 
   const handleChangeFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReservationData({
@@ -139,7 +142,7 @@ export function Reservation(props: ReservationProps) {
                 <Stack>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography>Pokój i oferta:</Typography>
-                    <Typography> 712 zł </Typography>
+                    <Typography> {reservationPrice} zł </Typography>
                   </Stack>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography>8 % VAT:</Typography>
@@ -151,7 +154,7 @@ export function Reservation(props: ReservationProps) {
                   </Stack>
                   <Stack direction="row" justifyContent="space-between" sx={{ my: 1 }}>
                     <Typography variant="h5" color="primary" fontWeight={600}>Cena:</Typography>
-                    <Typography variant="h5" color="primary" fontWeight={600}>740 zł</Typography>
+                    <Typography variant="h5" color="primary" fontWeight={600}>{reservationPrice+24+4} zł</Typography>
                   </Stack>
                 </Stack>
                 <Button variant="contained" size='large' color="secondary" sx={{ height: 56 }} onClick={handleClick}>Potwierdź rezerwację</Button>

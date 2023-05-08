@@ -232,10 +232,10 @@ function a11yProps(index: number) {
 }
 
 export function AccomondationDetails(props: AccomondationDetailsProps) {
-  const router = useRouter()
-  const { pid } = router.query
+  const router = useRouter();
   const [value, setValue] = React.useState(0);
   const [accommodation, setAccommodation] = React.useState<Accommodation>()
+  const [pid, setPid] = React.useState<string>();
   const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
 
   const accommodations: Accommodation[] = useAppSelector((state) => state.accomondation);
@@ -256,6 +256,8 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
         kids: parseInt(router.query.rooms.toString()),
         rooms: parseInt(router.query.rooms.toString()),
       });
+      let { pid } = router.query;
+      setPid(pid.toString());
     }
   }, [router])
 
@@ -297,7 +299,7 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-          <InformationsAndPrices />
+          <InformationsAndPrices pid={pid}/>
         </Container>
       </TabPanel>
       <TabPanel value={value} index={2}>

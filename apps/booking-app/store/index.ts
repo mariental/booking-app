@@ -2,10 +2,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
 import accomondationReducer from './accomondationSlice';
+import reservationSlice from './reservationSlice';
 
 const store = configureStore({
   reducer: {
     accomondation: accomondationReducer,
+    reservation: reservationSlice
   },
 });
 

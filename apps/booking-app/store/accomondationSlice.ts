@@ -45,7 +45,7 @@ export interface RoomOption {
     numberOfPeople: number;
     options: string[];
     price: number;
-    maxPersons: number;
+    maxPeople: number;
     cancellationType: string;
     mealIncluded: string | null;
 }
@@ -59,7 +59,7 @@ export interface Room {
     options: RoomOption[];
     unavailabilityDates: Date[];
     isAvailable: boolean;
-    maxPersons: number;
+    maxPeople: number;
 }
 
 export interface Accommodation {
@@ -228,19 +228,24 @@ const initialState = [
                 },
                 beds: [{ type: 'podwójne', quantity: 1 }],
                 facilities: [
-                    { id: '1',  name: '35 m²', icon: 'HeightOutlinedIcon'},
-                    { id: '2',  name: 'WiFi', icon: 'WifiIcon'},
-                    { id: '3',  name: 'Widok na miasto', icon: 'PanoramaOutlinedIcon'},
-                    { id: '4',  name: 'Prywatna łazienka', icon: 'BathtubOutlinedIcon'},
-                    { id: '5',  name: 'Telewizor', icon: 'TvOutlinedIcon'},
+                    { id: '1',  name: '35 m²', icon: 'height'},
+                    { id: '2',  name: 'WiFi', icon: 'wifi'},
+                    { id: '3',  name: 'Widok na miasto', icon: 'panorama'},
+                    { id: '4',  name: 'Prywatna łazienka', icon: 'bathtub'},
+                    { id: '5',  name: 'Telewizor', icon: 'tv'},
                 ],
-                options: [],
+                options: [
+                    { id: '1', numberOfPeople: 1, options: ['Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], price: 200, maxPeople: 2, cancellationType: 'Oferta bezzwrotna', mealIncluded: null},
+                    { id: '2', numberOfPeople: 1, options: ['Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], price: 230, maxPeople: 2, cancellationType: 'Bezpłatne odwołanie do trzech dni przed terminem', mealIncluded: null},
+                    { id: '3', numberOfPeople: 2, options: ['Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], price: 280, maxPeople: 2, cancellationType: 'Bezpłatne odwołanie do trzech dni przed terminem', mealIncluded: null},
+                    { id: '4', numberOfPeople: 2, options: ['Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], price: 300, maxPeople: 2, cancellationType: 'Bezpłatne odwołanie do trzech dni przed terminem', mealIncluded: 'Wliczona cena śniadania'},
+                ],
                 unavailabilityDates: [],
-                maxPersons: 2,
+                maxPeople: 2,
                 isAvailable: true,
             },
             {
-                id: '1',
+                id: '2',
                 name: 'Pokój trzyosobowy',
                 mainImage: {
                     id: '0',
@@ -249,14 +254,21 @@ const initialState = [
                 },
                 beds: [{ type: 'podwójne', quantity: 1 }, { type: 'pojedyncze', quantity: 2 }],
                 facilities: [
-                    { id: '6',  name: '46 m²', icon: 'HeightOutlinedIcon'},
-                    { id: '7',  name: 'WiFi', icon: 'WifiIcon'},
-                    { id: '8',  name: 'Prywatna łazienka', icon: 'BathtubOutlinedIcon'},
-                    { id: '9',  name: 'Klimatyzacja', icon: 'AcUnitOutlinedIcon'},
+                    { id: '6',  name: '46 m²', icon: 'height'},
+                    { id: '7',  name: 'WiFi', icon: 'wifi'},
+                    { id: '8',  name: 'Prywatna łazienka', icon: 'bathtub'},
+                    { id: '9',  name: 'Klimatyzacja', icon: 'ac_unit'},
                 ],
-                options: [],
+                options: [
+                    { id: '1', numberOfPeople: 1, options: ['Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], price: 200, maxPeople: 3, cancellationType: 'Oferta bezzwrotna', mealIncluded: null},
+                    { id: '2', numberOfPeople: 1, options: ['Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], price: 230, maxPeople: 3, cancellationType: 'Bezpłatne odwołanie do trzech dni przed terminem', mealIncluded: null},
+                    { id: '2', numberOfPeople: 2, options: ['Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], price: 280, maxPeople: 3, cancellationType: 'Bezpłatne odwołanie do trzech dni przed terminem', mealIncluded: null},
+                    { id: '3', numberOfPeople: 2, options: ['Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], price: 300, maxPeople: 3, cancellationType: 'Bezpłatne odwołanie do trzech dni przed terminem', mealIncluded: 'Wliczona cena śniadania'},
+                    { id: '4', numberOfPeople: 3, options: ['Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], price: 330, maxPeople: 3, cancellationType: 'Oferta bezzwrotna', mealIncluded: null},
+                    { id: '5', numberOfPeople: 3, options: ['Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], price: 350, maxPeople: 3, cancellationType: 'Bezpłatne odwołanie do trzech dni przed terminem', mealIncluded: null},
+                ],
                 unavailabilityDates: [],
-                maxPersons: 3,
+                maxPeople: 3,
                 isAvailable: true,
             }
         ]
@@ -544,7 +556,7 @@ const initialState = [
                 ],
                 options: [],
                 unavailabilityDates: [],
-                maxPersons: 1,
+                maxPeople: 1,
                 isAvailable: true,
             },
             {
@@ -564,7 +576,7 @@ const initialState = [
                 ],
                 options: [],
                 unavailabilityDates: [],
-                maxPersons: 1,
+                maxPeople: 1,
                 isAvailable: true,
             }
         ]

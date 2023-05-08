@@ -34,6 +34,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <>
             <Head>
                 <title>Welcome to booking-app!</title>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
             </Head>
             <Provider store={store}>
                 <ThemeProvider theme={theme}>

@@ -11,12 +11,13 @@ import SingleBedIcon from '@mui/icons-material/SingleBed';
 import WeekendOutlinedIcon from '@mui/icons-material/WeekendOutlined';
 import Chip from '@mui/material/Chip';
 import AccommondationRoomTable from '../accommondation-room-table/accommondation-room-table';
-import { Box, Button, styled } from '@mui/material';
+import { Box, Button, Icon, styled } from '@mui/material';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from '@mui/material/AccordionSummary';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import { Room, Bed } from 'apps/booking-app/store/accomondationSlice';
 
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary
@@ -28,28 +29,11 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
   },
 }));
 
-interface bed {
-  type: string;
-  quantity: number;
-}
-
-interface facility {
-  name: string,
-  icon: React.ReactElement
-}
-
-interface Room {
-  name: string;
-  image: string;
-  facilities: facility[];
-  beds: bed[];
-}
-
 export interface AccommondationRoomProps {
   room: Room;
 }
 
-function bedAlert(b: bed) {
+function bedAlert(b: Bed) {
   let text = "łóżka"
   if (b.quantity === 1) {
     text = 'łóżko'
@@ -71,7 +55,7 @@ export function AccommondationRoom(props: AccommondationRoomProps) {
             width: 200,
             height: 200,
             borderRadius: 1,
-            backgroundImage: `url(${props.room.image})`,
+            backgroundImage: `url(${props.room.mainImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center'
           }}
@@ -87,14 +71,14 @@ export function AccommondationRoom(props: AccommondationRoomProps) {
           </Stack>
           <Stack direction="row" sx={{ flexWrap: 'wrap' }}>
             {props.room.facilities.map((item) => 
-              <Chip label={item.name} variant="outlined" icon={item.icon} sx={{ m: 0.5 }}/>
+              <Chip key={item.id} label={item.name} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }}/>
             )}
           </Stack>
           <Button variant="outlined" endIcon={<ArrowForwardIosOutlinedIcon />} sx={{ width: 210}}>Zobacz szczegóły</Button>
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <AccommondationRoomTable />
+        <AccommondationRoomTable roomId={props.room.id} roomOptions={props.room.options}/>
       </AccordionDetails>
     </Accordion>
   );

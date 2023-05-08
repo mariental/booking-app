@@ -8,9 +8,9 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import AccommondationRoomTableRow from '../accommondation-room-table-row/accommondation-room-table-row';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { RoomOption } from 'apps/booking-app/store/accomondationSlice';
+import { useAppSelector } from 'apps/booking-app/store';
+import { selectRoomsOptions } from 'apps/booking-app/store/reservationSlice';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -22,47 +22,26 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-function BasicSelect() {
-  const [number, setNumber] = React.useState('0');
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setNumber(event.target.value as string);
-  };
-
-  return (
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <Select
-        labelId="select-rooms-number-label"
-        id="select-rooms-number"
-        value={number}
-        onChange={handleChange}
-      >
-        <MenuItem value={0}>0</MenuItem>
-        <MenuItem value={1}>1</MenuItem>
-        <MenuItem value={2}>2</MenuItem>
-      </Select>
-    </FormControl>
-  );
+export interface AccommondationRoomTableProps { 
+  roomId: string;
+  roomOptions: RoomOption[];
 }
-
-function createData(
-  numberOfPeople: number,
-  price: number,
-  options: string[],
-  select: React.ReactElement
-) {
-  return { numberOfPeople, price, options, select };
-}
-
-const rows = [
-  createData(2, 200, ['Oferta bezzwrotna', 'Zapłać z wyprzedzeniem', 'Natychmiastowe potwierdzenie'], <BasicSelect />),
-  createData(2, 236, ['Bezpłatne odwołanie do godz. 23:59 w dniu 18 kwietnia 2023', 'Nie płacisz nic do 16 kwietnia 2023'], <BasicSelect />),
-  createData(2, 272, ['Bezpłatne odwołanie do godz. 23:59 w dniu 18 kwietnia 2023', 'Nie płacisz nic do 16 kwietnia 2023', 'Wliczona cena śniadania'], <BasicSelect />),
-];
-
-export interface AccommondationRoomTableProps { }
 
 export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
+  const [disabled, setDisabled] = React.useState<boolean>(false);
+  
+  const roomsOptions: RoomOption[] = useAppSelector(selectRoomsOptions);
+
+  React.useEffect(() => {
+    if (roomsOptions.length > 0) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+    console.log(roomsOptions);
+  })
+  
   return (
     <TableContainer component={Paper} sx={{ my: 2 }}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -75,8 +54,8 @@ export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <AccommondationRoomTableRow row={row} />
+          {props.roomOptions.map((row) => (
+            <AccommondationRoomTableRow roomId={props.roomId} row={row} disabled={disabled}/>
           ))}
         </TableBody>
       </Table>
