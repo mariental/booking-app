@@ -54,28 +54,28 @@ export interface Room {
     id: string;
     name: string;
     mainImage: Image;
+    isAvailable: boolean;
+    maxPeople: number;
     beds: Bed[];
     facilities: Facility[];
     options: RoomOption[];
     unavailabilityDates: Date[];
-    isAvailable: boolean;
-    maxPeople: number;
 }
 
 export interface Accommodation {
-    id: string,
-    mainImage: Image;
-    images: Image[];
+    id: string;
     name: string;
     type: string;
     city: string;
     country: string;
     pricePerNight: number;
+    description: string;
+    rooms: Room[];
     ratings: Rate[];
     reviews: Review[];
-    description: string;
+    mainImage: Image;
+    images: Image[];
     facilities: Facility[];
-    rooms: Room[];
 }
 
 const initialState = [

@@ -326,11 +326,11 @@ export function SearchResult(props: SearchResultProps) {
       if (accommondation.rooms.length >= searchParams.rooms) {
         let guestNumber = searchParams.adults + searchParams.kids;
         accommondation.rooms.forEach(room => {
-          if (room.maxPersons >= searchParams.adults + searchParams.kids && accommondationByGuestNumber.find(acc => acc.id === accommondation.id) === undefined) {
+          if (room.maxPeople >= searchParams.adults + searchParams.kids && accommondationByGuestNumber.find(acc => acc.id === accommondation.id) === undefined) {
             accommondationByGuestNumber.push(accommondation);
-          } else if (room.maxPersons <= guestNumber && guestNumber > 0 && accommondationByGuestNumber.find(acc => acc.id === accommondation.id) === undefined && accommondationByRoomsNumber.find(acc => acc.id === accommondation.id) === undefined) {
+          } else if (room.maxPeople <= guestNumber && guestNumber > 0 && accommondationByGuestNumber.find(acc => acc.id === accommondation.id) === undefined && accommondationByRoomsNumber.find(acc => acc.id === accommondation.id) === undefined) {
             accommondationByRoomsNumber.push(accommondation);
-            guestNumber -= room.maxPersons;
+            guestNumber -= room.maxPeople;
           }
         })
       }
@@ -363,20 +363,6 @@ export function SearchResult(props: SearchResultProps) {
     }
   }, [searchParams])
 
-  React.useEffect(() => {
-    if (searchParams !== null) {
-      console.log('acc1', accommodations)
-      setData().then(() => {
-        console.log('acc2', accommodations)
-        if (types.length > 0) {
-          setAccommondations(filterByTypes(accommodations));
-        }
-        if (reviews.length > 0) {
-          setAccommondations(filterByReviews(accommodations));
-        }
-      })
-    }
-  }, [types, reviews])
 
   return (
     <>

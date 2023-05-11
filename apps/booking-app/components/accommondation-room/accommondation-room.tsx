@@ -42,6 +42,7 @@ function bedAlert(b: Bed) {
 }
 
 export function AccommondationRoom(props: AccommondationRoomProps) {
+
   return (
     <Accordion>
       <AccordionSummary
@@ -55,7 +56,7 @@ export function AccommondationRoom(props: AccommondationRoomProps) {
             width: 200,
             height: 200,
             borderRadius: 1,
-            backgroundImage: `url(${props.room.mainImage})`,
+            backgroundImage: `url(${props.room.mainImage.src})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center'
           }}
