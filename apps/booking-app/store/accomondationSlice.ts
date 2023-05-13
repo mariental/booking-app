@@ -178,34 +178,6 @@ const initialState = [
                     date: 'styczeń 2023',
                     option: 'rodzina'
                 }
-            },
-            {
-                id: '3',
-                title: 'Wyjątkowy',
-                content: 'Po raz kolejny w tym samym miejscu i ciągle pozytywnie.',
-                author: 'Anna Nowak',
-                publicationDate: '01-03-2023',
-                rate: 5.0,
-                reservationInfo: {
-                    name: 'Apartament z 1 sypialnią',
-                    duration: '1 noc',
-                    date: 'luty 2023',
-                    option: 'rodzina'
-                }
-            },
-            {
-                id: '4',
-                title: 'Wyjątkowy',
-                content: 'Po raz kolejny w tym samym miejscu i ciągle pozytywnie.',
-                author: 'Anna Nowak',
-                publicationDate: '01-03-2023',
-                rate: 5.0,
-                reservationInfo: {
-                    name: 'Apartament z 1 sypialnią',
-                    duration: '1 noc',
-                    date: 'luty 2023',
-                    option: 'rodzina'
-                }
             }
         ],
         description: 'Ta urocza skandynawska chatka położona jest w spokojnej okolicy i oferuje gościom wiele udogodnień. Chatka składa się z dwóch przytulnych sypialni, salonu z kominkiem oraz w pełni wyposażonej kuchni i łazienki. Dom posiada również przestronny taras, który zapewnia wspaniałe widoki na okolicę oraz miejsce do relaksu na świeżym powietrzu. Chatka jest idealnym miejscem na romantyczny wypad dla pary lub spokojny wypoczynek dla niewielkiej grupy przyjaciół lub rodziny. Wykończenie wnętrza w stylu skandynawskim nadaje chatce przytulnego charakteru, a drewniane elementy dodają uroku i ciepła.',
@@ -503,34 +475,6 @@ const initialState = [
                     name: 'Pokój trzyosobowy',
                     duration: '3 noce',
                     date: 'styczeń 2023',
-                    option: 'rodzina'
-                }
-            },
-            {
-                id: '3',
-                title: 'Wyjątkowy',
-                content: 'Po raz kolejny w tym samym miejscu i ciągle pozytywnie.',
-                author: 'Anna Nowak',
-                publicationDate: '01-03-2023',
-                rate: 5.0,
-                reservationInfo: {
-                    name: 'Apartament z 1 sypialnią',
-                    duration: '1 noc',
-                    date: 'luty 2023',
-                    option: 'rodzina'
-                }
-            },
-            {
-                id: '4',
-                title: 'Wyjątkowy',
-                content: 'Po raz kolejny w tym samym miejscu i ciągle pozytywnie.',
-                author: 'Anna Nowak',
-                publicationDate: '01-03-2023',
-                rate: 5.0,
-                reservationInfo: {
-                    name: 'Apartament z 1 sypialnią',
-                    duration: '1 noc',
-                    date: 'luty 2023',
                     option: 'rodzina'
                 }
             }

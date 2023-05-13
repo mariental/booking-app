@@ -22,7 +22,6 @@ export interface DetailsInfoProps {
 export function DetailsInfo(props: DetailsInfoProps) {
   const [showMore, setShowMore] = React.useState(false);
 
-
   return (
     <Grid container spacing={{ xs: 2, md: 4 }} columns={{ xs: 1, md: 12 }}>
       <Grid item xs={1} md={5}>
