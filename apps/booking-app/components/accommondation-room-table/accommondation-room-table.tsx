@@ -29,19 +29,7 @@ export interface AccommondationRoomTableProps {
 }
 
 export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
-  const [disabled, setDisabled] = React.useState<boolean>(false);
-  
-  const roomsOptions: RoomOption[] = useAppSelector(selectRoomsOptions);
 
-  React.useEffect(() => {
-    if (roomsOptions.length > 0) {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
-    console.log(roomsOptions);
-  })
-  
   return (
     <TableContainer component={Paper} sx={{ my: 2 }}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -55,7 +43,7 @@ export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
         </TableHead>
         <TableBody>
           {props.roomOptions.map((row) => (
-            <AccommondationRoomTableRow roomId={props.roomId} row={row} disabled={disabled}/>
+            <AccommondationRoomTableRow roomId={props.roomId} row={row}/>
           ))}
         </TableBody>
       </Table>

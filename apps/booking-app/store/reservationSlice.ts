@@ -8,12 +8,17 @@ interface numberOptions{
     rooms: number;
 }
 
+export interface SelectedOptions{
+    roomId: string;
+    roomOption: RoomOption;
+}
+
 interface Reservation {
     id?: string;
     destination: string;
     checkInDate: string;
     checkOutDate: string;
-    roomOptions: RoomOption[];
+    roomOptions: SelectedOptions[];
     totalPrice: number;
 }
 
@@ -34,12 +39,13 @@ const reservationSlice = createSlice({
             state.checkInDate = action.payload.checkInDate;
             state.checkOutDate = action.payload.checkOutDate;
         },
-        addRoomToReservation: (state, action: PayloadAction<RoomOption>) => {
-            state.roomOptions.push(action.payload);
-            state.totalPrice += action.payload.price;
+        addRoomToReservation: (state, action: PayloadAction<{ id: string, option: RoomOption }>) => {
+            state.roomOptions.push({ roomId: action.payload.id, roomOption: action.payload.option})
+            state.totalPrice += action.payload.option.price;
         },
-        removeRoomFromReservation: (state, action: PayloadAction<string>) => {
-            state.roomOptions = state.roomOptions.filter(room => room.id === action.payload);
+        removeRoomFromReservation: (state, action: PayloadAction<RoomOption>) => {
+            state.roomOptions = state.roomOptions.filter(room => room.roomOption.id !== action.payload.id);
+            state.totalPrice -= action.payload.price;
         }
     }
 });
