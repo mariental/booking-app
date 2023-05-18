@@ -14,37 +14,24 @@ import KitchenOutlinedIcon from '@mui/icons-material/KitchenOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import StarIcon from '@mui/icons-material/Star';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
-import { Accommodation } from 'apps/booking-app/store/accomondationSlice';
 import { useRouter } from 'next/router';
 import { SearchParams } from 'apps/booking-app/pages/search-result';
 
 
 export interface AccomondationSearchListItemProps {
-  accomondation: Accommodation;
+  accomondation: any;
   searchParams: SearchParams;
 }
 
 export function AccomondationSearchListItem(props: AccomondationSearchListItemProps) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const router = useRouter();
 
   return (
     <Card elevation={5} sx={{ width: 470, my: 2 }}>
       <CardMedia
         component="img"
         sx={{ height: 300 }}
-        image={props.accomondation.mainImage.src}
-        alt={props.accomondation.mainImage.alt}
+        image={props.accomondation.images[0].src}
+        alt={props.accomondation.images[0].alt}
       />
       <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">
@@ -59,7 +46,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
             <Stack direction="row" alignItems="center" mb={2}>
               <LocationOnOutlinedIcon color="action" />
               <Typography variant="body1" color="text.secondary" component="div">
-                {props.accomondation.city}, {props.accomondation.country}
+                {props.accomondation.address.city}, {props.accomondation.address.country}
               </Typography>
             </Stack>
           </Stack>

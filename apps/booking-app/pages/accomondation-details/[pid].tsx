@@ -28,61 +28,9 @@ import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import RulesOfStay from 'apps/booking-app/components/rules-of-stay/rules-of-stay';
 import GuestReviews from 'apps/booking-app/components/guest-reviews/guest-reviews';
 import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
-import { styled } from '@mui/material/styles';
-import { useAppSelector } from 'apps/booking-app/store';
-import { Accommodation } from 'apps/booking-app/store/accomondationSlice';
 import { SearchParams } from '../search-result';
-
-const AntTabs = styled(Tabs)({
-  borderBottom: '1px solid #e8e8e8',
-  '& .MuiTabs-indicator': {
-    backgroundColor: '#1890ff',
-  },
-});
-
-const AntTab = styled((props: StyledTabsProps) => <Tab disableRipple {...props} />)(
-  ({ theme }) => ({
-    textTransform: 'none',
-    minWidth: 0,
-    [theme.breakpoints.up('sm')]: {
-      minWidth: 0,
-    },
-    fontWeight: theme.typography.fontWeightRegular,
-    marginRight: theme.spacing(1),
-    color: 'rgba(0, 0, 0, 0.85)',
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    '&:hover': {
-      color: '#40a9ff',
-      opacity: 1,
-    },
-    '&.Mui-selected': {
-      color: '#1890ff',
-      fontWeight: theme.typography.fontWeightMedium,
-    },
-    '&.Mui-focusVisible': {
-      backgroundColor: '#d1eaff',
-    },
-  }),
-);
-
-interface StyledTabsProps {
-  children?: React.ReactNode;
-  value: number;
-  onChange: (event: React.SyntheticEvent, newValue: number) => void;
-}
-
-export interface AccomondationDetailsProps { }
+import prisma from 'apps/booking-app/lib/prisma';
+import { GetServerSideProps } from 'next';
 
 const facilitiesCategories = [
   {
@@ -197,7 +145,6 @@ const facilitiesCategories = [
   },
 ]
 
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -231,18 +178,50 @@ function a11yProps(index: number) {
   };
 }
 
-export function AccomondationDetails(props: AccomondationDetailsProps) {
+export const getServerSideProps: GetServerSideProps  = async ({ params }) => {
+  const acc = await prisma.accommodation.findFirst({
+    where: {
+      id: Number(params?.pid.toString()),
+    },
+    include: {
+      address: true,
+      images: true,
+      rooms: {
+        include: {
+          images: true,
+          beds: {
+            include: {
+              bed: true
+            }
+          },
+          facilities: true,
+          roomOptions: true
+        }
+      },
+      ratings: true,
+      reviews: {
+        include: {
+          rates: true
+        }
+      },
+      facilities: true
+    }
+  });
+  return {
+    props: { acc: { ...acc, reviews: JSON.parse(JSON.stringify(acc.reviews)) } },
+  };
+};
+
+export function AccomondationDetails({acc}) {
   const router = useRouter();
   const [value, setValue] = React.useState(0);
-  const [accommodation, setAccommodation] = React.useState<Accommodation>()
+  const [accommodation, setAccommodation] = React.useState()
   const [pid, setPid] = React.useState<string>();
   const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
 
-  const accommodations: Accommodation[] = useAppSelector((state) => state.accomondation);
-
   React.useEffect(() => {
     if (pid) {
-      setAccommodation(accommodations.find(item => item.id === pid))
+      setAccommodation(acc)
     }
   }, [pid])
 
@@ -264,11 +243,6 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-  const handleChangeIndex = (index: number) => {
-    setValue(index);
-  };
-
   return (
     <Box sx={{ width: '100%' }}>
       {searchParams !== null ?
@@ -299,7 +273,9 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-          <InformationsAndPrices pid={pid}/>
+          {
+            accommodation === undefined ? <></> : <InformationsAndPrices accommodation={accommodation}/>
+          }
         </Container>
       </TabPanel>
       <TabPanel value={value} index={2}>
@@ -315,7 +291,7 @@ export function AccomondationDetails(props: AccomondationDetailsProps) {
       <TabPanel value={value} index={4}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation === undefined ? <></> : <GuestReviews accommodationReviews={accommodation.reviews} accommodationRatings={accommodation.ratings} />
+            accommodation === undefined ? <></> : <GuestReviews accommodation={accommodation}/>
           }
         </Container>
       </TabPanel>

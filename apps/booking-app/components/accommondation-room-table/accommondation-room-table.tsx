@@ -25,7 +25,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export interface AccommondationRoomTableProps { 
   roomId: string;
-  roomOptions: RoomOption[];
+  roomOptions: any[];
 }
 
 export function AccommondationRoomTable(props: AccommondationRoomTableProps) {

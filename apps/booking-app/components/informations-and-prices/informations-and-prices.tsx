@@ -3,37 +3,31 @@ import AccommondationRoom from '../accommondation-room/accommondation-room';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import SendIcon from '@mui/icons-material/Send';
-import { Accommodation, Room } from 'apps/booking-app/store/accomondationSlice';
 import { useAppSelector } from 'apps/booking-app/store';
 
 
 export interface InformationsAndPricesProps {
-  pid: string;
+  accommodation: any;
 }
 
 export function InformationsAndPrices(props: InformationsAndPricesProps) {
-  const [rooms, setRooms] = React.useState<Room[]>([]);
+  const [rooms, setRooms] = React.useState([]);
 
-  let allAccommodations: Accommodation[] = useAppSelector((state) => state.accomondation);
   const reservationRoomsNumber = useAppSelector((state) => state.reservation.roomOptions.length);
   const reservationPrice = useAppSelector((state) => state.reservation.totalPrice);
 
   React.useEffect(() => {
-    if (allAccommodations.length > 0) {
-      setRooms(allAccommodations.find(item => item.id === props.pid).rooms);
-    }
+    setRooms(props.accommodation.rooms);
   })
 
   return (

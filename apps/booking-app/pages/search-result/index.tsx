@@ -10,17 +10,32 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/material/Stack';
-import { Alert, AlertTitle, Box, Button } from '@mui/material';
+import { Alert, AlertTitle, Box } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Container from '@mui/material/Container';
 import Pagination from '@mui/material/Pagination';
 import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
-import { Accommodation } from 'apps/booking-app/store/accomondationSlice';
-import { useAppSelector } from 'apps/booking-app/store';
 import { useRouter } from 'next/router';
+import prisma from '../../lib/prisma';
+import { GetStaticProps } from 'next';
+
+export const getStaticProps: GetStaticProps = async () => {
+  const acc = await prisma.accommodation.findMany({
+    include: {
+      address: true,
+      images: true,
+      rooms: true,
+      ratings: true,
+      facilities: true
+    }
+  });
+  return {
+    props: { acc },
+  };
+};
 
 export interface SearchParams {
   location: string,
@@ -31,9 +46,8 @@ export interface SearchParams {
   rooms: number
 }
 
-export interface SearchResultProps { }
 
-export function SearchResult(props: SearchResultProps) {
+export function SearchResult({acc}) {
   const [types, setTypes] = React.useState<string[]>([]);
   const [facilities, setFacilities] = React.useState<string[]>([]);
   const [prices, setPrices] = React.useState<string[]>([]);
@@ -143,12 +157,10 @@ export function SearchResult(props: SearchResultProps) {
   ])
 
   const [sort, setSort] = React.useState('');
-  const [accommodations, setAccommondations] = React.useState<Accommodation[]>([]);
+  const [accommodations, setAccommondations] = React.useState([]);
   const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
 
   const router = useRouter();
-
-  let allAccommodations: Accommodation[] = useAppSelector((state) => state.accomondation);
 
   const sortOptions = [
     'Najpopularniejsze', 'Cena (od najniższej)', 'Cena (od najwyższej)', 'Ocena obiektu (od najwyższej)', 'Ocena obiektu (od najniższej)'
@@ -283,66 +295,6 @@ export function SearchResult(props: SearchResultProps) {
       })
     }
   }
-  const filterByTypes = (accommondationsToFilter: Accommodation[]) => {
-    const filterArray = [];
-    types.forEach(accType => {
-      console.log(accType)
-      filterArray.push(...accommondationsToFilter.filter(acc => acc.type === accType));
-    });
-    return filterArray;
-  }
-  const filterByPrices = (accommondationsToFilter: Accommodation[]) => {
-    const filterArray = [];
-    prices.forEach(accPrice => {
-      const limits = accPrice.split("-");
-      const limit1 = parseInt(limits[0].replace(/\D/g, ""));
-      const limit2 = parseInt(limits[1].replace(/\D/g, ""));
-      filterArray.push(...accommondationsToFilter.filter(acc => acc.pricePerNight >= limit1 && acc.pricePerNight <= limit2));
-    });
-    return filterArray;
-  }
-  const filterByReviews = (accommondationsToFilter: Accommodation[]) => {
-    const filterArray = [];
-    reviews.forEach(accReview => {
-      const reviewValue = parseInt(accReview.replace(/\D/g, ""));
-      filterArray.push(...accommondationsToFilter.filter(acc => Number(String(acc.ratings.find(rating => rating.name === 'Overall').value).charAt(0)) === reviewValue));
-    });
-    return filterArray;
-  }
-  const filterByFacilities = (accommondationsToFilter: Accommodation[]) => {
-    const filterArray = [];
-    facilities.forEach(accFacility => {
-      const tmpArr = getData().filter(acc => (acc.facilities.filter(e => e.name === accFacility).length > 0));
-      filterArray.push(...tmpArr.filter(e => !filterArray.includes(e)));
-    });
-    return filterArray;
-  }
-  const getData = async () => {
-    const filteredAccommondations: Accommodation[] = [];
-    const accommondationByLocation: Accommodation[] = allAccommodations.filter((item) => item.country === searchParams.location || item.city === searchParams.location);
-    const accommondationByGuestNumber: Accommodation[] = [];
-    const accommondationByRoomsNumber: Accommodation[] = [];
-    accommondationByLocation.forEach(accommondation => {
-      if (accommondation.rooms.length >= searchParams.rooms) {
-        let guestNumber = searchParams.adults + searchParams.kids;
-        accommondation.rooms.forEach(room => {
-          if (room.maxPeople >= searchParams.adults + searchParams.kids && accommondationByGuestNumber.find(acc => acc.id === accommondation.id) === undefined) {
-            accommondationByGuestNumber.push(accommondation);
-          } else if (room.maxPeople <= guestNumber && guestNumber > 0 && accommondationByGuestNumber.find(acc => acc.id === accommondation.id) === undefined && accommondationByRoomsNumber.find(acc => acc.id === accommondation.id) === undefined) {
-            accommondationByRoomsNumber.push(accommondation);
-            guestNumber -= room.maxPeople;
-          }
-        })
-      }
-    })
-    filteredAccommondations.push(...accommondationByGuestNumber);
-    filteredAccommondations.push(...accommondationByRoomsNumber);
-    return filteredAccommondations;
-  }
-
-  const setData = async() => {
-    setAccommondations(await getData());
-  }
 
   React.useEffect(() => {
     if (router.isReady) {
@@ -355,13 +307,14 @@ export function SearchResult(props: SearchResultProps) {
         rooms: parseInt(router.query.rooms.toString()),
       });
     }
-  }, [router])
+  }, [router]);
 
   React.useEffect(() => {
     if (searchParams !== null) {
-      setData();
+      console.log(acc);
+      setAccommondations(acc);
     }
-  }, [searchParams])
+  }, [searchParams]);
 
 
   return (

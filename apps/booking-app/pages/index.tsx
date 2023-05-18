@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Box, Container, Grid, Stack, Typography } from '@mui/material';
+import { Box, Container, Stack, Typography } from '@mui/material';
 import mainImage from '../public/main.png';
 import SearchBarHorizontal from '../components/search-bar-horizontal/search-bar-horizontal';
-import prisma from '../../../libs/prisma';
-  
+
 export function Index() {
   return (
     <Container maxWidth="xl" sx={{ mx: 'auto', mt: 4 }}>

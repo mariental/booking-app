@@ -11,112 +11,153 @@ datasource db {
 }
 
 model Accommodation {
-  id            Int     @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name          String
-  type          String
-  address       Address? @relation(fields: [addressId], references: [id])
+  type          AccommodationType   @relation(fields: [typeId], references: [id])
+  typeId        Int
+  address       Address?   @relation(fields: [addressId], references: [id])
   addressId     Int?
-  pricePerNight Float 
   description   String
   rooms         Room[]
   ratings       Rate[]
   reviews       Review[]
-  mainImage     Image @relation(fields: [mainImageId], references: [id])
-  mainImageId   Int
   images        Image[]
-  facilities    Facility[]
+  facilities    Facility[]    
+  users         User[]
+}
+
+model AccommodationType {
+  id              Int        @id @default(autoincrement())
+  name            String
+  accommodations  Accommodation[]
 }
 
 model Rate {
-  id        Int     @id @default(autoincrement()) 
-  name      String
-  value     Float
-  quantity  Int  
-  accommondation    Accommodation @relation(fields: [accommondationId], references: [id])
-  accommondationId  Int
+  id               Int           @id @default(autoincrement())
+  name             String
+  value            Float
+  quantity         Int
+  accommondation   Accommodation @relation(fields: [accommondationId], references: [id])
+  accommondationId Int
 }
 
 model Address {
-  id        Int     @id @default(autoincrement()) 
-  country   String
-  city      String
+  id              Int             @id @default(autoincrement())
+  country         String
+  city            String
+  accommodations  Accommodation[]
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  name          String?
+  reviews       Review[]
+  reservations  Reservation[]
+  favorites     Accommodation[]
 }
 
 model Room {
-  id                Int     @id @default(autoincrement())
-  name              String  
-  mainImage         Image?
-  isAvailable       boolean
-  maxPeople         Int
-  accommondation    Accommodation @relation(fields: [accommondationId], references: [id])
-  accommondationId  Int
-  roomOptions       RoomOption[]
-  images            Image[]
-  facilities        Facility[]
-  beds              BedInTheRoom[]
+  id                  Int            @id @default(autoincrement())
+  name                String
+  isAvailable         Boolean
+  maxPeople           Int
+  size                Int
+  accommondation      Accommodation  @relation(fields: [accommondationId], references: [id])
+  accommondationId    Int
+  roomOptions         RoomOption[]
+  images              Image[]
+  facilities          Facility[]
+  beds                BedInTheRoom[]
 }
 
 model Bed {
-  id                Int     @id @default(autoincrement())
-  type              String
+  id           Int            @id @default(autoincrement())
+  type         String
+  bedInTheRoom BedInTheRoom[]
 }
 
 model BedInTheRoom {
-  bed       @relation(fields: [bedId], references: [id])
-  bedId     Int
-  room      @relation(fields: [roomId], references: [id])
-  roomId    Int
-  quantity  Int
+  bed      Bed  @relation(fields: [bedId], references: [id])
+  bedId    Int
+  room     Room @relation(fields: [roomId], references: [id])
+  roomId   Int
+  quantity Int
+
+  @@id([bedId, roomId])
 }
 
 model RoomOption {
-  id                Int     @id @default(autoincrement())
-  numberOfPeople    Int
-  options           String[]
-  price             Float
-  maxPeople         Int
-  cancellationType  String
-  meadIncluded      String?
-  room              Room    @relation(fields: [roomId], references: [id])
-  roomId            Int
+  id                  Int      @id @default(autoincrement())
+  numberOfPeople      Int
+  options             String[]
+  price               Float
+  maxPeople           Int
+  cancellationType    CancellationType  @relation(fields: [cancellationTypeId], references: [id])
+  cancellationTypeId  Int
+  daysToCancell       Int?
+  mealType            MealType  @relation(fields: [mealTypeId], references: [id])
+  mealTypeId          Int
+  mealPrice           Float?
+  room                Room     @relation(fields: [roomId], references: [id])
+  roomId              Int
+  reservation         Reservation? @relation(fields: [reservationId], references: [id])
+  reservationId       Int?
+}
+
+model CancellationType {
+  id        Int      @id @default(autoincrement())
+  name      String 
+  roomOptions  RoomOption[]
+}
+
+model MealType {
+  id      Int      @id @default(autoincrement())
+  name    String 
+  roomOptions  RoomOption[]
 }
 
 model Review {
-  id              Int     @id @default(autoincrement()) 
+  id              Int            @id @default(autoincrement())
   title           String
   content         String
-  author          User  @relation(fields: [authorId], references: [id])
+  author          User           @relation(fields: [authorId], references: [id])
   authorId        Int
-  publicationDate Date
-  rates           Rate[]
-  reservation     Reservation @relation(fields: [reservationId], fields: [id])
-  reservationId
+  rate            Float @default(0)
+  publicationDate DateTime
+  reservation     Reservation    @relation(fields: [reservationId], references: [id])
+  reservationId   Int
+  accommodation   Accommodation? @relation(fields: [accommodationId], references: [id])
+  accommodationId Int?
+  helpful         Int @default(0)
+  notHelpful      Int @default(0)
 }
 
 model Reservation {
-  id            Int     @id @default(autoincrement()) 
-  checkInDate   Date
-  checkOutDate  Date
+  id              Int      @id @default(autoincrement())
+  checkInDate     DateTime
+  checkOutDate    DateTime
+  roomOption      RoomOption[]
+  reviews         Review[]
+  adults          Int
+  kids            Int
+  user            User? @relation(fields: [userId], references: [id]) 
+  userId          Int?
 }
 
 model Image {
-  id                Int     @id @default(autoincrement()) 
-  src               String
-  alt               String
-  accommondation    Accommodation? @relation(fields: [accommondationId], references: [id])
-  accommondationId  Int?
-  room              Room?    @relation(fields: [roomId], references: [id])
-  roomId            Int?
+  id               Int            @id @default(autoincrement())
+  src              String
+  alt              String
+  mainImage        Boolean        @default(false)
+  accommondation   Accommodation? @relation(fields: [accommondationId], references: [id])
+  accommondationId Int?
+  room             Room?          @relation(fields: [roomId], references: [id])
+  roomId           Int?
 }
 
 model Facility {
-  id              Int     @id @default(autoincrement()) 
+  id              Int             @id @default(autoincrement())
   name            String
   icon            String
   accommondations Accommodation[]

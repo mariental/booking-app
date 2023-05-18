@@ -15,7 +15,6 @@ import { useTheme } from '@mui/material/styles';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import BedtimeOutlinedIcon from '@mui/icons-material/BedtimeOutlined';
-import { Rate, Review } from 'apps/booking-app/store/accomondationSlice';
 import Modal from '@mui/material/Modal';
 
 const style = {
@@ -34,8 +33,7 @@ const sortOptions = [
 ]
 
 export interface GuestReviewsProps {
-  accommodationReviews: Review[];
-  accommodationRatings: Rate[];
+  accommodation: any;
 }
 
 export function GuestReviews(props: GuestReviewsProps) {
@@ -96,6 +94,10 @@ export function GuestReviews(props: GuestReviewsProps) {
 
   }
 
+  React.useEffect(() => {
+    console.log(props.accommodation.reviews)
+  }, [])
+
   return (
     <Grid container spacing={2} columns={{ xs: 2, md: 12 }} justifyContent="center" sx={{ mb: 6 }}>
       <Grid item xs="auto">
@@ -104,11 +106,11 @@ export function GuestReviews(props: GuestReviewsProps) {
             <Stack direction="row" spacing={2}>
               <Stack alignItems="center">
                 <Typography variant="h3">4.8</Typography>
-                <Rating name="read-only" value={props.accommodationRatings.find(item => item.name === 'Overall').value} readOnly precision={0.1} />
-                <Typography color="text.secondary" variant="body2">{props.accommodationRatings.find(item => item.name === 'Overall').quantity} opinie</Typography>
+                <Rating name="read-only" value={props.accommodation.ratings.find(item => item.name === 'Overall').value} readOnly precision={0.1} />
+                <Typography color="text.secondary" variant="body2">{props.accommodation.ratings.find(item => item.name === 'Overall').quantity} opinie</Typography>
               </Stack>
               <Stack direction="column-reverse" sx={{ width: '100%' }}>
-                {props.accommodationRatings.map(item =>
+                {props.accommodation.ratings.map(item =>
                   <Stack direction="row" alignItems="center" justifyContent="space-around" spacing={1}>
                     <Typography variant="caption">{item.value}</Typography>
                     <Box sx={{ minWidth: 120 }}>
@@ -120,7 +122,7 @@ export function GuestReviews(props: GuestReviewsProps) {
             </Stack>
             <Divider variant="middle" sx={{ my: 3 }} />
             <Stack spacing={1}>
-              {props.accommodationRatings.map(item =>
+              {props.accommodation.ratings.map(item =>
                 <Stack direction="row" justifyContent="space-between">
                   <Typography color="text.secondary" variant="body2">{item.name}</Typography>
                   <Stack direction="row" justifyContent="space-between">
@@ -207,10 +209,10 @@ export function GuestReviews(props: GuestReviewsProps) {
             </Stack>
           </Stack>
           {
-            props.accommodationReviews.map((item) => (
+            props.accommodation.reviews.map((item) => (
               <ListItem key={`item-${item.id}`}>
                 <Card sx={{ width: '100%', mb: 1, paddingTop: 3, paddingBottom: 3, paddingLeft: 1, paddingRight: 1 }}>
-                  <CardHeader
+                  {/*<CardHeader
                     avatar={
                       <Avatar sx={{ bgcolor: theme.palette.primary.main, width: 48, height: 48 }} aria-label="person">
                         A
@@ -218,7 +220,7 @@ export function GuestReviews(props: GuestReviewsProps) {
                     }
                     title={item.author}
                     titleTypographyProps={{ fontSize: 18 }}
-                    subheader={`Opublikowano: ${item.publicationDate}`}
+                    subheader={`Opublikowano: `}
                     subheaderTypographyProps={{ fontSize: 16 }}
                     action={
                       <Stack>
@@ -228,9 +230,9 @@ export function GuestReviews(props: GuestReviewsProps) {
                         </Stack>
                       </Stack>
                     }
-                  />
+                  />*/}
                   <CardContent>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 3 }}>
+                    {/*<Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 3 }}>
                       <BedOutlinedIcon fontSize='small' color="disabled" />
                       <Typography variant="body2" color="text.secondary">
                         {item.reservationInfo.name}
@@ -250,14 +252,14 @@ export function GuestReviews(props: GuestReviewsProps) {
                       <Typography variant="body2" color="text.secondary">
                         {item.reservationInfo.option}
                       </Typography>
-                    </Stack>
+                </Stack>*/}
                     <Typography variant="h5" component="div" gutterBottom>
                       {item.title}
                     </Typography>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                       {item.content}
                     </Typography>
-                  </CardContent>
+                </CardContent>
                   <CardActions sx={{ justifyContent: "right" }}>
                     <Button variant="text" startIcon={<ThumbUpOffAltIcon />}>
                       Pomocna
@@ -271,7 +273,7 @@ export function GuestReviews(props: GuestReviewsProps) {
             ))
           }
         </List>
-      </Grid>
+        </Grid>
     </Grid>
   );
 }

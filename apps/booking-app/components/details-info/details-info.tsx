@@ -12,11 +12,10 @@ import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 import Icon from '@mui/material/Icon';
-import { useAppSelector } from 'apps/booking-app/store';
-import { Accommodation } from 'apps/booking-app/store/accomondationSlice';
+
 
 export interface DetailsInfoProps {
-  accommodation: Accommodation;
+  accommodation: any;
 }
 
 export function DetailsInfo(props: DetailsInfoProps) {
@@ -30,7 +29,7 @@ export function DetailsInfo(props: DetailsInfoProps) {
           <Button variant="contained" endIcon={<CameraAltOutlinedIcon />} fullWidth>Więcej zdjęć</Button>
         </Stack>
         <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 1, sm: 4 }}>
-          {props.accommodation.images.map(image => (
+          {props.accommodation.images.filter(image => image.id !== 1).map(image => (
             <Grid item xs={1} sm={2} key={image.id}>
               <Box
                 sx={{
@@ -62,7 +61,7 @@ export function DetailsInfo(props: DetailsInfoProps) {
               <Stack direction="row" alignItems="center">
                 <LocationOnOutlinedIcon color='action' />
                 <Typography variant="h6" color="text.secondary" component="div">
-                  {props.accommodation.city}, {props.accommodation.country}
+                  {props.accommodation.address.city}, {props.accommodation.address.country}
                 </Typography>
               </Stack>
             </Stack>
