@@ -8,9 +8,6 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import AccommondationRoomTableRow from '../accommondation-room-table-row/accommondation-room-table-row';
-import { RoomOption } from 'apps/booking-app/store/accomondationSlice';
-import { useAppSelector } from 'apps/booking-app/store';
-import { selectRoomsOptions } from 'apps/booking-app/store/reservationSlice';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,7 +39,7 @@ export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.roomOptions.map((row) => (
+          {props.roomOptions.sort((firstItem, secondItem) => firstItem.price - secondItem.price).map((row) => (
             <AccommondationRoomTableRow roomId={props.roomId} row={row}/>
           ))}
         </TableBody>

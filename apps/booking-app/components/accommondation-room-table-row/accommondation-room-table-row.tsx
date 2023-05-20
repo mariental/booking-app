@@ -12,7 +12,7 @@ import { addRoomToReservation, removeRoomFromReservation, selectRoomsOptions, Se
 
 export interface AccommondationRoomTableRowProps {
   roomId: string;
-  row: RoomOption;
+  row: any;
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -85,8 +85,8 @@ export function AccommondationRoomTableRow(props: AccommondationRoomTableRowProp
         {props.row.options.map(option =>
           <Typography variant='subtitle2'>{option}</Typography>
         )}
-        <Typography variant='subtitle2' color="green">{props.row.cancellationType}</Typography>
-        {props.row.mealIncluded !== null ? <Typography variant='subtitle2' color="green">{props.row.mealIncluded}</Typography> : <></>}
+        <Typography variant='subtitle2' color="green">{props.row.cancellationType.name}{props.row.daysToCancell !== null ? " do " + props.row.daysToCancell + " dni przed terminem" : ""}</Typography>
+        {props.row.mealType.name !== "Brak" ? <Typography variant='subtitle2' color="green">{props.row.mealType.name}</Typography> : <></>}
       </StyledTableCell>
       <StyledTableCell align="right">
         <Typography variant='h6' fontWeight={600}>{props.row.price} zł</Typography>

@@ -2,8 +2,8 @@ import * as React from 'react';
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
-import { blue } from "@mui/material/colors";
-
+import { Icon } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 interface facility {
   name: string;
@@ -17,12 +17,13 @@ export interface FacilitiesCategoryWithoutCollapseProps {
 }
 
 export function FacilitiesCategoryWithoutCollapse(props: FacilitiesCategoryWithoutCollapseProps) {
+  const theme = useTheme();
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 300, flexGrow: 1 }}>
       <CardHeader
         avatar={
-          <Avatar aria-label="family" sx={{ bgcolor: blue[600] }}>
-            {props.facility.icon}
+          <Avatar aria-label={props.facility.name} sx={{ bgcolor: theme.palette.primary.main}}>
+            <Icon>{props.facility.icon}</Icon>
           </Avatar>
         }
         title={props.facility.name}

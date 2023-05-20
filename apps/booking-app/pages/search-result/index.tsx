@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
-import AccomondationSearchListItem from '../../components/accomondation-search-list-item/accomondation-search-list-item';
+import AccomondationSearchListItem, { calculateRate } from '../../components/accomondation-search-list-item/accomondation-search-list-item';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -25,6 +25,7 @@ import { GetStaticProps } from 'next';
 export const getStaticProps: GetStaticProps = async () => {
   const acc = await prisma.accommodation.findMany({
     include: {
+      type: true,
       address: true,
       images: true,
       rooms: true,
@@ -47,11 +48,7 @@ export interface SearchParams {
 }
 
 
-export function SearchResult({acc}) {
-  const [types, setTypes] = React.useState<string[]>([]);
-  const [facilities, setFacilities] = React.useState<string[]>([]);
-  const [prices, setPrices] = React.useState<string[]>([]);
-  const [reviews, setReviews] = React.useState<string[]>([]);
+export function SearchResult({ acc }) {
   const [typesCategories, setTypesCategories] = React.useState([
     {
       name: 'houseForExclusivity',
@@ -76,88 +73,104 @@ export function SearchResult({acc}) {
   ]);
   const [facilitiesCategories, setFacilitiesCategories] = React.useState([
     {
+      name: 'wifi',
+      label: 'WiFi',
+      checked: false
+    },
+    {
+      name: 'bathroom',
+      label: 'Prywatna łazienka',
+      checked: false
+    },
+    {
+      name: 'panorama',
+      label: 'Pokój z widokiem',
+      checked: false
+    },
+    {
+      name: 'tv',
+      label: 'Telewizor',
+      checked: false
+    },
+    {
+      name: 'ac_unit',
+      label: 'Klimatyzacja',
+      checked: false
+    },
+    {
       name: 'parking',
-      value: 'parking',
-      checked: false
-    },
-    {
-      name: 'restaurant',
-      value: 'restauracja',
-      checked: false
-    },
-    {
-      name: 'petsAllowed',
-      value: 'zwierzęta domowe są akceptowane',
-      checked: false
-    },
-    {
-      name: 'roomService',
-      value: 'obsługa pokoju',
-      checked: false
-    },
-    {
-      name: 'WiFi',
-      value: 'WiFi',
+      label: 'Parking',
       checked: false
     }
   ])
   const [pricesCategories, setPricesCategories] = React.useState([
     {
       name: 'firstPriceRange',
-      value: '0 zł - 200zł',
+      value: '1',
+      label: '0 zł - 200zł',
       checked: false
     },
     {
       name: 'secondPriceRange',
-      value: '200 zł - 400zł',
+      value: '2',
+      label: '200 zł - 400zł',
       checked: false
     },
     {
       name: 'thirdPriceRange',
-      value: '400 zł - 600zł',
+      value: '3',
+      label: '400 zł - 600zł',
       checked: false
     },
     {
       name: 'fourthPriceRange',
-      value: '600 zł - 800zł',
+      value: '4',
+      label: '600 zł - 800zł',
       checked: false
     },
     {
       name: 'fifthPriceRange',
-      value: '800zł +',
+      value: '5',
+      label: '800zł +',
       checked: false
     }
   ])
-  const [reviewsCategories, setReviewsCategories] = React.useState([
+  const [ratingCategories, setRatingCategories] = React.useState([
     {
       name: 'oneStar',
-      value: '1 gwiazdka',
+      value: '1',
+      label: '1 gwiazdka',
       checked: false
     },
     {
       name: 'twoStars',
-      value: '2 gwiazdki',
+      value: '2',
+      label: '2 gwiazdki',
       checked: false
     },
     {
       name: 'threeStars',
-      value: '3 gwiazdki',
+      value: '3',
+      label: '3 gwiazdki',
       checked: false
     },
     {
       name: 'fourStars',
-      value: '4 gwiazdki',
+      value: '4',
+      label: '4 gwiazdki',
       checked: false
     },
     {
       name: 'fiveStars',
-      value: '5 gwiazdek',
+      value: '5',
+      label: '5 gwiazdek',
       checked: false
     }
   ])
 
-  const [sort, setSort] = React.useState('');
+  const [sort, setSort] = React.useState('Najpopularniejsze');
   const [accommodations, setAccommondations] = React.useState([]);
+  const [filteredAccommondations, setFilteredAccommondations] = React.useState([]);
   const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
 
   const router = useRouter();
@@ -178,13 +191,7 @@ export function SearchResult({acc}) {
       }
     })
     setTypesCategories(updatetypesCategories);
-    if (event.target.checked) {
-      setTypes(prevState => [...prevState, event.target.value]);
-    } else {
-      setTypes(types.filter(type => type !== event.target.value));
-    }
   };
-
   const handleFacilitiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const updatefacilitiesCategories = facilitiesCategories.map(item => {
       if (item.name === event.target.name) {
@@ -197,11 +204,6 @@ export function SearchResult({acc}) {
       }
     })
     setFacilitiesCategories(updatefacilitiesCategories);
-    if (event.target.checked) {
-      setFacilities(prevState => [...prevState, event.target.value]);
-    } else {
-      setFacilities(facilities.filter(type => type !== event.target.value));
-    }
   };
   const handlePricesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const updatePricesCategories = pricesCategories.map(item => {
@@ -215,14 +217,9 @@ export function SearchResult({acc}) {
       }
     })
     setPricesCategories(updatePricesCategories);
-    if (event.target.checked) {
-      setPrices(prevState => [...prevState, event.target.value]);
-    } else {
-      setPrices(prices.filter(type => type !== event.target.value));
-    }
   };
-  const handleReviewsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const updateReviewsCategories = reviewsCategories.map(item => {
+  const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updateRatingCategories = ratingCategories.map(item => {
       if (item.name === event.target.name) {
         return {
           ...item,
@@ -232,16 +229,15 @@ export function SearchResult({acc}) {
         return item;
       }
     })
-    setReviewsCategories(updateReviewsCategories);
-    if (event.target.checked) {
-      setReviews(prevState => [...prevState, event.target.value]);
-    } else {
-      setReviews(reviews.filter(type => type !== event.target.value));
-    }
+    setRatingCategories(updateRatingCategories);
   };
-  const sortAccommondations = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSort = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSort(event.target.value);
-    if (event.target.value === 'Cena (od najniższej)') {
+    sortAccommondations(event.target.value);
+  }
+
+  const sortAccommondations = (type) => {
+    if (type === 'Cena (od najniższej)') {
       accommodations.sort((a, b) => {
         const nameA = a.pricePerNight;
         const nameB = b.pricePerNight;
@@ -254,7 +250,7 @@ export function SearchResult({acc}) {
 
         return 0;
       })
-    } else if (event.target.value === 'Cena (od najwyższej)') {
+    } else if (type === 'Cena (od najwyższej)') {
       accommodations.sort((a, b) => {
         const nameA = a.pricePerNight;
         const nameB = b.pricePerNight;
@@ -264,13 +260,12 @@ export function SearchResult({acc}) {
         if (nameA < nameB) {
           return 1;
         }
-
         return 0;
       })
-    } else if (event.target.value === 'Ocena obiektu (od najniższej)') {
+    } else if (type === 'Ocena obiektu (od najniższej)') {
       accommodations.sort((a, b) => {
-        const nameA = a.ratings.find(rating => rating.name === 'Overall').value;
-        const nameB = b.ratings.find(rating => rating.name === 'Overall').value;
+        const nameA = calculateRate(a.ratings).value;
+        const nameB = calculateRate(b.ratings).value;
         if (nameA < nameB) {
           return -1;
         }
@@ -280,10 +275,10 @@ export function SearchResult({acc}) {
 
         return 0;
       })
-    } else if (event.target.value === 'Ocena obiektu (od najwyższej)') {
+    } else if (type === 'Ocena obiektu (od najwyższej)') {
       accommodations.sort((a, b) => {
-        const nameA = a.ratings.find(rating => rating.name === 'Overall').value;
-        const nameB = b.ratings.find(rating => rating.name === 'Overall').value;
+        const nameA = calculateRate(a.ratings).value;
+        const nameB = calculateRate(b.ratings).value;
         if (nameA > nameB) {
           return -1;
         }
@@ -291,11 +286,22 @@ export function SearchResult({acc}) {
           return 1;
         }
 
+        return 0;
+      })
+    } else if (type === 'Najpopularniejsze') {
+      accommodations.sort((a, b) => {
+        const nameA = calculateRate(a.ratings).quantity;
+        const nameB = calculateRate(b.ratings).quantity;
+        if (nameA > nameB) {
+          return -1;
+        }
+        if (nameA < nameB) {
+          return 1;
+        }
         return 0;
       })
     }
   }
-
   React.useEffect(() => {
     if (router.isReady) {
       setSearchParams({
@@ -311,11 +317,76 @@ export function SearchResult({acc}) {
 
   React.useEffect(() => {
     if (searchParams !== null) {
-      console.log(acc);
       setAccommondations(acc);
+      setFilteredAccommondations(acc);
+      sortAccommondations('Najpopularniejsze');
     }
   }, [searchParams]);
 
+  const applyFilters = () => {
+    let filteredData = accommodations;
+
+    const typesChecked = typesCategories
+      .filter((item) => item.checked)
+      .map((item) => item.value);
+
+    const ratesChecked = ratingCategories
+      .filter((item) => item.checked)
+      .map((item) => item.value);
+
+    const pricesChecked = pricesCategories
+      .filter((item) => item.checked)
+      .map((item) => item.value);
+
+    const facilitiesChecked = facilitiesCategories
+      .filter((item) => item.checked)
+      .map((item) => item.label);
+
+    if (typesChecked.length && !ratesChecked.length && !facilitiesChecked.length) {
+      filteredData = filteredData.filter(
+        (item) => typesChecked.includes(item.type.name)
+      );
+    } else if (ratesChecked.length && !typesChecked.length && !facilitiesChecked.length) {
+      filteredData = filteredData.filter(
+        (item) => ratesChecked.includes((calculateRate(item.ratings).value).charAt(0))
+      );
+    } else if (facilitiesChecked.length && !ratesChecked.length && !typesChecked.length) {
+      filteredData = filteredData.filter(
+        (item) => item.facilities.filter((facility) => facilitiesChecked.includes(facility.name)).length !== 0 
+      );
+    } else if (typesChecked.length && ratesChecked.length && !facilitiesChecked.length) {
+      filteredData = filteredData.filter(
+        (item) =>
+          typesChecked.includes(item.type.name) &&
+          ratesChecked.includes((calculateRate(item.ratings).value).charAt(0))
+      );
+    } else if (typesChecked.length && facilitiesChecked.length && !ratesChecked.length) {
+      filteredData = filteredData.filter(
+        (item) =>
+          typesChecked.includes(item.type.name) &&
+          item.facilities.filter((facility) => facilitiesChecked.includes(facility.name)).length !== 0
+      );
+    } else if (ratesChecked.length && facilitiesChecked.length && !typesChecked.length) {
+      filteredData = filteredData.filter(
+        (item) =>
+          ratesChecked.includes((calculateRate(item.ratings).value).charAt(0)) &&
+          item.facilities.filter((facility) => facilitiesChecked.includes(facility.name)).length !== 0
+      );
+    } else if (ratesChecked.length && typesChecked.length && facilitiesChecked.length) {
+      filteredData = filteredData.filter(
+        (item) =>
+          typesChecked.includes(item.type.name) &&
+          ratesChecked.includes((calculateRate(item.ratings).value).charAt(0)) && 
+          item.facilities.filter((facility) => facilitiesChecked.includes(facility.name)).length !== 0
+      );
+    }
+
+    setFilteredAccommondations(filteredData);
+  }
+
+  React.useEffect(() => {
+    applyFilters();
+  }, [typesCategories, ratingCategories, facilitiesCategories])
 
   return (
     <>
@@ -353,7 +424,7 @@ export function SearchResult({acc}) {
                 <AccordionDetails>
                   <FormGroup>
                     {facilitiesCategories.map((item) =>
-                      <FormControlLabel control={<Checkbox name={item.name} value={item.value} checked={item.checked} onChange={handleFacilitiesChange} />} label={item.value} key={item.name} />
+                      <FormControlLabel control={<Checkbox name={item.name} value={item.name} checked={item.checked} onChange={handleFacilitiesChange} />} label={item.label} key={item.name} />
                     )}
                   </FormGroup>
                 </AccordionDetails>
@@ -368,8 +439,8 @@ export function SearchResult({acc}) {
                 </AccordionSummary>
                 <AccordionDetails>
                   <FormGroup>
-                    {reviewsCategories.map((item) =>
-                      <FormControlLabel control={<Checkbox name={item.name} value={item.value} checked={item.checked} onChange={handleReviewsChange} />} label={item.value} key={item.name} />
+                    {ratingCategories.map((item) =>
+                      <FormControlLabel control={<Checkbox name={item.name} value={item.value} checked={item.checked} onChange={handleRatingChange} />} label={item.label} key={item.name} />
                     )}
                   </FormGroup>
                 </AccordionDetails>
@@ -385,7 +456,7 @@ export function SearchResult({acc}) {
                 <AccordionDetails>
                   <FormGroup>
                     {pricesCategories.map((item) =>
-                      <FormControlLabel control={<Checkbox name={item.name} value={item.value} checked={item.checked} onChange={handlePricesChange} />} label={item.value} key={item.name} />
+                      <FormControlLabel control={<Checkbox name={item.name} value={item.value} checked={item.checked} onChange={handlePricesChange} />} label={item.label} key={item.name} />
                     )}
                   </FormGroup>
                 </AccordionDetails>
@@ -401,7 +472,7 @@ export function SearchResult({acc}) {
                   id="demo-simple-select"
                   value={sort}
                   label="Sortuj według"
-                  onChange={sortAccommondations}
+                  onChange={handleSort}
                   fullWidth
                 >
                   {sortOptions.map((item) =>
@@ -410,15 +481,15 @@ export function SearchResult({acc}) {
                 </Select>
               </FormControl>
             </Stack>
-            {accommodations.length === 0 ?
+            {filteredAccommondations.length === 0 ?
               <Alert severity="info" sx={{ mb: 2 }}>
                 <AlertTitle>Brak miejsc dla podanych parametrów</AlertTitle>
               </Alert> :
               <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 {
-                  accommodations.length === 0 ? <></> :
-                    accommodations.map((item) =>
-                      <AccomondationSearchListItem key={item.id} accomondation={item} searchParams={searchParams}/>
+                  filteredAccommondations.length === 0 ? <></> :
+                    filteredAccommondations.map((item) =>
+                      <AccomondationSearchListItem key={item.id} accommondation={item} searchParams={searchParams} />
                     )
                 }
               </Box>

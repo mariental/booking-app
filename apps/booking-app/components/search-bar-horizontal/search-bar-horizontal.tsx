@@ -14,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   marginTop: 12,
-  marginBottom: 12,
+  marginBottom: 24,
   gap: 24,
   padding: 24,
   flexWrap: 'wrap',

@@ -8,142 +8,13 @@ import AppBar from '@mui/material/AppBar';
 import DetailsInfo from 'apps/booking-app/components/details-info/details-info';
 import InformationsAndPrices from 'apps/booking-app/components/informations-and-prices/informations-and-prices';
 import AccommondationFacilities from 'apps/booking-app/components/accommondation-facilities/accommondation-facilities';
-import LocalParkingOutlinedIcon from '@mui/icons-material/LocalParkingOutlined';
-import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined';
-import KitchenOutlinedIcon from '@mui/icons-material/KitchenOutlined';
-import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
-import BathtubOutlinedIcon from '@mui/icons-material/BathtubOutlined';
-import ChairOutlinedIcon from '@mui/icons-material/ChairOutlined';
-import TvOutlinedIcon from '@mui/icons-material/TvOutlined';
-import HotelOutlinedIcon from '@mui/icons-material/HotelOutlined';
-import PetsOutlinedIcon from '@mui/icons-material/PetsOutlined';
-import AccessibleOutlinedIcon from '@mui/icons-material/AccessibleOutlined';
-import LocalFloristOutlinedIcon from '@mui/icons-material/LocalFloristOutlined';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import ForestOutlinedIcon from '@mui/icons-material/ForestOutlined';
-import HouseOutlinedIcon from '@mui/icons-material/HouseOutlined';
-import FamilyRestroomOutlinedIcon from '@mui/icons-material/FamilyRestroomOutlined';
-import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
-import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import RulesOfStay from 'apps/booking-app/components/rules-of-stay/rules-of-stay';
 import GuestReviews from 'apps/booking-app/components/guest-reviews/guest-reviews';
 import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
 import { SearchParams } from '../search-result';
 import prisma from 'apps/booking-app/lib/prisma';
 import { GetServerSideProps } from 'next';
-
-const facilitiesCategories = [
-  {
-    name: 'Parking',
-    details: 'Bezpłatny parking prywatny jest dostępny na miejscu (nie jest konieczna rezerwacja).',
-    icon: <LocalParkingOutlinedIcon />
-  },
-  {
-    name: 'Internet',
-    details: 'Wi-Fi jest dostępne w pomieszczeniach ogólnodostępnych i jest bezpłatne.',
-    icon: <WifiOutlinedIcon />
-  },
-  {
-    name: 'Kuchnia',
-    details: '',
-    facilities: ['stół', 'płyta kuchenna', 'czajnik elektryczny', 'lodówka', 'aneks kuchenny', 'przybory kuchenne', 'piekarnik', 'pralka'],
-    icon: <KitchenOutlinedIcon />
-  },
-  {
-    name: 'Sypialnia',
-    details: '',
-    facilities: ['pościel', 'szafa lub garderoba ', 'długie łóżka (> 2 metry'],
-    icon: <BedOutlinedIcon />
-  },
-  {
-    name: 'Łazienka',
-    details: '',
-    facilities: ['papier toaletowy', 'ręczniki', 'wanna lub prysznic ', 'prywatna łazienka ', 'toaleta', 'suszarka do włosów', 'bezpłatny zestaw kosmetyków'],
-    icon: <BathtubOutlinedIcon />
-  },
-  {
-    name: 'Salon',
-    details: '',
-    facilities: ['część jadalna', 'kominek', 'sofa'],
-    icon: <ChairOutlinedIcon />
-  },
-  {
-    name: 'Media/Technologia',
-    details: '',
-    facilities: ['telewizor z płaskim ekranem ', 'kanały kablowe ', 'radio', 'telewizor', 'serwis z filmami online (np. Netflix)'],
-    icon: <TvOutlinedIcon />
-
-  },
-  {
-    name: 'Udogodnienia w pokoju',
-    details: '',
-    facilities: ['gniazdko koło łóżka ', 'suszarka na ubrania ', 'moskitiera ', 'wieszak na ubrania', 'prywatne wejście', 'żelazko'],
-    icon: <HotelOutlinedIcon />
-  },
-  {
-    name: 'Zwierzęta',
-    details: 'Zwierzęta są akceptowane. Mogą obowiązywać dodatkowe opłaty.',
-    icon: <PetsOutlinedIcon />
-
-  },
-  {
-    name: 'Udogodnienia dla niepełnosprawnych',
-    details: '',
-    facilities: ['całość dostępna dla wózków inwalidzkich', 'całość zlokalizowana na parterze '],
-    icon: <AccessibleOutlinedIcon />
-
-  },
-  {
-    name: 'Okolica',
-    details: '',
-    facilities: ['miejsce na piknik ', 'miejsce na ognisko', 'meble ogrodowe', 'stół na świeżym powietrzu', 'sprzęt do grillowania', 'balkon', 'taras', 'ogród'],
-    icon: <LocalFloristOutlinedIcon />
-
-  },
-  {
-    name: 'Bezpieczeństwo',
-    details: '',
-    facilities: ['czujnik dymu', 'system alarmowy', 'gaśnice', 'monitoring wokół obiektu'],
-    icon: <LockOutlinedIcon />
-
-  },
-  {
-    name: 'Okolica i widok',
-    details: '',
-    facilities: ['widok na góry ', 'widok na ogród ', 'widok'],
-    icon: <ForestOutlinedIcon />
-  },
-  {
-    name: 'Cechy budynku',
-    details: '',
-    facilities: ['bliźniak', 'wolnostojący'],
-    icon: <HouseOutlinedIcon />
-  },
-  {
-    name: 'Usługi recepcji',
-    details: '',
-    facilities: ['indywidualne zameldowanie / wymeldowanie', 'ekspresowe zameldowanie / wymeldowanie', 'całodobowa recepcja'],
-    icon: <StoreOutlinedIcon />
-  },
-  {
-    name: 'Usługi dla rodzin i oferta rozrywkowa',
-    details: '',
-    facilities: ['plac zabaw dla dzieci', 'książki, DVD lub muzyka dla dzieci', 'gry planszowe / puzzle'],
-    icon: <FamilyRestroomOutlinedIcon />
-  },
-  {
-    name: 'Różne',
-    details: '',
-    facilities: ['całkowity zakaz palenia', 'ogrzewanie', 'pokoje rodzinne', 'pokoje dla niepalących '],
-    icon: <ForestOutlinedIcon />
-  },
-  {
-    name: 'Języki',
-    details: '',
-    facilities: ['angielski', 'polski', 'ukraiński'],
-    icon: <ForumOutlinedIcon />
-  },
-]
+import styled from '@emotion/styled';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -171,6 +42,19 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
+interface StyledTabProps {
+  label: string;
+}
+
+const StyledTab = styled((props: StyledTabProps) => (
+  <Tab disableRipple {...props} />
+))(({ theme }) => ({
+  '&.Mui-selected': {
+    color: '#000',
+    backgroundColor: theme.palette.secondary.main
+  },
+}));
+
 function a11yProps(index: number) {
   return {
     id: `full-width-tab-${index}`,
@@ -195,13 +79,31 @@ export const getServerSideProps: GetServerSideProps  = async ({ params }) => {
             }
           },
           facilities: true,
-          roomOptions: true
+          roomOptions: {
+            include: {
+              cancellationType: true,
+              mealType: true
+            }
+          }
         }
       },
       ratings: true,
       reviews: {
         include: {
-          rates: true
+          author: true,
+          reservation: {
+            include : {
+              roomOption: {
+                select : {
+                  room: {
+                    select: {
+                      name: true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       },
       facilities: true
@@ -243,6 +145,7 @@ export function AccomondationDetails({acc}) {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
   return (
     <Box sx={{ width: '100%' }}>
       {searchParams !== null ?
@@ -257,17 +160,17 @@ export function AccomondationDetails({acc}) {
           variant="fullWidth"
           aria-label="full width tabs example"
         >
-          <Tab label="Ogólne informacje" {...a11yProps(0)} />
-          <Tab label="Pokoje" {...a11yProps(1)} />
-          <Tab label="Udogodnienia" {...a11yProps(2)} />
-          <Tab label="Zasady pobytu" {...a11yProps(3)} />
-          <Tab label="Opinie gości" {...a11yProps(4)} />
+          <StyledTab label="Ogólne informacje" {...a11yProps(0)} />
+          <StyledTab label="Pokoje" {...a11yProps(1)} />
+          <StyledTab label="Udogodnienia" {...a11yProps(2)} />
+          <StyledTab label="Zasady pobytu" {...a11yProps(3)} />
+          <StyledTab label="Opinie gości" {...a11yProps(4)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation === undefined ? <></> : <DetailsInfo accommodation={accommodation}/>
+            accommodation === undefined ? <></> : <DetailsInfo accommodation={accommodation} setValue={setValue}/>
           }
         </Container>
       </TabPanel>
@@ -280,7 +183,7 @@ export function AccomondationDetails({acc}) {
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-          <AccommondationFacilities facilitiesCategories={facilitiesCategories} />
+          <AccommondationFacilities accommodation={accommodation} />
         </Container>
       </TabPanel>
       <TabPanel value={value} index={3}>

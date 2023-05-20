@@ -12,10 +12,12 @@ import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 import Icon from '@mui/material/Icon';
+import { calculateRate } from '../accomondation-search-list-item/accomondation-search-list-item';
 
 
 export interface DetailsInfoProps {
   accommodation: any;
+  setValue: Function;
 }
 
 export function DetailsInfo(props: DetailsInfoProps) {
@@ -47,7 +49,6 @@ export function DetailsInfo(props: DetailsInfoProps) {
       </Grid>
       <Grid item xs={1} md={7}>
         <Box>
-
           <Stack direction="row" alignContent="center" justifyContent="space-between">
             <Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
@@ -67,10 +68,10 @@ export function DetailsInfo(props: DetailsInfoProps) {
             </Stack>
             <Stack>
               <Stack direction="row" spacing={0.5} alignItems="center">
-                <Rating name="read-only" value={props.accommodation.ratings.find((item) => item.name === 'Overall').value} precision={0.01} readOnly />
-                <Typography variant="h5" color="primary">{props.accommodation.ratings.find((item) => item.name === 'Overall').value}</Typography>
+                <Rating name="read-only" value={Number(calculateRate(props.accommodation.ratings).value)} precision={0.01} readOnly />
+                <Typography variant="h5" color="primary">{calculateRate(props.accommodation.ratings).value}</Typography>
               </Stack>
-              <Button variant='contained' size='small' endIcon={<ArrowForwardIosOutlinedIcon />}>Zobacz opinie</Button>
+              <Button variant='contained' size='small' endIcon={<ArrowForwardIosOutlinedIcon />} onClick={() => props.setValue(4)}>Zobacz opinie</Button>
             </Stack>
           </Stack>
           <Stack boxShadow={2} padding={2} mt={3}>
@@ -88,7 +89,7 @@ export function DetailsInfo(props: DetailsInfoProps) {
                 props.accommodation.facilities.map(facility =>
                   <Chip key={facility.id} label={facility.name} icon={<Icon>{facility.icon}</Icon>}></Chip>
                 )}
-              <Button variant='outlined' size='small' endIcon={<ArrowForwardIosOutlinedIcon />} sx={{ borderRadius: 24 }}>Zobacz więcej</Button>
+              <Button variant='outlined' size='small' onClick={() => props.setValue(2)} endIcon={<ArrowForwardIosOutlinedIcon />} sx={{ borderRadius: 24 }}>Zobacz więcej</Button>
             </Box>
           </Stack>
         </Box>

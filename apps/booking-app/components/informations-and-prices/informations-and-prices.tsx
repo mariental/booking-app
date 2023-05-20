@@ -28,6 +28,7 @@ export function InformationsAndPrices(props: InformationsAndPricesProps) {
 
   React.useEffect(() => {
     setRooms(props.accommodation.rooms);
+    console.log(rooms)
   })
 
   return (

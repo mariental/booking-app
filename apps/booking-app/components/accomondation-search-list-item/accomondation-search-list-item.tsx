@@ -19,8 +19,21 @@ import { SearchParams } from 'apps/booking-app/pages/search-result';
 
 
 export interface AccomondationSearchListItemProps {
-  accomondation: any;
+  accommondation: any;
   searchParams: SearchParams;
+}
+
+export const calculateRate = (ratings) => {
+  let sum = 0;
+  let quantity = 0; 
+  for (let i=0; i < ratings.length; i++) {
+    sum += ratings[i].value;
+    quantity += ratings[i].quantity;
+  }
+  return {
+    value: (sum/ratings.length).toPrecision(2),
+    quantity: quantity
+  }
 }
 
 export function AccomondationSearchListItem(props: AccomondationSearchListItemProps) {
@@ -30,15 +43,15 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
       <CardMedia
         component="img"
         sx={{ height: 300 }}
-        image={props.accomondation.images[0].src}
-        alt={props.accomondation.images[0].alt}
+        image={props.accommondation.images[0].src}
+        alt={props.accommondation.images[0].alt}
       />
       <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">
           <Stack>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography component="div" variant="h6">
-                {props.accomondation.name}
+                {props.accommondation.name}
               </Typography>
               <ThumbUpIcon color='primary' />
               <StarsIcon color='primary' />
@@ -46,7 +59,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
             <Stack direction="row" alignItems="center" mb={2}>
               <LocationOnOutlinedIcon color="action" />
               <Typography variant="body1" color="text.secondary" component="div">
-                {props.accomondation.address.city}, {props.accomondation.address.country}
+                {props.accommondation.address.city}, {props.accommondation.address.country}
               </Typography>
             </Stack>
           </Stack>
@@ -54,9 +67,9 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
           <Stack alignItems="flex-end">
             <Stack direction="row" spacing={0.5} alignItems="center">
               <StarIcon sx={{ color: '#faaf00' }} />
-              <Typography variant="h5" color="primary">{props.accomondation.ratings.find((item) => item.name === 'Overall').value}</Typography>
+              <Typography variant="h5" color="primary">{calculateRate(props.accommondation.ratings).value}</Typography>
             </Stack>
-            <Typography variant="caption">({props.accomondation.ratings.find((item) => item.name === 'Overall').quantity} opinii)</Typography>
+            <Typography variant="caption">({calculateRate(props.accommondation.ratings).quantity} opinii)</Typography>
           </Stack>
         </Stack>
 
@@ -73,7 +86,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
         </Stack>
         <Stack mt={2}>
           <Typography variant="h5" color="primary.light" textAlign="end" fontWeight={600}>
-            {props.accomondation.pricePerNight} PLN / noc
+            {props.accommondation.pricePerNight} PLN / noc
           </Typography>
           <Typography variant="caption" color="text.secondary" textAlign="end">
             Zawiera opłaty i podatki
@@ -82,7 +95,7 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
       </CardContent>
       <CardActions sx={{ padding: 0, mt: 2 }}>
         {props.searchParams !== null ?
-          <Button variant='contained' href={`/accomondation-details/${props.accomondation.id}?location=${props.searchParams.location}&checkIn=${props.searchParams.checkIn}&checkOut=${props.searchParams.checkOut}&adults=${props.searchParams.adults}&kids=${props.searchParams.kids}&rooms=${props.searchParams.rooms}`} size="large" fullWidth sx={{ height: 50 }} endIcon={<ArrowForwardOutlinedIcon />} >Zobacz dostępność</Button>
+          <Button variant='contained' href={`/accomondation-details/${props.accommondation.id}?location=${props.searchParams.location}&checkIn=${props.searchParams.checkIn}&checkOut=${props.searchParams.checkOut}&adults=${props.searchParams.adults}&kids=${props.searchParams.kids}&rooms=${props.searchParams.rooms}`} size="large" fullWidth sx={{ height: 50 }} endIcon={<ArrowForwardOutlinedIcon />} >Zobacz dostępność</Button>
           : <></>
         }
       </CardActions>
