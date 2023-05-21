@@ -200,7 +200,7 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
           id="chooseLocation"
           options={locations}
           value={location}
-          onChange={(event: any, newValue: string | null) => {
+          onChange={(event: any, newValue: string) => {
             setLocation(newValue);
             if (validateLocation(newValue)) {
               setLocationError(false)

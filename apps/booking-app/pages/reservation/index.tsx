@@ -232,7 +232,7 @@ export function Reservation(props: ReservationProps) {
         </Grid>
         <Grid item xs={1} md={9}>
           {reservation.selectedOptions.map(option =>
-            <Card sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Card sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
               <CardContent sx={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: "space-between" }}>
                 <Stack direction="row" justifyContent="space-between">
                   <Stack>
