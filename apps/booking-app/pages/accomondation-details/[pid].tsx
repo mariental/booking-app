@@ -177,7 +177,7 @@ export function AccomondationDetails({acc}) {
       <TabPanel value={value} index={1}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation === undefined ? <></> : <InformationsAndPrices accommodation={accommodation}/>
+            accommodation === undefined ? <></> : <InformationsAndPrices accommodation={accommodation} searchParams={searchParams}/>
           }
         </Container>
       </TabPanel>

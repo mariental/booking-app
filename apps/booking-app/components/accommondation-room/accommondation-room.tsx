@@ -39,12 +39,6 @@ function bedAlert(quantity, bed) {
 }
 
 export function AccommondationRoom(props: AccommondationRoomProps) {
-
-  React.useEffect(() => {
-    console.log(props.room)
-  }, [])
-
-
   return (
     <Accordion>
       <AccordionSummary
@@ -74,14 +68,16 @@ export function AccommondationRoom(props: AccommondationRoomProps) {
           </Stack>
           <Stack direction="row" sx={{ flexWrap: 'wrap' }}>
             {props.room.facilities.map((item) => 
-              <Chip key={item.id} label={item.name} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }}/>
+              item.name === 'Powierzchnia' ? 
+              <Chip key={item.id} label={props.room.size + "m2"} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }}/> 
+              : <Chip key={item.id} label={item.name} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }}/>
             )}
           </Stack>
           <Button variant="outlined" endIcon={<ArrowForwardIosOutlinedIcon />} sx={{ width: 210}}>Zobacz szczegóły</Button>
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <AccommondationRoomTable roomId={props.room.id} roomOptions={props.room.roomOptions}/>
+        <AccommondationRoomTable roomOptions={props.room.roomOptions} room={props.room}/>
       </AccordionDetails>
     </Accordion>
   );

@@ -302,6 +302,7 @@ export function SearchResult({ acc }) {
       })
     }
   }
+  
   React.useEffect(() => {
     if (router.isReady) {
       setSearchParams({

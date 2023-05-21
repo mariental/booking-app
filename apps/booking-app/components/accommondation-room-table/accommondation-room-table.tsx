@@ -21,11 +21,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 
 export interface AccommondationRoomTableProps { 
-  roomId: string;
+  room: any;
   roomOptions: any[];
 }
 
 export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
+  const [roomOptions, setRoomOptions] = React.useState<any[]>([])
+
+  React.useEffect(() => {
+    const arrayToSort = [...props.roomOptions];
+    setRoomOptions(arrayToSort.sort((firstItem, secondItem) => parseFloat(firstItem.price) - parseFloat(secondItem.price)));
+  }, []);
 
   return (
     <TableContainer component={Paper} sx={{ my: 2 }}>
@@ -39,8 +45,8 @@ export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.roomOptions.sort((firstItem, secondItem) => firstItem.price - secondItem.price).map((row) => (
-            <AccommondationRoomTableRow roomId={props.roomId} row={row}/>
+          {roomOptions.map((row) => (
+            <AccommondationRoomTableRow row={row} room={props.room}/>
           ))}
         </TableBody>
       </Table>

@@ -5,13 +5,12 @@ import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import { Checkbox } from '@mui/material';
-import { Room, RoomOption } from 'apps/booking-app/store/accomondationSlice';
 import React from 'react';
-import store, { useAppDispatch, useAppSelector } from 'apps/booking-app/store';
-import { addRoomToReservation, removeRoomFromReservation, selectRoomsOptions, SelectedOptions } from 'apps/booking-app/store/reservationSlice';
+import { useAppDispatch, useAppSelector } from 'apps/booking-app/store';
+import { addRoomToReservation, removeRoomFromReservation } from 'apps/booking-app/store/reservationSlice';
 
 export interface AccommondationRoomTableRowProps {
-  roomId: string;
+  room: any;
   row: any;
 }
 
@@ -38,7 +37,7 @@ export function AccommondationRoomTableRow(props: AccommondationRoomTableRowProp
   const [checked, setChecked] = React.useState<boolean>(false);
   const [disabled, setDisabled] = React.useState<boolean>(false);
 
-  const roomsOptions: SelectedOptions[] = useAppSelector(selectRoomsOptions);
+  const selectedOptions = useAppSelector((state) => state.reservation.selectedOptions);
 
   const dispatch = useAppDispatch();
 
@@ -47,24 +46,27 @@ export function AccommondationRoomTableRow(props: AccommondationRoomTableRowProp
     if (checked) {
       dispatch(removeRoomFromReservation(props.row));
     } else {
-      dispatch(addRoomToReservation({id: props.roomId, option: props.row}));
+      if(!selectedOptions.find((option) => option.room.id === props.room.id)) {
+        dispatch(addRoomToReservation({ room: props.room, option: props.row }));
+      }
     }
   };
 
   React.useEffect(() => {
-    if(roomsOptions.length > 0) {
-      const selectedOption: SelectedOptions = roomsOptions.find(roomOption => roomOption.roomId === props.roomId);
+    if(selectedOptions.length > 0) {
+      const selectedOption = selectedOptions.find((option) => option.room.id === props.room.id);
       if(selectedOption === undefined) {
         setDisabled(false)
-      } else if(selectedOption.roomOption === props.row) {
+      } else if(selectedOption.roomOption.id === props.row.id) {
         setDisabled(false)
+        setChecked(true)
       } else {
         setDisabled(true)
       }
     } else {
       setDisabled(false)
     }
-  }, [roomsOptions])
+  }, [selectedOptions])
 
   return (
     <StyledTableRow

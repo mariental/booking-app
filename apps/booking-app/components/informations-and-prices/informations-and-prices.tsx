@@ -13,22 +13,42 @@ import ListItemText from '@mui/material/ListItemText';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import SendIcon from '@mui/icons-material/Send';
-import { useAppSelector } from 'apps/booking-app/store';
-
+import { useAppDispatch, useAppSelector } from 'apps/booking-app/store';
+import { useRouter } from 'next/router';
+import { setReservationInfo } from 'apps/booking-app/store/reservationSlice';
+import { Divider } from '@mui/material';
 
 export interface InformationsAndPricesProps {
   accommodation: any;
+  searchParams: any;
 }
 
 export function InformationsAndPrices(props: InformationsAndPricesProps) {
   const [rooms, setRooms] = React.useState([]);
 
-  const reservationRoomsNumber = useAppSelector((state) => state.reservation.roomOptions.length);
+  const reservationRoomsNumber = useAppSelector(state => state.reservation.selectedOptions.length);
   const reservationPrice = useAppSelector((state) => state.reservation.totalPrice);
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const handleClick = () => {
+    if (reservationRoomsNumber > 0) {
+      dispatch(setReservationInfo({
+        destination: props.searchParams.location,
+        checkInDate: props.searchParams.checkIn,
+        checkOutDate: props.searchParams.checkOut,
+        adults: props.searchParams.adults,
+        kids: props.searchParams.kids,
+        accommondationName: props.accommodation.name,
+        accommondationAddress: props.accommodation.address.city.concat(", ", props.accommodation.address.country)
+      }));
+      router.push("/reservation");
+    }
+  }
 
   React.useEffect(() => {
     setRooms(props.accommodation.rooms);
-    console.log(rooms)
   })
 
   return (
@@ -36,7 +56,7 @@ export function InformationsAndPrices(props: InformationsAndPricesProps) {
       <Grid container spacing={2}>
         <Grid item xs={9}>
           {rooms.map(room =>
-            <AccommondationRoom room={room} />
+            <AccommondationRoom key={room.id} room={room} />
           )}
         </Grid>
         <Grid item xs={3}>
@@ -57,7 +77,7 @@ export function InformationsAndPrices(props: InformationsAndPricesProps) {
                   </Stack>
                 </> : <Typography variant="h5" textAlign="center">Wybierz jeden z pokoi</Typography>
               }
-              <Button variant="contained" size="large" endIcon={<SendIcon />} fullWidth sx={{ mt: 3, mb: 2 }} href="/reservation">Rezerwuję</Button>
+              {reservationRoomsNumber > 0 ? <Button variant="contained" size="large" endIcon={<SendIcon />} fullWidth sx={{ mt: 3, mb: 2 }} onClick={handleClick}>Rezerwuję</Button> : <Divider sx={{ my: 2}}></Divider>}
               <List>
                 <ListItem sx={{ py: 0 }}>
                   <ListItemIcon sx={{ minWidth: 25 }}>

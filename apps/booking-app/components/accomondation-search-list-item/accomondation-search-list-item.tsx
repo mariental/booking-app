@@ -43,8 +43,8 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
       <CardMedia
         component="img"
         sx={{ height: 300 }}
-        image={props.accommondation.images[0].src}
-        alt={props.accommondation.images[0].alt}
+        image={props.accommondation.images.find(image => image.mainImage === true).src}
+        alt={props.accommondation.images.find(image => image.mainImage === true).alt}
       />
       <CardContent sx={{ paddingBottom: 0 }}>
         <Stack direction="row" justifyContent="space-between">

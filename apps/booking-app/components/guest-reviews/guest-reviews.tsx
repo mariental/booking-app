@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import { Avatar, Button, CardActions, Divider, FormControl, InputLabel, LinearProgress, MenuItem, Rating, Select, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Button, CardActions, Divider, FormControl, InputLabel, LinearProgress, MenuItem, Rating, Select, SelectChangeEvent, Stack, TextField, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
@@ -17,6 +17,8 @@ import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import BedtimeOutlinedIcon from '@mui/icons-material/BedtimeOutlined';
 import Modal from '@mui/material/Modal';
 import { calculateRate } from '../accomondation-search-list-item/accomondation-search-list-item';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -37,9 +39,21 @@ export interface GuestReviewsProps {
   accommodation: any;
 }
 
+export const calculateDuration = (checkIn, checkOut) => {
+  const date1 = new Date(checkIn);
+  const date2 = new Date(checkOut);
+  const diffTime = Math.abs(date2.getTime() - date1.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (diffDays === 1) {
+    return diffDays + " dzień"
+  } else
+    return diffDays + " dni";
+}
+
 export function GuestReviews(props: GuestReviewsProps) {
   const [sort, setSort] = React.useState('');
   const [open, setOpen] = React.useState(false);
+  const [reviews, setReviews] = React.useState<any[]>([]);
   const [ratings, setRatings] = React.useState([
     {
       name: 'Personel',
@@ -72,6 +86,12 @@ export function GuestReviews(props: GuestReviewsProps) {
   const handleClose = () => setOpen(false);
 
   const theme = useTheme();
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    setReviews(props.accommodation.reviews);
+  }, [])
 
   const handleChange = (event, newValue) => {
     const updatedRatings = ratings.map(item => {
@@ -87,47 +107,42 @@ export function GuestReviews(props: GuestReviewsProps) {
     setRatings(updatedRatings);
   }
 
-  const handleSubmit = () => {
-
+  const handleSortChange = (event: SelectChangeEvent) => {
+    setSort(event.target.value);
+    sortReviews(event.target.value);
   }
 
-  React.useEffect(() => {
-    console.log(props.accommodation.reviews)
-  }, [])
-
-
-  const calculateDuration = (checkIn, checkOut) => {
-    const date1 = new Date(checkIn);
-    const date2 = new Date(checkOut);
-    const diffTime = Math.abs(date2.getTime() - date1.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-    if (diffDays === 1) {
-      return diffDays + " dzień"
-    } else 
-      return diffDays + " dni";
+  const sortReviews = (type: string) => {
+    switch(type) {
+      case "Najnowsze" : 
+        setReviews(reviews.sort((firstItem, secondItem) => new Date(firstItem.publicationDate.split("T")[0]).getTime() + new Date(secondItem.publicationDate.split("T")[0]).getTime()));
+        break;
+      case "Najstarsze" : 
+        setReviews(reviews.sort((firstItem, secondItem) => new Date(firstItem.publicationDate.split("T")[0]).getTime() - new Date(secondItem.publicationDate.split("T")[0]).getTime()));
+        break;
+      case "Najwyższe oceny" :
+        setReviews(reviews.sort((firstItem, secondItem) => firstItem.rate + secondItem.rate));
+        break;
+      case "Najniższe oceny" :
+        setReviews(reviews.sort((firstItem, secondItem) => firstItem.rate - secondItem.rate));
+        break;
+      case "Najtrafniejsze" : 
+        setReviews(reviews.sort((firstItem, secondItem) => firstItem.helpful + secondItem.helpful));
+        break;
+    }
   }
+
+  const handleSubmit = () => { }
 
   return (
     <Grid container spacing={2} columns={{ xs: 2, md: 12 }} justifyContent="center" sx={{ mb: 6 }}>
       <Grid item xs="auto">
         <Card>
           <CardContent>
-            <Stack direction="row" spacing={2}>
-              <Stack alignItems="center">
-                <Typography variant="h3">4.8</Typography>
-                <Rating name="read-only" value={Number(calculateRate(props.accommodation.ratings).value)} readOnly precision={0.1} />
-                <Typography color="text.secondary" variant="body2">{calculateRate(props.accommodation.ratings).quantity} opinie</Typography>
-              </Stack>
-              <Stack direction="column-reverse" sx={{ width: '100%' }}>
-                {props.accommodation.ratings.map(item =>
-                  <Stack direction="row" alignItems="center" justifyContent="space-around" spacing={1}>
-                    <Typography variant="caption">{item.value}</Typography>
-                    <Box sx={{ minWidth: 120 }}>
-                      <LinearProgress variant="determinate" value={item.quantity} />
-                    </Box>
-                  </Stack>
-                )}
-              </Stack>
+            <Stack alignItems="center">
+              <Typography variant="h3">4.8</Typography>
+              <Rating name="read-only" value={Number(calculateRate(props.accommodation.ratings).value)} readOnly precision={0.1} />
+              <Typography color="text.secondary" variant="body2">{calculateRate(props.accommodation.ratings).quantity} opinie</Typography>
             </Stack>
             <Divider variant="middle" sx={{ my: 3 }} />
             <Stack spacing={1}>
@@ -165,43 +180,44 @@ export function GuestReviews(props: GuestReviewsProps) {
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
-                  Dodaj opinię
-                </Typography>
-                <form onSubmit={handleSubmit}>
-                  <Stack spacing={2}>
-                    <TextField id="content" label="Tytuł" variant="outlined" fullWidth />
-                    <TextField id="content" label="Treść" variant="outlined" fullWidth />
-                    {ratings.map(item =>
-                      <Stack direction="row" justifyContent="space-between" px={1}>
-                        <Typography color="text.secondary" variant="body2">{item.name}</Typography>
-                        <Stack direction="row" justifyContent="space-between">
-                          <Rating name={item.name} sx={{ mr: 2 }} size="small" precision={0.1} value={item.value} onChange={handleChange} />
-                          <Typography>{item.value}</Typography>
-                        </Stack>
-                      </Stack>
-                    )}
-                    <Button type="submit" variant="contained">Dodaj</Button>
+              {status !== "authenticated" ?
+                <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
+                    Chcesz dodać opinię?
+                  </Typography>
+                  <Typography color="text.secondary" variant="body2">Możesz wystawić opinię jeśli zarezerwowałeś pobyt w tym obiekcie.</Typography>
+                  <Stack direction="row" justifyContent="space-between" mt={2}>
+                    <Button onClick={handleClose}>Ok</Button>
+                    <Button onClick={() => router.push('/login')} variant='contained' autoFocus>
+                      Przejdź do strony logowania
+                    </Button>
                   </Stack>
-                </form>
-              </Box>
+                </Box>
+                : <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
+                    Dodaj opinię
+                  </Typography>
+                  <form onSubmit={handleSubmit}>
+                    <Stack spacing={2}>
+                      <TextField id="content" label="Tytuł" variant="outlined" fullWidth />
+                      <TextField id="content" label="Treść" variant="outlined" fullWidth />
+                      {ratings.map(item =>
+                        <Stack direction="row" justifyContent="space-between" px={1}>
+                          <Typography color="text.secondary" variant="body2">{item.name}</Typography>
+                          <Stack direction="row" justifyContent="space-between">
+                            <Rating name={item.name} sx={{ mr: 2 }} size="small" precision={0.1} value={item.value} onChange={handleChange} />
+                            <Typography>{item.value}</Typography>
+                          </Stack>
+                        </Stack>
+                      )}
+                      <Button type="submit" variant="contained">Dodaj</Button>
+                    </Stack>
+                  </form>
+                </Box>
+              }
+
             </Modal>
             <Stack direction="row" spacing={2} alignItems="center">
-              <FormControl sx={{ m: 1, minWidth: 200 }}>
-                <InputLabel id="demo-simple-select-label">Filtruj</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={sort}
-                  label="Filtruj"
-                  onChange={(e) => setSort(e.target.value)}
-                >
-                  {sortOptions.map((item) =>
-                    <MenuItem value={item}>{item}</MenuItem>
-                  )}
-                </Select>
-              </FormControl>
               <FormControl sx={{ m: 1, minWidth: 200 }}>
                 <InputLabel id="demo-simple-select-label">Sortuj według</InputLabel>
                 <Select
@@ -209,7 +225,7 @@ export function GuestReviews(props: GuestReviewsProps) {
                   id="demo-simple-select"
                   value={sort}
                   label="Sortuj według"
-                  onChange={(e) => setSort(e.target.value)}
+                  onChange={handleSortChange}
                 >
                   {sortOptions.map((item) =>
                     <MenuItem value={item}>{item}</MenuItem>
@@ -219,7 +235,7 @@ export function GuestReviews(props: GuestReviewsProps) {
             </Stack>
           </Stack>
           {
-            props.accommodation.reviews.map((item) => (
+            reviews.map((item) => (
               <ListItem key={`item-${item.id}`}>
                 <Card sx={{ width: '100%', mb: 1, paddingTop: 3, paddingBottom: 3, paddingLeft: 1, paddingRight: 1 }}>
                   <CardHeader
@@ -262,20 +278,20 @@ export function GuestReviews(props: GuestReviewsProps) {
                       <Typography variant="body2" color="text.secondary">
                         {item.reservation.kids + item.reservation.adults}
                       </Typography>
-                </Stack>
+                    </Stack>
                     <Typography variant="h5" component="div" gutterBottom>
                       {item.title}
                     </Typography>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                       {item.content}
                     </Typography>
-                </CardContent>
+                  </CardContent>
                   <CardActions sx={{ justifyContent: "right" }}>
                     <Button variant="text" startIcon={<ThumbUpOffAltIcon />}>
                       Pomocna {item.helpful !== 0 ? "(" + item.helpful + ")" : ""}
                     </Button>
                     <Button variant="text" startIcon={<ThumbDownOffAltIcon />}>
-                      Niezbyt pomocna {item.notHelpful !== 0 ? "(" +  item.notHelpful + ")" : ""}
+                      Niezbyt pomocna {item.notHelpful !== 0 ? "(" + item.notHelpful + ")" : ""}
                     </Button>
                   </CardActions>
                 </Card>
@@ -283,7 +299,7 @@ export function GuestReviews(props: GuestReviewsProps) {
             ))
           }
         </List>
-        </Grid>
+      </Grid>
     </Grid>
   );
 }

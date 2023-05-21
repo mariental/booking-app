@@ -5,7 +5,9 @@ import Layout from '../components/layout/layout';
 import { responsiveFontSizes, ThemeOptions } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Provider } from 'react-redux';
-import store from '../store';
+import{ store, persistor } from '../store';
+import { SessionProvider } from 'next-auth/react';
+import { PersistGate } from 'redux-persist/integration/react';
 
 export const themeOptions: ThemeOptions = {
     palette: {
@@ -34,15 +36,20 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <>
             <Head>
                 <title>Welcome to booking-app!</title>
-                <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
             </Head>
-            <Provider store={store}>
-                <ThemeProvider theme={theme}>
-                    <Layout>
-                        <Component {...pageProps} />
-                    </Layout>
-                </ThemeProvider>
-            </Provider>
+            <SessionProvider session={pageProps.session}>
+                <Provider store={store}>
+                    <PersistGate loading={null} persistor={persistor}>
+                        <ThemeProvider theme={theme}>
+                            <Layout>
+                                <Component {...pageProps} />
+                            </Layout>
+                        </ThemeProvider>
+                    </PersistGate>
+
+                </Provider>
+            </SessionProvider>
         </>
     );
 }
