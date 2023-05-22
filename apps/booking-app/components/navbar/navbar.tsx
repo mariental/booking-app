@@ -4,13 +4,14 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import { IconButton, Stack } from '@mui/material';
+import { IconButton, Stack, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import TravelExploreOutlinedIcon from '@mui/icons-material/TravelExploreOutlined';
 import { useRouter } from 'next/router';
-import { signOut, useSession } from 'next-auth/react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth, signOut } from 'firebase/auth';
+import { auth } from 'apps/booking-app/firebase/firebaseApp';
 
-export interface NavbarProps { }
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   justifyContent: 'space-between',
@@ -24,12 +25,10 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
-export function Navbar(props: NavbarProps) {
+export function Navbar() {
   const router = useRouter();
 
-  const isActive: (pathname: string) => boolean = (pathname) =>
-    router.pathname === pathname;
-  const { data: session, status } = useSession();
+  const [user, loading] = useAuthState(auth);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -42,10 +41,10 @@ export function Navbar(props: NavbarProps) {
             <Button variant="text" href='/' color='primary' startIcon={<TravelExploreOutlinedIcon />} size="large" sx={{ fontWeight: 700 }}>Booking-app</Button>
           </Stack>
           {
-            session ?
-              <Stack direction="row" spacing={1} justifyContent="center">
-                <Button href='#' color='primary' disabled>{session.user.name} ({session.user.email})</Button>
-                <Button variant="outlined" onClick={() => signOut()} color='primary'>Wyloguj się</Button>
+            user ?
+              <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
+                <Typography variant="button">Witaj {user.email}</Typography>
+                <Button variant="outlined" onClick={() => signOut(auth)} color='primary'>Wyloguj się</Button>
               </Stack>
               :
               <Stack direction="row" spacing={1} justifyContent="center">

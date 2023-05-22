@@ -2,9 +2,8 @@ import * as React from 'react';
 import { Box, Container, Stack, Typography } from '@mui/material';
 import mainImage from '../public/main.png';
 import SearchBarHorizontal from '../components/search-bar-horizontal/search-bar-horizontal';
-import { initFirebase } from '../firebase/firebaseApp';
 
-export function Index() {
+export function Index() {  
   return (
     <Container maxWidth="xl" sx={{ mx: 'auto', mt: 4 }}>
       <Stack sx={{ mb: 4 }}>
