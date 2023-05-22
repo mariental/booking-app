@@ -12,8 +12,6 @@ import RulesOfStay from 'apps/booking-app/components/rules-of-stay/rules-of-stay
 import GuestReviews from 'apps/booking-app/components/guest-reviews/guest-reviews';
 import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
 import { SearchParams } from '../search-result';
-import prisma from 'apps/booking-app/lib/prisma';
-import { GetServerSideProps } from 'next';
 import { styled } from "@mui/material/styles";
 
 interface TabPanelProps {
@@ -65,7 +63,7 @@ function a11yProps(index: number) {
 export function AccomondationDetails() {
   const router = useRouter();
   const [value, setValue] = React.useState(0);
-  const [accommodation, setAccommodation] = React.useState()
+  const [accommodation, setAccommodation] = React.useState(null)
   const [rooms, setRooms] = React.useState([])
   const [reviews, setReviews] = React.useState<any[]>([]);
   const [accRatings, setAccRatings] = React.useState<any[]>([]); 
@@ -156,14 +154,21 @@ export function AccomondationDetails() {
       <TabPanel value={value} index={0}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation === undefined ? <></> : <DetailsInfo accommodation={accommodation} setValue={setValue}/>
+            accommodation ? <></> : <DetailsInfo accommodation={accommodation} setValue={setValue}/>
           }
         </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation === undefined ? <></> : <InformationsAndPrices rooms={rooms} searchParams={searchParams}/>
+            accommodation && rooms ? <></> : 
+            <InformationsAndPrices 
+              rooms={rooms} 
+              searchParams={searchParams} 
+              accommodationName={accommodation.name}
+              accommodationAddressCity={accommodation.address.city}
+              accommodationAddressCountry={accommodation.address.country}
+            />
           }
         </Container>
       </TabPanel>
@@ -180,7 +185,7 @@ export function AccomondationDetails() {
       <TabPanel value={value} index={4}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation === undefined ? <></> : <GuestReviews reviews={reviews} ratings={accRatings}/>
+            reviews && accRatings ? <></> : <GuestReviews reviews={reviews} ratings={accRatings}/>
           }
         </Container>
       </TabPanel>

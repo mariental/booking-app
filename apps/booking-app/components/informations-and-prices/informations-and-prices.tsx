@@ -21,6 +21,9 @@ import { Divider } from '@mui/material';
 export interface InformationsAndPricesProps {
   searchParams: any;
   rooms: any[];
+  accommodationName: string;
+  accommodationAddressCity: string;
+  accommodationAddressCountry: string;
 }
 
 export function InformationsAndPrices(props: InformationsAndPricesProps) {
@@ -40,8 +43,8 @@ export function InformationsAndPrices(props: InformationsAndPricesProps) {
         checkOutDate: props.searchParams.checkOut,
         adults: props.searchParams.adults,
         kids: props.searchParams.kids,
-        accommondationName: props.accommodation.name,
-        accommondationAddress: props.accommodation.address.city.concat(", ", props.accommodation.address.country)
+        accommondationName: props.accommodationName,
+        accommondationAddress: props.accommodationAddressCity.concat(", ", props.accommodationAddressCountry)
       }));
       router.push("/reservation");
     }

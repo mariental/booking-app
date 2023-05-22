@@ -3,7 +3,6 @@ import FacilitiesCategoryWithoutCollapse from '../facilities-category-without-co
 import Stack from '@mui/material/Stack';
 
 export interface AccommondationFacilitiesProps {
-  pid: any;
   rooms: any;
 }
 
