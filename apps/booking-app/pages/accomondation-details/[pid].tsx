@@ -13,6 +13,7 @@ import GuestReviews from 'apps/booking-app/components/guest-reviews/guest-review
 import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizontal/search-bar-horizontal';
 import { SearchParams } from '../search-result';
 import { styled } from "@mui/material/styles";
+import { CircularProgress } from '@mui/material';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -66,7 +67,7 @@ export function AccomondationDetails() {
   const [accommodation, setAccommodation] = React.useState(null)
   const [rooms, setRooms] = React.useState([])
   const [reviews, setReviews] = React.useState<any[]>([]);
-  const [accRatings, setAccRatings] = React.useState<any[]>([]); 
+  const [accRatings, setAccRatings] = React.useState<any[]>([]);
   const [pid, setPid] = React.useState<string>();
   const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
 
@@ -154,27 +155,33 @@ export function AccomondationDetails() {
       <TabPanel value={value} index={0}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation ? <></> : <DetailsInfo accommodation={accommodation} setValue={setValue}/>
+            accommodation ? <DetailsInfo accommodation={accommodation} setValue={setValue} /> 
+            : 
+            <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+              <CircularProgress />
+            </Box>
           }
         </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation && rooms ? <></> : 
-            <InformationsAndPrices 
-              rooms={rooms} 
-              searchParams={searchParams} 
+            accommodation && rooms ? <InformationsAndPrices
+              rooms={rooms}
+              searchParams={searchParams}
               accommodationName={accommodation.name}
               accommodationAddressCity={accommodation.address.city}
               accommodationAddressCountry={accommodation.address.country}
-            />
+            /> :
+              <></>
           }
         </Container>
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-          <AccommondationFacilities rooms={rooms} />
+          {
+            rooms ? <AccommondationFacilities rooms={rooms} /> : <></>
+          }
         </Container>
       </TabPanel>
       <TabPanel value={value} index={3}>
@@ -185,7 +192,7 @@ export function AccomondationDetails() {
       <TabPanel value={value} index={4}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            reviews && accRatings ? <></> : <GuestReviews reviews={reviews} ratings={accRatings}/>
+            reviews && accRatings ? <GuestReviews reviews={reviews} ratings={accRatings} /> : <></>
           }
         </Container>
       </TabPanel>
