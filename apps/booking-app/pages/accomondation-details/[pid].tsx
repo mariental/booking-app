@@ -14,7 +14,7 @@ import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizont
 import { SearchParams } from '../search-result';
 import prisma from 'apps/booking-app/lib/prisma';
 import { GetServerSideProps } from 'next';
-import styled from '@emotion/styled';
+import { styled } from "@mui/material/styles";
 
 interface TabPanelProps {
   children?: React.ReactNode;

@@ -5,7 +5,7 @@ import { TextField, Button, ButtonGroup, Fade, Popper, PopperPlacementType, Stac
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import React from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/router';
