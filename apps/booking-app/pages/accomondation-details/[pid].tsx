@@ -155,11 +155,11 @@ export function AccomondationDetails() {
       <TabPanel value={value} index={0}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation ? <DetailsInfo accommodation={accommodation} setValue={setValue} /> 
-            : 
-            <Box sx={{ display: 'flex', justifyContent: 'center'}}>
-              <CircularProgress />
-            </Box>
+            accommodation ? <DetailsInfo accommodation={accommodation} setValue={setValue} />
+              :
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+              </Box>
           }
         </Container>
       </TabPanel>
@@ -173,14 +173,19 @@ export function AccomondationDetails() {
               accommodationAddressCity={accommodation.address.city}
               accommodationAddressCountry={accommodation.address.country}
             /> :
-              <></>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+              </Box>
           }
         </Container>
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            rooms ? <AccommondationFacilities rooms={rooms} /> : <></>
+            rooms ? <AccommondationFacilities rooms={rooms} /> : 
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </Box>
           }
         </Container>
       </TabPanel>
@@ -192,7 +197,10 @@ export function AccomondationDetails() {
       <TabPanel value={value} index={4}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            reviews && accRatings ? <GuestReviews reviews={reviews} ratings={accRatings} /> : <></>
+            reviews && accRatings ? <GuestReviews reviews={reviews} ratings={accRatings} /> : 
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </Box>
           }
         </Container>
       </TabPanel>

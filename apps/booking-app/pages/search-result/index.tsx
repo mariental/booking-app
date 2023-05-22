@@ -22,22 +22,6 @@ import { useRouter } from 'next/router';
 import prisma from '../../lib/prisma';
 import { GetStaticProps } from 'next';
 
-export const getStaticProps: GetStaticProps = async () => {
-  const acc = await prisma.accommodation.findMany({
-    include: {
-      type: true,
-      address: true,
-      images: true,
-      rooms: true,
-      ratings: true,
-      facilities: true
-    }
-  });
-  return {
-    props: { acc },
-  };
-};
-
 export interface SearchParams {
   location: string,
   checkIn: string,
@@ -47,8 +31,7 @@ export interface SearchParams {
   rooms: number
 }
 
-
-export function SearchResult({ acc }) {
+export function SearchResult() {
   const [typesCategories, setTypesCategories] = React.useState([
     {
       name: 'houseForExclusivity',
@@ -269,9 +252,17 @@ export function SearchResult({ acc }) {
     }
   }, [router]);
 
+  const getData = async () => {
+    const resonse = await fetch(`/api/allAccommondations/`, {
+      method: "POST"
+    });
+    return resonse.json();
+  }
   React.useEffect(() => {
     if (searchParams !== null) {
-      setAccommondations(acc.filter((item) => item.address.country === searchParams.location));
+      getData().then((data) => {
+        setAccommondations(data.filter((item) => item.address.country === searchParams.location));
+      });
     }
   }, [searchParams]);
 
