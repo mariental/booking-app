@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import { Avatar, Button, CardActions, Divider, FormControl, InputLabel, LinearProgress, MenuItem, Rating, Select, SelectChangeEvent, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Button, CardActions, Divider, FormControl, InputLabel, MenuItem, Rating, Select, SelectChangeEvent, Stack, TextField, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
@@ -17,7 +17,6 @@ import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import BedtimeOutlinedIcon from '@mui/icons-material/BedtimeOutlined';
 import Modal from '@mui/material/Modal';
 import { calculateRate } from '../accomondation-search-list-item/accomondation-search-list-item';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 const style = {
@@ -86,7 +85,6 @@ export function GuestReviews(props: GuestReviewsProps) {
   const handleClose = () => setOpen(false);
 
   const theme = useTheme();
-  const { data: session, status } = useSession();
   const router = useRouter();
 
   React.useEffect(() => {
