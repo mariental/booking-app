@@ -62,68 +62,54 @@ function a11yProps(index: number) {
   };
 }
 
-export const getServerSideProps: GetServerSideProps  = async ({ params }) => {
-  const acc = await prisma.accommodation.findFirst({
-    where: {
-      id: Number(params?.pid.toString()),
-    },
-    include: {
-      address: true,
-      images: true,
-      rooms: {
-        include: {
-          images: true,
-          beds: {
-            include: {
-              bed: true
-            }
-          },
-          facilities: true,
-          roomOptions: {
-            include: {
-              cancellationType: true,
-              mealType: true
-            }
-          }
-        }
-      },
-      ratings: true,
-      reviews: {
-        include: {
-          author: true,
-          reservation: {
-            include : {
-              roomOption: {
-                select : {
-                  room: {
-                    select: {
-                      name: true
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      facilities: true
-    }
-  });
-  return {
-    props: { acc: { ...acc, reviews: JSON.parse(JSON.stringify(acc.reviews)) } },
-  };
-};
-
-export function AccomondationDetails({acc}) {
+export function AccomondationDetails() {
   const router = useRouter();
   const [value, setValue] = React.useState(0);
   const [accommodation, setAccommodation] = React.useState()
+  const [rooms, setRooms] = React.useState([])
+  const [reviews, setReviews] = React.useState<any[]>([]);
+  const [accRatings, setAccRatings] = React.useState<any[]>([]); 
   const [pid, setPid] = React.useState<string>();
   const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
 
+  const getAccommondation = async () => {
+    const resonse = await fetch(`/api/accommondation/${pid}`, {
+      method: "POST"
+    });
+    return resonse.json();
+  }
+
+  const getRooms = async () => {
+    const resonse = await fetch(`/api/accommondation/rooms/${pid}`, {
+      method: "POST"
+    });
+    return resonse.json();
+  }
+  const getReviews = async () => {
+    const resonse = await fetch(`/api/accommondation/reviews/${pid}`, {
+      method: "POST"
+    });
+    return resonse.json();
+  }
+  const getRatings = async () => {
+    const resonse = await fetch(`/api/accommondation/ratings/${pid}`, {
+      method: "POST"
+    });
+    return resonse.json();
+  }
+
   React.useEffect(() => {
     if (pid) {
-      setAccommodation(acc)
+      getAccommondation().then((data) => {
+        setAccommodation(data);
+        getRooms().then((data) => {
+          setRooms(data);
+          getReviews().then((data) => {
+            setReviews(data);
+            getRatings().then((data) => setAccRatings(data));
+          });
+        });
+      });
     }
   }, [pid])
 
@@ -177,13 +163,13 @@ export function AccomondationDetails({acc}) {
       <TabPanel value={value} index={1}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation === undefined ? <></> : <InformationsAndPrices accommodation={accommodation} searchParams={searchParams}/>
+            accommodation === undefined ? <></> : <InformationsAndPrices rooms={rooms} searchParams={searchParams}/>
           }
         </Container>
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-          <AccommondationFacilities accommodation={accommodation} />
+          <AccommondationFacilities rooms={rooms} />
         </Container>
       </TabPanel>
       <TabPanel value={value} index={3}>
@@ -194,7 +180,7 @@ export function AccomondationDetails({acc}) {
       <TabPanel value={value} index={4}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            accommodation === undefined ? <></> : <GuestReviews accommodation={accommodation}/>
+            accommodation === undefined ? <></> : <GuestReviews reviews={reviews} ratings={accRatings}/>
           }
         </Container>
       </TabPanel>

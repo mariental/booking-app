@@ -69,8 +69,8 @@ export function AccommondationRoom(props: AccommondationRoomProps) {
           <Stack direction="row" sx={{ flexWrap: 'wrap' }}>
             {props.room.facilities.map((item) => 
               item.name === 'Powierzchnia' ? 
-              <Chip key={item.id} label={props.room.size + "m2"} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }}/> 
-              : <Chip key={item.id} label={item.name} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }}/>
+              <Chip key={`${item.name}-${item.id}`} label={props.room.size + "m2"} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }}/> 
+              : <Chip key={`${item.name}-${item.id}`} label={item.name} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }}/>
             )}
           </Stack>
           <Button variant="outlined" endIcon={<ArrowForwardIosOutlinedIcon />} sx={{ width: 210}}>Zobacz szczegóły</Button>

@@ -46,7 +46,7 @@ export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
         </TableHead>
         <TableBody>
           {roomOptions.map((row) => (
-            <AccommondationRoomTableRow row={row} room={props.room}/>
+            <AccommondationRoomTableRow key={`room-table-row-${row.id}`} row={row} room={props.room}/>
           ))}
         </TableBody>
       </Table>

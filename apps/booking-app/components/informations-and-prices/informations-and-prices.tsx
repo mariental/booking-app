@@ -19,8 +19,8 @@ import { setReservationInfo } from 'apps/booking-app/store/reservationSlice';
 import { Divider } from '@mui/material';
 
 export interface InformationsAndPricesProps {
-  accommodation: any;
   searchParams: any;
+  rooms: any[];
 }
 
 export function InformationsAndPrices(props: InformationsAndPricesProps) {
@@ -48,7 +48,7 @@ export function InformationsAndPrices(props: InformationsAndPricesProps) {
   }
 
   React.useEffect(() => {
-    setRooms(props.accommodation.rooms);
+    setRooms(props.rooms);
   })
 
   return (

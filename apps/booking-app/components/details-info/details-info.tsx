@@ -3,7 +3,7 @@ import Box from '@mui/system/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, ImageList, ImageListItem, Rating, Stack } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Rating, Stack } from '@mui/material';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import StarsIcon from '@mui/icons-material/Stars';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';

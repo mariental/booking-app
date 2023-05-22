@@ -1,18 +1,24 @@
 import * as React from 'react';
 import FacilitiesCategoryWithoutCollapse from '../facilities-category-without-collapse/facilities-category-without-collapse';
 import Stack from '@mui/material/Stack';
-import { Typography } from '@mui/material';
 
 export interface AccommondationFacilitiesProps {
-  accommodation: any;
+  pid: any;
+  rooms: any;
 }
 
 export function AccommondationFacilities(props: AccommondationFacilitiesProps) {
+  const [rooms, setRooms] = React.useState([]);
   const [facilities, setFacilities] = React.useState([]);
 
   React.useEffect(() => {
+    setRooms(props.rooms);
+  })
+
+
+  React.useEffect(() => {
     const fac = [];
-    for (const room of props.accommodation.rooms) {
+    for (const room of rooms) {
       for(const facility of room.facilities) {
         if(!fac.includes(facility)){
           fac.push(facility);
@@ -20,7 +26,7 @@ export function AccommondationFacilities(props: AccommondationFacilitiesProps) {
       }
     }
     setFacilities(fac)
-  }, []);
+  }, [rooms]);
 
   return (
     <>

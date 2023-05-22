@@ -35,7 +35,8 @@ const sortOptions = [
 ]
 
 export interface GuestReviewsProps {
-  accommodation: any;
+  reviews: any[];
+  ratings: any[];
 }
 
 export const calculateDuration = (checkIn, checkOut) => {
@@ -53,6 +54,7 @@ export function GuestReviews(props: GuestReviewsProps) {
   const [sort, setSort] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [reviews, setReviews] = React.useState<any[]>([]);
+  const [accRatings, setAccRatings] = React.useState<any[]>([]); 
   const [ratings, setRatings] = React.useState([
     {
       name: 'Personel',
@@ -87,9 +89,11 @@ export function GuestReviews(props: GuestReviewsProps) {
   const theme = useTheme();
   const router = useRouter();
 
+
   React.useEffect(() => {
-    setReviews(props.accommodation.reviews);
-  }, [])
+    setReviews(props.reviews);
+    setAccRatings(props.ratings);
+  })
 
   const handleChange = (event, newValue) => {
     const updatedRatings = ratings.map(item => {
@@ -139,12 +143,12 @@ export function GuestReviews(props: GuestReviewsProps) {
           <CardContent>
             <Stack alignItems="center">
               <Typography variant="h3">4.8</Typography>
-              <Rating name="read-only" value={Number(calculateRate(props.accommodation.ratings).value)} readOnly precision={0.1} />
-              <Typography color="text.secondary" variant="body2">{calculateRate(props.accommodation.ratings).quantity} opinie</Typography>
+              <Rating name="read-only" value={Number(calculateRate(accRatings).value)} readOnly precision={0.1} />
+              <Typography color="text.secondary" variant="body2">{calculateRate(accRatings).quantity} opinie</Typography>
             </Stack>
             <Divider variant="middle" sx={{ my: 3 }} />
             <Stack spacing={1}>
-              {props.accommodation.ratings.map(item =>
+              {accRatings.map(item =>
                 <Stack direction="row" justifyContent="space-between">
                   <Typography color="text.secondary" variant="body2">{item.name}</Typography>
                   <Stack direction="row" justifyContent="space-between">
