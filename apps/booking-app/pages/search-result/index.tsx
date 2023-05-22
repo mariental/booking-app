@@ -236,73 +236,26 @@ export function SearchResult({ acc }) {
     sortAccommondations(event.target.value);
   }
 
-  const sortAccommondations = (type) => {
-    if (type === 'Cena (od najniższej)') {
-      accommodations.sort((a, b) => {
-        const nameA = a.pricePerNight;
-        const nameB = b.pricePerNight;
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-
-        return 0;
-      })
-    } else if (type === 'Cena (od najwyższej)') {
-      accommodations.sort((a, b) => {
-        const nameA = a.pricePerNight;
-        const nameB = b.pricePerNight;
-        if (nameA > nameB) {
-          return -1;
-        }
-        if (nameA < nameB) {
-          return 1;
-        }
-        return 0;
-      })
-    } else if (type === 'Ocena obiektu (od najniższej)') {
-      accommodations.sort((a, b) => {
-        const nameA = calculateRate(a.ratings).value;
-        const nameB = calculateRate(b.ratings).value;
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-
-        return 0;
-      })
-    } else if (type === 'Ocena obiektu (od najwyższej)') {
-      accommodations.sort((a, b) => {
-        const nameA = calculateRate(a.ratings).value;
-        const nameB = calculateRate(b.ratings).value;
-        if (nameA > nameB) {
-          return -1;
-        }
-        if (nameA < nameB) {
-          return 1;
-        }
-
-        return 0;
-      })
-    } else if (type === 'Najpopularniejsze') {
-      accommodations.sort((a, b) => {
-        const nameA = calculateRate(a.ratings).quantity;
-        const nameB = calculateRate(b.ratings).quantity;
-        if (nameA > nameB) {
-          return -1;
-        }
-        if (nameA < nameB) {
-          return 1;
-        }
-        return 0;
-      })
+  const sortAccommondations = (type: string) => {
+    switch (type) {
+      case "Cena (od najniższej)":
+        setFilteredAccommondations(filteredAccommondations.sort((a, b) => a.pricePerNight - b.pricePerNight));
+        break;
+      case "Cena (od najwyższej)":
+        setFilteredAccommondations(filteredAccommondations.sort((a, b) => a.pricePerNight + b.pricePerNight));
+        break;
+      case "Ocena obiektu (od najniższej)":
+        setFilteredAccommondations(filteredAccommondations.sort((a, b) => Number(calculateRate(a.ratings).value) - Number(calculateRate(b.ratings).value)));
+        break;
+      case "Ocena obiektu (od najwyższej)":
+        setFilteredAccommondations(filteredAccommondations.sort((a, b) => Number(calculateRate(a.ratings).quantity) + Number(calculateRate(b.ratings).quantity)));
+        break;
+      case "Najpopularniejsze":
+        setFilteredAccommondations(filteredAccommondations.sort((a, b) => Number(calculateRate(a.ratings).quantity) + Number(calculateRate(b.ratings).quantity)));
+        break;
     }
   }
-  
+
   React.useEffect(() => {
     if (router.isReady) {
       setSearchParams({
@@ -318,11 +271,13 @@ export function SearchResult({ acc }) {
 
   React.useEffect(() => {
     if (searchParams !== null) {
-      setAccommondations(acc);
-      setFilteredAccommondations(acc);
-      sortAccommondations('Najpopularniejsze');
+      setAccommondations(acc.filter((item) => item.address.country === searchParams.location));
     }
   }, [searchParams]);
+
+  React.useEffect(() => {
+    setFilteredAccommondations(accommodations);
+  }, [accommodations])
 
   const applyFilters = () => {
     let filteredData = accommodations;
@@ -353,7 +308,7 @@ export function SearchResult({ acc }) {
       );
     } else if (facilitiesChecked.length && !ratesChecked.length && !typesChecked.length) {
       filteredData = filteredData.filter(
-        (item) => item.facilities.filter((facility) => facilitiesChecked.includes(facility.name)).length !== 0 
+        (item) => item.facilities.filter((facility) => facilitiesChecked.includes(facility.name)).length !== 0
       );
     } else if (typesChecked.length && ratesChecked.length && !facilitiesChecked.length) {
       filteredData = filteredData.filter(
@@ -377,7 +332,7 @@ export function SearchResult({ acc }) {
       filteredData = filteredData.filter(
         (item) =>
           typesChecked.includes(item.type.name) &&
-          ratesChecked.includes((calculateRate(item.ratings).value).charAt(0)) && 
+          ratesChecked.includes((calculateRate(item.ratings).value).charAt(0)) &&
           item.facilities.filter((facility) => facilitiesChecked.includes(facility.name)).length !== 0
       );
     }
@@ -446,7 +401,7 @@ export function SearchResult({ acc }) {
                   </FormGroup>
                 </AccordionDetails>
               </Accordion>
-              <Accordion>
+              {/*<Accordion>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel3a-content"
@@ -461,7 +416,7 @@ export function SearchResult({ acc }) {
                     )}
                   </FormGroup>
                 </AccordionDetails>
-              </Accordion>
+              </Accordion>*/}
             </Stack>
           </Grid>
           <Grid item xs={1} md={8}>
