@@ -54,7 +54,7 @@ export function GuestReviews(props: GuestReviewsProps) {
   const [sort, setSort] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [reviews, setReviews] = React.useState<any[]>([]);
-  const [accRatings, setAccRatings] = React.useState<any[]>([]); 
+  const [accRatings, setAccRatings] = React.useState<any[]>([]);
   const [ratings, setRatings] = React.useState([
     {
       name: 'Personel',
@@ -115,20 +115,20 @@ export function GuestReviews(props: GuestReviewsProps) {
   }
 
   const sortReviews = (type: string) => {
-    switch(type) {
-      case "Najnowsze" : 
+    switch (type) {
+      case "Najnowsze":
         setReviews(reviews.sort((firstItem, secondItem) => new Date(firstItem.publicationDate.split("T")[0]).getTime() + new Date(secondItem.publicationDate.split("T")[0]).getTime()));
         break;
-      case "Najstarsze" : 
+      case "Najstarsze":
         setReviews(reviews.sort((firstItem, secondItem) => new Date(firstItem.publicationDate.split("T")[0]).getTime() - new Date(secondItem.publicationDate.split("T")[0]).getTime()));
         break;
-      case "Najwyższe oceny" :
+      case "Najwyższe oceny":
         setReviews(reviews.sort((firstItem, secondItem) => firstItem.rate + secondItem.rate));
         break;
-      case "Najniższe oceny" :
+      case "Najniższe oceny":
         setReviews(reviews.sort((firstItem, secondItem) => firstItem.rate - secondItem.rate));
         break;
-      case "Najtrafniejsze" : 
+      case "Najtrafniejsze":
         setReviews(reviews.sort((firstItem, secondItem) => firstItem.helpful + secondItem.helpful));
         break;
     }
@@ -182,42 +182,18 @@ export function GuestReviews(props: GuestReviewsProps) {
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              {status !== "authenticated" ?
-                <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
-                    Chcesz dodać opinię?
-                  </Typography>
-                  <Typography color="text.secondary" variant="body2">Możesz wystawić opinię jeśli zarezerwowałeś pobyt w tym obiekcie.</Typography>
-                  <Stack direction="row" justifyContent="space-between" mt={2}>
-                    <Button onClick={handleClose}>Ok</Button>
-                    <Button onClick={() => router.push('/login')} variant='contained' autoFocus>
-                      Przejdź do strony logowania
-                    </Button>
-                  </Stack>
-                </Box>
-                : <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
-                    Dodaj opinię
-                  </Typography>
-                  <form onSubmit={handleSubmit}>
-                    <Stack spacing={2}>
-                      <TextField id="content" label="Tytuł" variant="outlined" fullWidth />
-                      <TextField id="content" label="Treść" variant="outlined" fullWidth />
-                      {ratings.map(item =>
-                        <Stack direction="row" justifyContent="space-between" px={1}>
-                          <Typography color="text.secondary" variant="body2">{item.name}</Typography>
-                          <Stack direction="row" justifyContent="space-between">
-                            <Rating name={item.name} sx={{ mr: 2 }} size="small" precision={0.1} value={item.value} onChange={handleChange} />
-                            <Typography>{item.value}</Typography>
-                          </Stack>
-                        </Stack>
-                      )}
-                      <Button type="submit" variant="contained">Dodaj</Button>
-                    </Stack>
-                  </form>
-                </Box>
-              }
-
+              <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
+                  Chcesz dodać opinię?
+                </Typography>
+                <Typography color="text.secondary" variant="body2">Możesz wystawić opinię jeśli zarezerwowałeś pobyt w tym obiekcie.</Typography>
+                <Stack direction="row" justifyContent="space-between" mt={2}>
+                  <Button onClick={handleClose}>Ok</Button>
+                  <Button onClick={() => router.push('/login')} variant='contained' autoFocus>
+                    Przejdź do strony logowania
+                  </Button>
+                </Stack>
+              </Box>
             </Modal>
             <Stack direction="row" spacing={2} alignItems="center">
               <FormControl sx={{ m: 1, minWidth: 200 }}>
@@ -251,35 +227,42 @@ export function GuestReviews(props: GuestReviewsProps) {
                     subheader={`Opublikowano: ${item.publicationDate.split("T")[0]}`}
                     subheaderTypographyProps={{ fontSize: 16 }}
                     action={
-                      <Stack>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                          <Rating name="read-only" value={item.rate} readOnly precision={0.1} />
-                          <Typography variant='h6'>{item.rate.toPrecision(2)}</Typography>
-                        </Stack>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Rating name="read-only" value={item.rate} readOnly precision={0.1} />
+                        <Typography variant='h6'>{item.rate.toPrecision(2)}</Typography>
                       </Stack>
                     }
                   />
                   <CardContent>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 3 }}>
-                      <BedOutlinedIcon fontSize='small' color="disabled" />
-                      <Typography variant="body2" color="text.secondary">
-                        {item.reservation.roomOption[0].room.name}
-                      </Typography>
+                    <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 3 }} flexWrap="wrap">
+                      <Stack direction="row" spacing={1} alignItems="center" my={1}>
+                        <BedOutlinedIcon fontSize='small' color="disabled" />
+                        <Typography variant="body2" color="text.secondary">
+                          {item.reservation.roomOption[0].room.name}
+                        </Typography>
+                      </Stack>
                       <Divider orientation="vertical" flexItem />
-                      <CalendarMonthOutlinedIcon fontSize='small' color="disabled" />
-                      <Typography variant="body2" color="text.secondary">
-                        {item.reservation.checkOutDate.split("T")[0]}
-                      </Typography>
+                      <Stack direction="row" spacing={1} alignItems="center" my={1}>
+                        <CalendarMonthOutlinedIcon fontSize='small' color="disabled" />
+                        <Typography variant="body2" color="text.secondary">
+                          {item.reservation.checkOutDate.split("T")[0]}
+                        </Typography>
+                      </Stack>
                       <Divider orientation="vertical" flexItem />
-                      <BedtimeOutlinedIcon fontSize='small' color="disabled" />
-                      <Typography variant="body2" color="text.secondary">
-                        {calculateDuration(item.reservation.checkInDate.split("T")[0], item.reservation.checkOutDate.split("T")[0])}
-                      </Typography>
+                      <Stack direction="row" spacing={1} alignItems="center" my={1}>
+                        <BedtimeOutlinedIcon fontSize='small' color="disabled" />
+                        <Typography variant="body2" color="text.secondary">
+                          {calculateDuration(item.reservation.checkInDate.split("T")[0], item.reservation.checkOutDate.split("T")[0])}
+                        </Typography>
+                      </Stack>
                       <Divider orientation="vertical" flexItem />
-                      <FamilyRestroomIcon fontSize='small' color="disabled" />
-                      <Typography variant="body2" color="text.secondary">
-                        {item.reservation.kids + item.reservation.adults}
-                      </Typography>
+                      <Stack direction="row" spacing={1} alignItems="center" my={1}>
+                        <FamilyRestroomIcon fontSize='small' color="disabled" />
+                        <Typography variant="body2" color="text.secondary">
+                          {item.reservation.kids + item.reservation.adults}
+                        </Typography>
+                      </Stack>
+
                     </Stack>
                     <Typography variant="h5" component="div" gutterBottom>
                       {item.title}

@@ -56,13 +56,13 @@ export function InformationsAndPrices(props: InformationsAndPricesProps) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={9}>
+      <Grid container spacing={2} columns={{ xs: 1, md: 12 }} justifyContent="center" sx={{ mb: 6 }}>
+        <Grid item xs={1} md={9}>
           {rooms.map(room =>
             <AccommondationRoom key={room.id} room={room} />
           )}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={1} md={3}>
           <Card sx={{ maxWidth: 345 }}>
             <CardContent>
               {reservationRoomsNumber !== 0 && reservationPrice !== 0 ?

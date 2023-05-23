@@ -98,7 +98,7 @@ export function RulesOfStay(props: RulesOfStayProps) {
     <Box sx={{ width: '100%' }}>
       <Stack spacing={2}>
         <Item>
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
             <LoginIcon />
             <Typography variant="subtitle2" fontWeight="600" minWidth={250}>
               Zameldowanie
@@ -115,7 +115,7 @@ export function RulesOfStay(props: RulesOfStayProps) {
           </Stack>
         </Item>
         <Item>
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
             <LogoutIcon />
             <Typography variant="subtitle2" fontWeight="600" minWidth={250}>
               Wymeldowanie
@@ -132,7 +132,7 @@ export function RulesOfStay(props: RulesOfStayProps) {
           </Stack>
         </Item>
         <Item>
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
             <InfoOutlinedIcon />
             <Typography variant="subtitle2" fontWeight="600" minWidth={250}>
               Odwołanie rezerwacji/przedpłata
@@ -143,7 +143,7 @@ export function RulesOfStay(props: RulesOfStayProps) {
           </Stack>
         </Item>
         <Item>
-          <Stack direction="row" spacing={1} alignItems="flex-start">
+          <Stack direction="row" spacing={1} alignItems="flex-start" flexWrap="wrap">
             <FamilyRestroomOutlinedIcon />
             <Typography variant="subtitle2" fontWeight="600" minWidth={250}>
               Zakwaterowanie dzieci
@@ -168,7 +168,7 @@ export function RulesOfStay(props: RulesOfStayProps) {
           </Stack>
         </Item>
         <Item>
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
             <BoyOutlinedIcon />
             <Typography variant="subtitle2" fontWeight="600" minWidth={250}>
               Brak ograniczeń wiekowych
@@ -179,7 +179,7 @@ export function RulesOfStay(props: RulesOfStayProps) {
           </Stack>
         </Item>
         <Item>
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
             <SmokeFreeOutlinedIcon />
             <Typography variant="subtitle2" fontWeight="600" minWidth={250}>
               Palenie tytoniu
@@ -190,7 +190,7 @@ export function RulesOfStay(props: RulesOfStayProps) {
           </Stack>
         </Item>
         <Item>
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
             <CelebrationOutlinedIcon />
             <Typography variant="subtitle2" fontWeight="600" minWidth={250}>
               Imprezy
@@ -201,7 +201,7 @@ export function RulesOfStay(props: RulesOfStayProps) {
           </Stack>
         </Item>
         <Item>
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
             <PetsOutlinedIcon />
             <Typography variant="subtitle2" fontWeight="600" minWidth={250}>
               Zwierzęta

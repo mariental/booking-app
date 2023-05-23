@@ -232,15 +232,15 @@ export function Reservation(props: ReservationProps) {
         </Grid>
         <Grid item xs={1} md={9}>
           {reservation.selectedOptions.map(option =>
-            <Card sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+            <Card sx={{ display: 'flex', justifyContent: 'space-between', mb: 2}}>
               <CardContent sx={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: "space-between" }}>
-                <Stack direction="row" justifyContent="space-between">
+                <Stack direction="row" justifyContent="space-between" flexWrap="wrap">
                   <Stack>
                     <Typography variant="body2" color="text.secondary">Wybrana opcja:</Typography>
                     <Typography component="div" variant="h5">
                       {option.room.name}
                     </Typography>
-                    <Stack direction="row" alignItems="center" spacing={0.5}>
+                    <Stack direction="row" alignItems="center" spacing={0.5} flexWrap="wrap">
                       <PlaceOutlinedIcon color="primary" />
                       <Typography color="text.secondary">
                         {reservation.accommondationName} | {reservation.accommondationAddress}
@@ -248,16 +248,16 @@ export function Reservation(props: ReservationProps) {
                     </Stack>
                   </Stack>
                 </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+                  <Stack direction="row" flexWrap="wrap" my={1}>
                     {option.room.facilities.map(item =>
                       item.name === 'Powierzchnia' ?
                         <Chip key={item.id} label={option.room.size + "m2"} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }} />
                         : <Chip key={item.id} label={item.name} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }} />
                     )}
                   </Stack>
-                  <Button variant="contained" onClick={() => router.back()}>Zmień wybór</Button>
                 </Stack>
+                <Button variant="contained" onClick={() => router.back()}>Zmień wybór</Button>
               </CardContent>
               <CardMedia
                 component="img"

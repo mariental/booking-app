@@ -35,7 +35,7 @@ function bedAlert(quantity, bed) {
   if (quantity === 1) {
     text = 'łóżko'
   }
-  return <Alert severity="info" sx={{ padding: '2px 12px'}} iconMapping={{ info: bed.type === 'łóżko podwójne' ? <BedOutlinedIcon fontSize="inherit" /> : <SingleBedIcon fontSize="inherit" /> }}>{quantity} {bed.type} {text}</Alert>
+  return <Alert severity="info" sx={{ padding: '2px 12px' }} iconMapping={{ info: bed.type === 'łóżko podwójne' ? <BedOutlinedIcon fontSize="inherit" /> : <SingleBedIcon fontSize="inherit" /> }}>{quantity} {bed.type} {text}</Alert>
 }
 
 export function AccommondationRoom(props: AccommondationRoomProps) {
@@ -45,39 +45,41 @@ export function AccommondationRoom(props: AccommondationRoomProps) {
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1bh-content"
         id="panel1bh-header"
-        sx={{ boxShadow: 1, display: 'flex', alignItems: 'center', gap: 12 }}
+        sx={{ boxShadow: 1 }}
       >
-        <Box
-          sx={{
-            width: 200,
-            height: 200,
-            borderRadius: 1,
-            backgroundImage: `url(${props.room.images[0].src})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
-        />
-        <Stack justifyContent="space-between" ml={2}>
-          <Typography variant='h6'>
-            {props.room.name}
-          </Typography>
-          <Stack direction="row" spacing={2}>
-            {props.room.beds.map(item =>
-              bedAlert(item.quantity, item.bed)
-            )}
+        <Stack direction="row" justifyContent="space-between" flexWrap="wrap">
+          <Box
+            sx={{
+              width: 200,
+              height: 200,
+              borderRadius: 1,
+              backgroundImage: `url(${props.room.images[0].src})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          />
+          <Stack justifyContent="space-between" ml={2} flexWrap="wrap">
+            <Typography variant='h6' my={1}>
+              {props.room.name}
+            </Typography>
+            <Stack direction="row" spacing={2}>
+              {props.room.beds.map(item =>
+                bedAlert(item.quantity, item.bed)
+              )}
+            </Stack>
+            <Stack direction="row" flexWrap="wrap" my={1}>
+              {props.room.facilities.map((item) =>
+                item.name === 'Powierzchnia' ?
+                  <Chip key={`${item.name}-${item.id}`} label={props.room.size + "m2"} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }} />
+                  : <Chip key={`${item.name}-${item.id}`} label={item.name} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }} />
+              )}
+            </Stack>
+            <Button variant="outlined" endIcon={<ArrowForwardIosOutlinedIcon />} sx={{ width: 210 }}>Zobacz szczegóły</Button>
           </Stack>
-          <Stack direction="row" sx={{ flexWrap: 'wrap' }}>
-            {props.room.facilities.map((item) => 
-              item.name === 'Powierzchnia' ? 
-              <Chip key={`${item.name}-${item.id}`} label={props.room.size + "m2"} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }}/> 
-              : <Chip key={`${item.name}-${item.id}`} label={item.name} variant="outlined" icon={<Icon>{item.icon}</Icon>} sx={{ m: 0.5 }}/>
-            )}
-          </Stack>
-          <Button variant="outlined" endIcon={<ArrowForwardIosOutlinedIcon />} sx={{ width: 210}}>Zobacz szczegóły</Button>
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <AccommondationRoomTable roomOptions={props.room.roomOptions} room={props.room}/>
+        <AccommondationRoomTable roomOptions={props.room.roomOptions} room={props.room} />
       </AccordionDetails>
     </Accordion>
   );

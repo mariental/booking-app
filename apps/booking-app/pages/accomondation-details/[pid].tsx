@@ -142,8 +142,10 @@ export function AccomondationDetails() {
           onChange={handleChange}
           indicatorColor="secondary"
           textColor="inherit"
-          variant="fullWidth"
           aria-label="full width tabs example"
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
         >
           <StyledTab label="Ogólne informacje" {...a11yProps(0)} />
           <StyledTab label="Pokoje" {...a11yProps(1)} />

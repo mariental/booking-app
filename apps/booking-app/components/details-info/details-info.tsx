@@ -103,7 +103,7 @@ export function DetailsInfo(props: DetailsInfoProps) {
       </Grid>
       <Grid item xs={1} md={7}>
         <Box>
-          <Stack direction="row" alignContent="center" justifyContent="space-between">
+          <Stack direction="row" alignContent="center" justifyContent="space-between" flexWrap="wrap">
             <Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography component="div" variant="h5">

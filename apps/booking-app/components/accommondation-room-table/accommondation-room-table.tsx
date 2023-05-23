@@ -34,7 +34,7 @@ export function AccommondationRoomTable(props: AccommondationRoomTableProps) {
   }, []);
 
   return (
-    <TableContainer component={Paper} sx={{ my: 2 }}>
+    <TableContainer component={Paper} sx={{ my: 2, width: '100%' }}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
