@@ -6,7 +6,17 @@ export default async function handle(req, res) {
           type: true,
           address: true,
           images: true,
-          rooms: true,
+          rooms: {
+            include: {
+              roomOptions: {
+                select: {
+                  price: true,
+                }
+              },
+              facilities: true,
+              beds: true
+            }
+          },
           ratings: true,
           facilities: true
         }

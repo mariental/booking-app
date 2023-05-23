@@ -72,7 +72,7 @@ export function DetailsInfo(props: DetailsInfoProps) {
               </Button>
             </DialogActions>
           </Dialog>
-          <Button variant="contained" endIcon={<CameraAltOutlinedIcon />} onClick={handleOpenModal} fullWidth>Więcej zdjęć</Button>
+          <Button variant="contained" endIcon={<CameraAltOutlinedIcon />} fullWidth>Więcej zdjęć</Button>
           <Modal
             open={openModal}
             onClose={handleCloseModal}

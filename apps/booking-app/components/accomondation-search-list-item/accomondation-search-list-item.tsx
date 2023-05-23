@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Button, CardActions } from '@mui/material';
+import { Button, CardActions, Icon } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -76,17 +76,17 @@ export function AccomondationSearchListItem(props: AccomondationSearchListItemPr
         <Stack spacing={1}>
           <Stack direction="row" spacing={1} alignContent="end">
             <Typography color="text.secondary">Proponowana opcja:</Typography>
-            <Typography>Apartament z balkonem</Typography>
+            <Typography>{props.accommondation.rooms[0].name}</Typography>
           </Stack>
           <Stack direction="row" spacing={1} sx={{ mt: 3 }}>
-            <Chip label="1 łóżko podwójne" variant="filled" icon={<KingBedOutlinedIcon />} />
-            <Chip label="1 łazienka" variant="filled" icon={<BathtubOutlinedIcon />} />
-            <Chip label="1 kuchnia" variant="filled" icon={<KitchenOutlinedIcon />} />
+            <Chip label={props.accommondation.rooms[0].beds.length + " łóżko"} variant="filled" icon={<KingBedOutlinedIcon />} />
+            <Chip label={props.accommondation.rooms[0].facilities[0].name} variant="filled" icon={<Icon>{props.accommondation.rooms[0].facilities[0].icon}</Icon>} />
+            <Chip label={props.accommondation.rooms[0].facilities[2].name} variant="filled" icon={<Icon>{props.accommondation.rooms[0].facilities[2].icon}</Icon>} />
           </Stack>
         </Stack>
         <Stack mt={2}>
           <Typography variant="h5" color="primary.light" textAlign="end" fontWeight={600}>
-            {props.accommondation.pricePerNight} PLN / noc
+            {props.accommondation.rooms[0].roomOptions[0].price} PLN / noc
           </Typography>
           <Typography variant="caption" color="text.secondary" textAlign="end">
             Zawiera opłaty i podatki

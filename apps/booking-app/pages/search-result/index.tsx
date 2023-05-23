@@ -10,7 +10,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/material/Stack';
-import { Alert, AlertTitle, Box } from '@mui/material';
+import { Alert, AlertTitle, Box, CircularProgress } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -428,13 +428,16 @@ export function SearchResult() {
                 </Select>
               </FormControl>
             </Stack>
-            {filteredAccommondations.length === 0 ?
-              <Alert severity="info" sx={{ mb: 2 }}>
-                <AlertTitle>Brak miejsc dla podanych parametrów</AlertTitle>
-              </Alert> :
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+            {accommodations.length === 0 ?
+              <Box sx={{ display: 'flex', justifyContent: 'center', my: 8 }}>
+                <CircularProgress />
+              </Box>
+              : <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 {
-                  filteredAccommondations.length === 0 ? <></> :
+                  filteredAccommondations.length === 0 ?
+                    <Alert severity="info" sx={{ mb: 2, width: '100%' }}>
+                      <AlertTitle>Brak miejsc dla podanych parametrów</AlertTitle>
+                    </Alert> :
                     filteredAccommondations.map((item) =>
                       <AccomondationSearchListItem key={item.id} accommondation={item} searchParams={searchParams} />
                     )
