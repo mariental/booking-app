@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Alert, Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, Grid, Icon, IconButton, InputLabel, Link, MenuItem, Rating, Stack, Step, StepLabel, Stepper, styled, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardHeader, CardMedia, Chip, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid, Icon, IconButton, InputLabel, Link, MenuItem, Rating, Stack, Step, StepLabel, Stepper, styled, TextField, Typography } from "@mui/material";
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from 'apps/booking-app/store';
-import { calculateDuration } from 'apps/booking-app/components/guest-reviews/guest-reviews';
-import { removeReservation } from 'apps/booking-app/store/reservationSlice';
+import { calculateDuration, removeReservation } from 'apps/booking-app/store/reservationSlice';
 import { validateConfirmEmail, validateEmail, validateFirstName, validateLastName } from 'apps/booking-app/tools/validators';
 
 interface ReservationData {
@@ -45,7 +44,7 @@ export function Reservation(props: ReservationProps) {
   const [lastNameError, setLastNameError] = React.useState<boolean>(false);
   const [emailError, setEmailError] = React.useState<boolean>(false);
   const [confirmEmailError, setConfirmEmailError] = React.useState<boolean>(false);
-  const [duration, setDuration] = React.useState('');
+  const [duration, setDuration] = React.useState<number>(0);
   const [open, setOpen] = React.useState(false);
 
   const reservation = useAppSelector((state) => state.reservation);
@@ -183,7 +182,7 @@ export function Reservation(props: ReservationProps) {
                   </Stack>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography fontWeight={600}>Długość pobytu</Typography>
-                    <Typography color="text.secondary">{duration}</Typography>
+                    <Typography color="text.secondary">{duration}{duration === 1 ? " dzień" : " dni"}</Typography>
                   </Stack>
                 </Stack>
                 <Typography variant="h5" >

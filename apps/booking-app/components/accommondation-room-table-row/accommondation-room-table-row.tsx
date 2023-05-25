@@ -44,7 +44,7 @@ export function AccommondationRoomTableRow(props: AccommondationRoomTableRowProp
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
     if (checked) {
-      dispatch(removeRoomFromReservation(props.row));
+      dispatch(removeRoomFromReservation({ id: props.room.id, price: props.row.price }));
     } else {
       if(!selectedOptions.find((option) => option.room.id === props.room.id)) {
         dispatch(addRoomToReservation({ room: props.room, option: props.row }));

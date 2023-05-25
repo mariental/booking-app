@@ -127,6 +127,9 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
 
   const handleSearch = () => {
     if (validateLocation(location) && validateCheckInDate(checkInDate) && validateCheckOutDate(checkOutDate)) {
+      //if(router.pathname === '/search-result'){
+      //  router.reload();
+      //}
       router.push(`/search-result?location=${location}&checkIn=${checkInDate.format('YYYY-MM-DD')}&checkOut=${checkOutDate.format('YYYY-MM-DD')}&adults=${guestOptions.adults}&kids=${guestOptions.kids}&rooms=${guestOptions.rooms}`);
     } else {
       validateData();
@@ -217,6 +220,7 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
             value={checkInDate}
             onChange={(newValue) => {
               setCheckInDate(newValue);
+              setCheckOutDate(newValue.add(1, 'day'));
               if (validateCheckInDate(newValue)) {
                 setCheckInDateError(false)
               } else {
@@ -233,7 +237,7 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Data wymeldowania"
-            value={checkInDate === null ? null : checkInDate.add(1, 'day')}
+            value={checkOutDate}
             minDate={checkInDate === null ? dayjs().add(1, 'day') : checkInDate.add(1, 'day')}
             maxDate={checkInDate === null ? dayjs().add(1, 'day').add(1, 'month') : checkInDate.add(1, 'day').add(1, 'month')}
             onChange={(newValue) => {

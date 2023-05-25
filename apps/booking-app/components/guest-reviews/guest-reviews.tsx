@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import { Avatar, Button, CardActions, Divider, FormControl, InputLabel, MenuItem, Rating, Select, SelectChangeEvent, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Button, CardActions, Divider, FormControl, InputLabel, MenuItem, Rating, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
@@ -18,6 +18,7 @@ import BedtimeOutlinedIcon from '@mui/icons-material/BedtimeOutlined';
 import Modal from '@mui/material/Modal';
 import { calculateRate } from '../accomondation-search-list-item/accomondation-search-list-item';
 import { useRouter } from 'next/router';
+import { calculateDuration } from 'apps/booking-app/store/reservationSlice';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -37,17 +38,6 @@ const sortOptions = [
 export interface GuestReviewsProps {
   reviews: any[];
   ratings: any[];
-}
-
-export const calculateDuration = (checkIn, checkOut) => {
-  const date1 = new Date(checkIn);
-  const date2 = new Date(checkOut);
-  const diffTime = Math.abs(date2.getTime() - date1.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  if (diffDays === 1) {
-    return diffDays + " dzień"
-  } else
-    return diffDays + " dni";
 }
 
 export function GuestReviews(props: GuestReviewsProps) {
@@ -253,6 +243,7 @@ export function GuestReviews(props: GuestReviewsProps) {
                         <BedtimeOutlinedIcon fontSize='small' color="disabled" />
                         <Typography variant="body2" color="text.secondary">
                           {calculateDuration(item.reservation.checkInDate.split("T")[0], item.reservation.checkOutDate.split("T")[0])}
+                          {calculateDuration(item.reservation.checkInDate.split("T")[0], item.reservation.checkOutDate.split("T")[0]) === 1 ? " dzień" : " dni"}
                         </Typography>
                       </Stack>
                       <Divider orientation="vertical" flexItem />

@@ -21,6 +21,8 @@ import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizont
 import { useRouter } from 'next/router';
 import prisma from '../../lib/prisma';
 import { GetStaticProps } from 'next';
+import { setReservationInfo } from 'apps/booking-app/store/reservationSlice';
+import { useAppDispatch } from 'apps/booking-app/store';
 
 export interface SearchParams {
   location: string,
@@ -157,6 +159,7 @@ export function SearchResult() {
   const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
 
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const sortOptions = [
     'Najpopularniejsze', 'Cena (od najniższej)', 'Cena (od najwyższej)', 'Ocena obiektu (od najwyższej)', 'Ocena obiektu (od najniższej)'
@@ -246,7 +249,7 @@ export function SearchResult() {
         checkIn: router.query.checkIn.toString(),
         checkOut: router.query.checkOut.toString(),
         adults: parseInt(router.query.adults.toString()),
-        kids: parseInt(router.query.rooms.toString()),
+        kids: parseInt(router.query.kids.toString()),
         rooms: parseInt(router.query.rooms.toString()),
       });
     }
@@ -265,6 +268,19 @@ export function SearchResult() {
       });
     }
   }, [searchParams]);
+
+  React.useEffect(() => {
+    if (searchParams) {
+      dispatch(setReservationInfo({
+        destination: searchParams.location,
+        checkInDate: searchParams.checkIn,
+        checkOutDate: searchParams.checkOut,
+        adults: searchParams.adults,
+        kids: searchParams.kids
+      }));
+    }
+  }, [searchParams])
+
 
   React.useEffect(() => {
     setFilteredAccommondations(accommodations);

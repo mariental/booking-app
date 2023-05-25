@@ -14,6 +14,8 @@ import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizont
 import { SearchParams } from '../search-result';
 import { styled } from "@mui/material/styles";
 import { CircularProgress } from '@mui/material';
+import { useAppDispatch } from 'apps/booking-app/store';
+import { setAccommondationInfo, setReservationInfo } from 'apps/booking-app/store/reservationSlice';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -62,7 +64,6 @@ function a11yProps(index: number) {
 }
 
 export function AccomondationDetails() {
-  const router = useRouter();
   const [value, setValue] = React.useState(0);
   const [accommodation, setAccommodation] = React.useState(null)
   const [rooms, setRooms] = React.useState([])
@@ -70,6 +71,8 @@ export function AccomondationDetails() {
   const [accRatings, setAccRatings] = React.useState<any[]>([]);
   const [pid, setPid] = React.useState<string>();
   const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
+
+  const router = useRouter();
 
   const getAccommondation = async () => {
     const resonse = await fetch(`/api/accommondation/${pid}`, {
@@ -99,13 +102,13 @@ export function AccomondationDetails() {
 
   React.useEffect(() => {
     if (pid) {
-      getAccommondation().then((data) => {
-        setAccommodation(data);
-        getRooms().then((data) => {
-          setRooms(data);
-          getReviews().then((data) => {
-            setReviews(data);
-            getRatings().then((data) => setAccRatings(data));
+      getAccommondation().then((accommondations) => {
+        setAccommodation(accommondations);
+        getRooms().then((rooms) => {
+          setRooms(rooms);
+          getReviews().then((reviews) => {
+            setReviews(reviews);
+            getRatings().then((ratings) => setAccRatings(ratings));
           });
         });
       });
@@ -119,13 +122,14 @@ export function AccomondationDetails() {
         checkIn: router.query.checkIn.toString(),
         checkOut: router.query.checkOut.toString(),
         adults: parseInt(router.query.adults.toString()),
-        kids: parseInt(router.query.rooms.toString()),
+        kids: parseInt(router.query.kids.toString()),
         rooms: parseInt(router.query.rooms.toString()),
       });
       let { pid } = router.query;
       setPid(pid.toString());
     }
   }, [router])
+
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -170,10 +174,9 @@ export function AccomondationDetails() {
           {
             accommodation && rooms ? <InformationsAndPrices
               rooms={rooms}
-              searchParams={searchParams}
-              accommodationName={accommodation.name}
-              accommodationAddressCity={accommodation.address.city}
-              accommodationAddressCountry={accommodation.address.country}
+              accommondationName={accommodation.name}
+              accommondationCity={accommodation.address.city}
+              accommondationCountry={accommodation.address.country}
             /> :
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress />
@@ -184,10 +187,10 @@ export function AccomondationDetails() {
       <TabPanel value={value} index={2}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            rooms ? <AccommondationFacilities rooms={rooms} /> : 
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <CircularProgress />
-            </Box>
+            rooms ? <AccommondationFacilities rooms={rooms} /> :
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+              </Box>
           }
         </Container>
       </TabPanel>
@@ -199,10 +202,10 @@ export function AccomondationDetails() {
       <TabPanel value={value} index={4}>
         <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
           {
-            reviews && accRatings ? <GuestReviews reviews={reviews} ratings={accRatings} /> : 
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <CircularProgress />
-            </Box>
+            reviews && accRatings ? <GuestReviews reviews={reviews} ratings={accRatings} /> :
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+              </Box>
           }
         </Container>
       </TabPanel>
