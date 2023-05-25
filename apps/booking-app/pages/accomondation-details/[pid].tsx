@@ -76,26 +76,26 @@ export function AccomondationDetails() {
 
   const getAccommondation = async () => {
     const resonse = await fetch(`/api/accommondation/${pid}`, {
-      method: "POST"
+      method: "GET"
     });
     return resonse.json();
   }
 
   const getRooms = async () => {
     const resonse = await fetch(`/api/accommondation/rooms/${pid}`, {
-      method: "POST"
+      method: "GET"
     });
     return resonse.json();
   }
   const getReviews = async () => {
     const resonse = await fetch(`/api/accommondation/reviews/${pid}`, {
-      method: "POST"
+      method: "GET"
     });
     return resonse.json();
   }
   const getRatings = async () => {
     const resonse = await fetch(`/api/accommondation/ratings/${pid}`, {
-      method: "POST"
+      method: "GET"
     });
     return resonse.json();
   }

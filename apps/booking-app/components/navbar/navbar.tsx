@@ -27,7 +27,6 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 export function Navbar() {
   const router = useRouter();
-
   const [user, loading] = useAuthState(auth);
 
   return (
@@ -43,7 +42,7 @@ export function Navbar() {
           {
             user ?
               <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
-                <Typography variant="button">Witaj {user.email}</Typography>
+                <Button variant="outlined" onClick={() => router.push("/profile")} color='primary'>Profil</Button>
                 <Button variant="outlined" onClick={() => signOut(auth)} color='primary'>Wyloguj się</Button>
               </Stack>
               :

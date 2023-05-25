@@ -2,19 +2,27 @@ import { Container, CssBaseline, Box, Avatar, Typography, Grid, TextField, Butto
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "apps/booking-app/firebase/firebaseApp";
+import { useRouter } from "next/router";
 
 export interface RegisterProps {}
 
 export function Register(props: RegisterProps) {  
+  const router = useRouter();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const name = data.get('firstName').toString() + " " + data.get('lastName').toString();
     const email = data.get('email').toString();
     const password = data.get('password').toString();
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      console.log(user);
+      saveUser(name, email)
+      .then((data) => {
+        console.log(data);
+        router.push("/profile");
+      });
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -22,6 +30,18 @@ export function Register(props: RegisterProps) {
       console.log(errorMessage, errorCode);
     });
   };
+
+  const saveUser = async (name: string, email: string) => {
+    const data = {
+      name: name,
+      email: email,
+    };
+    const resonse = await fetch(`/api/user`, {
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+    return resonse.json();
+  }
 
   return (
     <Container component="main" maxWidth="xs">
