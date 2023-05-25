@@ -225,6 +225,7 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
             }}
             inputFormat="YYYY-MM-DD"
             minDate={dayjs()}
+            maxDate={dayjs().add(1, 'year')}
             renderInput={(params) => <CustomTextField {...params} error={checkInDateError} helperText={checkInDateError ? "Podaj datę zameldowania" : ""} />}
             disableHighlightToday
           />
@@ -234,6 +235,7 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
             label="Data wymeldowania"
             value={checkOutDate}
             minDate={checkInDate === null ? dayjs().add(1, 'day') : checkInDate.add(1, 'day')}
+            maxDate={dayjs().add(1, 'day').add(1, 'month').add(1, 'year')}
             onChange={(newValue) => {
               setCheckOutDate(newValue);
               if (validateCheckOutDate(newValue)) {
