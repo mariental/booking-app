@@ -233,9 +233,9 @@ export function SearchBarHorizontal(props: SearchBarHorizontalProps) {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Data wymeldowania"
-            value={checkOutDate}
+            value={checkInDate === null ? null : checkInDate.add(1, 'day')}
             minDate={checkInDate === null ? dayjs().add(1, 'day') : checkInDate.add(1, 'day')}
-            maxDate={dayjs().add(1, 'day').add(1, 'month').add(1, 'year')}
+            maxDate={checkInDate === null ? dayjs().add(1, 'day').add(1, 'month') : checkInDate.add(1, 'day').add(1, 'month')}
             onChange={(newValue) => {
               setCheckOutDate(newValue);
               if (validateCheckOutDate(newValue)) {
