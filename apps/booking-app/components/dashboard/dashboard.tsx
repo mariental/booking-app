@@ -5,29 +5,39 @@ import StarIcon from '@mui/icons-material/Star';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from 'apps/booking-app/firebase/firebaseApp';
 
-export interface DashboardProps { 
+export interface DashboardProps {
   setValue: Function;
 }
 
 export function Dashboard(props: DashboardProps) {
-  const [reservations, setReservations] = React.useState();
-  const [userData, setUserData] = React.useState(); 
+  const [reservations, setReservations] = React.useState(null);
+  const [userData, setUserData] = React.useState(null);
 
   const [user, loading] = useAuthState(auth);
   const theme = useTheme();
 
-  const getData = async (email: string) => {
+  const getUser = async (email: string) => {
     const resonse = await fetch(`/api/user/${email}`, {
       method: "GET",
     });
     return resonse.json();
   }
 
+  const getReservations = async (id: number) => {
+    const resonse = await fetch(`/api/reservation/${id}`, {
+      method: "GET",
+    });
+    return resonse.json();
+  }
+
   React.useEffect(() => {
-    if(user) {
-      getData(user.email).then((data) => {
-        setUserData(data);
-        console.log(data);
+    if (user) {
+      getUser(user.email).then((userData) => {
+        setUserData(userData);
+        getReservations(userData.id).then((reservations) => {
+          setReservations(reservations);
+          console.log(reservations)
+        });
       });
     }
   }, [])
@@ -64,12 +74,12 @@ export function Dashboard(props: DashboardProps) {
             </Card>
             <Card sx={{ maxWidth: 345 }}>
               <CardHeader
-                avatar={<StarIcon  sx={{ color: theme.palette.secondary.main, width: 40, height: 40 }} fontSize="large"></StarIcon>}
+                avatar={<StarIcon sx={{ color: theme.palette.secondary.main, width: 40, height: 40 }} fontSize="large"></StarIcon>}
                 title="Ostatnie opinie"
                 subheader={<Link
                   component="button"
                   variant="body2"
-                  onClick={() => { props.setValue(1);  }}
+                  onClick={() => { props.setValue(1); }}
                   sx={{ textDecoration: 'none' }}
                 >
                   Zobacz więcej
@@ -135,11 +145,32 @@ export function Dashboard(props: DashboardProps) {
         <Grid item xs={1} md={8}>
           <Paper elevation={3} sx={{ padding: 3 }}>
             <Typography variant="h6">Ostatnie rezerwacje</Typography>
-            {reservations ? 
-            <Stack direction="row" spacing={2}>
-
-            </Stack> 
-            : <Button variant="contained" sx={{ mt: 2 }} fullWidth>Dodaj pierwszą rezerwację</Button>}
+            {reservations ?
+              <Stack spacing={2}>
+                {reservations.map((reservation) =>
+                  <Card sx={{ maxWidth: 345 }}>
+                    <CardMedia
+                      sx={{ height: 140 }}
+                      image=""
+                      title="green iguana"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {reservation.roomOption[0].room.accommondation.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Lizards are a widespread group of squamate reptiles, with over 6,000
+                        species, ranging across all continents except Antarctica
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small">Share</Button>
+                      <Button size="small">Learn More</Button>
+                    </CardActions>
+                  </Card>
+                )}
+              </Stack>
+              : <Button variant="contained" sx={{ mt: 2 }} fullWidth>Dodaj pierwszą rezerwację</Button>}
           </Paper>
         </Grid>
       </Grid>

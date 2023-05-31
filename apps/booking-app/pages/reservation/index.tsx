@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from 'apps/booking-app/store';
 import { calculateDuration, removeReservation } from 'apps/booking-app/store/reservationSlice';
 import { validateConfirmEmail, validateEmail, validateFirstName, validateLastName } from 'apps/booking-app/tools/validators';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from 'apps/booking-app/firebase/firebaseApp';
 
 interface ReservationData {
   firstName: string;
@@ -51,10 +53,12 @@ export function Reservation(props: ReservationProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [openProgress, setOpenProgress] = React.useState(false);
+  const [user, loading] = useAuthState(auth);
+  const [dbUser, setDbUser] = React.useState();
+
   const handleOpen = () => {
     setOpenProgress(true);
   };
-
 
   const handleChangeFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReservationData({
@@ -101,7 +105,6 @@ export function Reservation(props: ReservationProps) {
     }
   }
 
-  
 
   const validateData = () => {
     if(validateFirstName(reservationData.firstName)) {
@@ -128,8 +131,21 @@ export function Reservation(props: ReservationProps) {
 
   React.useEffect(() => {
     setDuration(calculateDuration(reservation.checkInDate, reservation.checkOutDate));
-  }, [])
+  }, []);
 
+  React.useEffect(() => {
+    if(user) {
+      getUser(user.email).then((data) => {
+        setReservationData({
+          firstName: data.name.split(' ')[0],
+          lastName: data.name.split(' ')[1],
+          email: data.email,
+          emailConfirm: data.email
+        });
+        setDbUser(data);
+      });
+    }
+  }, []);
 
   const handleClickOpen = () => {
     if(validateFirstName(reservationData.firstName) && validateLastName(reservationData.lastName) && validateEmail(reservationData.email) && validateConfirmEmail(reservationData.email, reservationData.emailConfirm)){
@@ -139,11 +155,38 @@ export function Reservation(props: ReservationProps) {
     }
   };
 
+  const getUser = async (email: string) => {
+    const resonse = await fetch(`/api/user/${email}`, {
+      method: "GET",
+    });
+    return resonse.json();
+  }
+
+  const saveReservation = async () => {
+    const options = [];
+    reservation.selectedOptions.map((option) => {
+      options.push({id: option.roomOption.id});
+    })
+    const data = {
+      checkInDate: new Date(reservation.checkInDate), 
+      checkOutDate: new Date(reservation.checkOutDate), 
+      roomOptions: options, 
+      adults: reservation.adults, 
+      kids: reservation.kids, 
+      userId: dbUser.id
+    }
+    const resonse = await fetch(`/api/reservation`, {
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+    return resonse.json();
+  }
   const handleClose = async () => {
     setOpen(false);
-    await dispatch(removeReservation());
-    handleOpen();
-    router.push("/")
+    saveReservation();
+    //await dispatch(removeReservation());
+    //handleOpen();
+    //router.push("/")
   };
 
   return (
