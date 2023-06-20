@@ -17,7 +17,8 @@ export default async function handle(req, res) {
                                     select: {
                                         name: true
                                     }
-                                }
+                                },
+                                images: true
                             }
                         }
                     }

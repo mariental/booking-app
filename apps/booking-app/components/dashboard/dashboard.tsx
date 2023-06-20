@@ -4,6 +4,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import StarIcon from '@mui/icons-material/Star';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from 'apps/booking-app/firebase/firebaseApp';
+import UserReservation from "../user-reservation/user-reservation";
 
 export interface DashboardProps {
   setValue: Function;
@@ -144,30 +145,11 @@ export function Dashboard(props: DashboardProps) {
         </Grid>
         <Grid item xs={1} md={8}>
           <Paper elevation={3} sx={{ padding: 3 }}>
-            <Typography variant="h6">Ostatnie rezerwacje</Typography>
+            <Typography variant="h4" mb={3}>Ostatnie rezerwacje</Typography>
             {reservations ?
               <Stack spacing={2}>
                 {reservations.map((reservation) =>
-                  <Card sx={{ maxWidth: 345 }}>
-                    <CardMedia
-                      sx={{ height: 140 }}
-                      image=""
-                      title="green iguana"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {reservation.roomOption[0].room.accommondation.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                        species, ranging across all continents except Antarctica
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button size="small">Share</Button>
-                      <Button size="small">Learn More</Button>
-                    </CardActions>
-                  </Card>
+                  <UserReservation key={reservation.id} reservation={reservation}/>
                 )}
               </Stack>
               : <Button variant="contained" sx={{ mt: 2 }} fullWidth>Dodaj pierwszą rezerwację</Button>}

@@ -2,12 +2,12 @@ import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/router';
 import { auth } from 'apps/booking-app/firebase/firebaseApp';
-import { styled } from "@mui/material/styles";
+import { styled } from '@mui/material/styles';
 import { Box, Tab, AppBar, Tabs, Container } from '@mui/material';
 import Dashboard from 'apps/booking-app/components/dashboard/dashboard';
 import UserReviews from 'apps/booking-app/components/user-reviews/user-reviews';
 
-export interface ProfileProps { }
+export interface ProfileProps {}
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -26,11 +26,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -44,7 +40,7 @@ const StyledTab = styled((props: StyledTabProps) => (
 ))(({ theme }) => ({
   '&.Mui-selected': {
     color: '#000',
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
 }));
 
@@ -54,7 +50,6 @@ function a11yProps(index: number) {
     'aria-controls': `full-width-tabpanel-${index}`,
   };
 }
-
 
 export function Profile(props: ProfileProps) {
   const [value, setValue] = React.useState(0);
@@ -67,7 +62,7 @@ export function Profile(props: ProfileProps) {
   };
 
   if (!user) {
-    router.push("/");
+    router.push('/');
   } else {
     return (
       <Box sx={{ width: '100%' }}>
@@ -89,23 +84,33 @@ export function Profile(props: ProfileProps) {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-            <Dashboard setValue={setValue}/>
+          <Container
+            maxWidth="xl"
+            sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}
+          >
+            <Dashboard setValue={setValue} />
           </Container>
-        </TabPanel><TabPanel value={value} index={1}>
-          <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-            <UserReviews/>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Container
+            maxWidth="xl"
+            sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}
+          >
+            <UserReviews />
           </Container>
-        </TabPanel><TabPanel value={value} index={2}>
-
-        </TabPanel><TabPanel value={value} index={3}>
-          <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-
-          </Container>
-        </TabPanel><TabPanel value={value} index={4}>
-          <Container maxWidth="xl" sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}>
-
-          </Container>
+        </TabPanel>
+        <TabPanel value={value} index={2}></TabPanel>
+        <TabPanel value={value} index={3}>
+          <Container
+            maxWidth="xl"
+            sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}
+          ></Container>
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          <Container
+            maxWidth="xl"
+            sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}
+          ></Container>
         </TabPanel>
       </Box>
     );

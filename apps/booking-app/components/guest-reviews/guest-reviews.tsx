@@ -4,7 +4,21 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import { Avatar, Button, CardActions, Divider, FormControl, InputLabel, MenuItem, Rating, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  CardActions,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Rating,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
@@ -19,6 +33,8 @@ import Modal from '@mui/material/Modal';
 import { calculateRate } from '../accomondation-search-list-item/accomondation-search-list-item';
 import { useRouter } from 'next/router';
 import { calculateDuration } from 'apps/booking-app/store/reservationSlice';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from 'apps/booking-app/firebase/firebaseApp';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -32,8 +48,12 @@ const style = {
 };
 
 const sortOptions = [
-  'Najtrafniejsze', 'Najnowsze', 'Najstarsze', 'Najwyższe oceny', 'Najniższe oceny',
-]
+  'Najtrafniejsze',
+  'Najnowsze',
+  'Najstarsze',
+  'Najwyższe oceny',
+  'Najniższe oceny',
+];
 
 export interface GuestReviewsProps {
   reviews: any[];
@@ -72,81 +92,126 @@ export function GuestReviews(props: GuestReviewsProps) {
     },
   ]);
 
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const theme = useTheme();
   const router = useRouter();
-
+  const [user, loading] = useAuthState(auth);
 
   React.useEffect(() => {
     setReviews(props.reviews);
     setAccRatings(props.ratings);
-  })
+  });
 
   const handleChange = (event, newValue) => {
-    const updatedRatings = ratings.map(item => {
+    const updatedRatings = ratings.map((item) => {
       if (item.name === event.target.name) {
         return {
           ...item,
-          value: newValue
-        }
+          value: newValue,
+        };
       } else {
         return item;
       }
-    })
+    });
     setRatings(updatedRatings);
-  }
+  };
 
   const handleSortChange = (event: SelectChangeEvent) => {
     setSort(event.target.value);
     sortReviews(event.target.value);
-  }
+  };
 
   const sortReviews = (type: string) => {
     switch (type) {
-      case "Najnowsze":
-        setReviews(reviews.sort((firstItem, secondItem) => new Date(firstItem.publicationDate.split("T")[0]).getTime() + new Date(secondItem.publicationDate.split("T")[0]).getTime()));
+      case 'Najnowsze':
+        setReviews(
+          reviews.sort(
+            (firstItem, secondItem) =>
+              new Date(firstItem.publicationDate.split('T')[0]).getTime() +
+              new Date(secondItem.publicationDate.split('T')[0]).getTime()
+          )
+        );
         break;
-      case "Najstarsze":
-        setReviews(reviews.sort((firstItem, secondItem) => new Date(firstItem.publicationDate.split("T")[0]).getTime() - new Date(secondItem.publicationDate.split("T")[0]).getTime()));
+      case 'Najstarsze':
+        setReviews(
+          reviews.sort(
+            (firstItem, secondItem) =>
+              new Date(firstItem.publicationDate.split('T')[0]).getTime() -
+              new Date(secondItem.publicationDate.split('T')[0]).getTime()
+          )
+        );
         break;
-      case "Najwyższe oceny":
-        setReviews(reviews.sort((firstItem, secondItem) => firstItem.rate + secondItem.rate));
+      case 'Najwyższe oceny':
+        setReviews(
+          reviews.sort(
+            (firstItem, secondItem) => firstItem.rate + secondItem.rate
+          )
+        );
         break;
-      case "Najniższe oceny":
-        setReviews(reviews.sort((firstItem, secondItem) => firstItem.rate - secondItem.rate));
+      case 'Najniższe oceny':
+        setReviews(
+          reviews.sort(
+            (firstItem, secondItem) => firstItem.rate - secondItem.rate
+          )
+        );
         break;
-      case "Najtrafniejsze":
-        setReviews(reviews.sort((firstItem, secondItem) => firstItem.helpful + secondItem.helpful));
+      case 'Najtrafniejsze':
+        setReviews(
+          reviews.sort(
+            (firstItem, secondItem) => firstItem.helpful + secondItem.helpful
+          )
+        );
         break;
     }
-  }
+  };
 
-  const handleSubmit = () => { }
+  const handleSubmit = () => {};
 
   return (
-    <Grid container spacing={2} columns={{ xs: 2, md: 12 }} justifyContent="center" sx={{ mb: 6 }}>
+    <Grid
+      container
+      spacing={2}
+      columns={{ xs: 2, md: 12 }}
+      justifyContent="center"
+      sx={{ mb: 6 }}
+    >
       <Grid item xs="auto">
         <Card>
           <CardContent>
             <Stack alignItems="center">
               <Typography variant="h3">4.8</Typography>
-              <Rating name="read-only" value={Number(calculateRate(accRatings).value)} readOnly precision={0.1} />
-              <Typography color="text.secondary" variant="body2">{calculateRate(accRatings).quantity} opinie</Typography>
+              <Rating
+                name="read-only"
+                value={Number(calculateRate(accRatings).value)}
+                readOnly
+                precision={0.1}
+              />
+              <Typography color="text.secondary" variant="body2">
+                {calculateRate(accRatings).quantity} opinie
+              </Typography>
             </Stack>
             <Divider variant="middle" sx={{ my: 3 }} />
             <Stack spacing={1}>
-              {accRatings.map(item =>
+              {accRatings.map((item) => (
                 <Stack direction="row" justifyContent="space-between">
-                  <Typography color="text.secondary" variant="body2">{item.name}</Typography>
+                  <Typography color="text.secondary" variant="body2">
+                    {item.name}
+                  </Typography>
                   <Stack direction="row" justifyContent="space-between">
-                    <Rating name="read-only" value={item.value} readOnly sx={{ mr: 2 }} size="small" precision={0.1} />
+                    <Rating
+                      name="read-only"
+                      value={item.value}
+                      readOnly
+                      sx={{ mr: 2 }}
+                      size="small"
+                      precision={0.1}
+                    />
                     <Typography>{item.value}</Typography>
                   </Stack>
                 </Stack>
-              )}
+              ))}
             </Stack>
           </CardContent>
         </Card>
@@ -159,11 +224,21 @@ export function GuestReviews(props: GuestReviewsProps) {
             overflow: 'auto',
             maxHeight: '55vh',
             boxShadow: 1,
-            paddingTop: 2
+            paddingTop: 2,
           }}
         >
-          <Stack direction="row" sx={{ px: 2, mb: 1 }} justifyContent="space-between" alignItems="center">
-            <Button variant="outlined" endIcon={<AddIcon />} sx={{ height: 56 }} onClick={handleOpen}>
+          <Stack
+            direction="row"
+            sx={{ px: 2, mb: 1 }}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Button
+              variant="outlined"
+              endIcon={<AddIcon />}
+              sx={{ height: 56 }}
+              onClick={handleOpen}
+            >
               Napisz opinię
             </Button>
             <Modal
@@ -173,21 +248,70 @@ export function GuestReviews(props: GuestReviewsProps) {
               aria-describedby="modal-modal-description"
             >
               <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2" mb={2}>
-                  Chcesz dodać opinię?
-                </Typography>
-                <Typography color="text.secondary" variant="body2">Możesz wystawić opinię jeśli zarezerwowałeś pobyt w tym obiekcie.</Typography>
-                <Stack direction="row" justifyContent="space-between" mt={2}>
-                  <Button onClick={handleClose}>Ok</Button>
-                  <Button onClick={() => router.push('/login')} variant='contained' autoFocus>
-                    Przejdź do strony logowania
-                  </Button>
-                </Stack>
+                {user ? (
+                  <>
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="h2"
+                      mb={2}
+                    >
+                      Chcesz dodać opinię?
+                    </Typography>
+                    <Stack direction="row" spacing={2}>
+                      <Button
+                        onClick={() => router.push('/profile')}
+                        variant="contained"
+                        autoFocus
+                      >
+                        Tak, przejdź do strony
+                      </Button>
+                      <Button
+                        onClick={handleClose}
+                        variant="contained"
+                        autoFocus
+                      >
+                        Nie
+                      </Button>
+                    </Stack>
+                  </>
+                ) : (
+                  <>
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="h2"
+                      mb={2}
+                    >
+                      Chcesz dodać opinię?
+                    </Typography>
+                    <Typography color="text.secondary" variant="body2">
+                      Możesz wystawić opinię jeśli zarezerwowałeś pobyt w tym
+                      obiekcie.
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      mt={2}
+                    >
+                      <Button onClick={handleClose}>Ok</Button>
+                      <Button
+                        onClick={() => router.push('/login')}
+                        variant="contained"
+                        autoFocus
+                      >
+                        Przejdź do strony logowania
+                      </Button>
+                    </Stack>
+                  </>
+                )}
               </Box>
             </Modal>
             <Stack direction="row" spacing={2} alignItems="center">
               <FormControl sx={{ m: 1, minWidth: 200 }}>
-                <InputLabel id="demo-simple-select-label">Sortuj według</InputLabel>
+                <InputLabel id="demo-simple-select-label">
+                  Sortuj według
+                </InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
@@ -195,85 +319,149 @@ export function GuestReviews(props: GuestReviewsProps) {
                   label="Sortuj według"
                   onChange={handleSortChange}
                 >
-                  {sortOptions.map((item) =>
+                  {sortOptions.map((item) => (
                     <MenuItem value={item}>{item}</MenuItem>
-                  )}
+                  ))}
                 </Select>
               </FormControl>
             </Stack>
           </Stack>
-          {
-            reviews.map((item) => (
-              <ListItem key={`item-${item.id}`}>
-                <Card sx={{ width: '100%', mb: 1, paddingTop: 3, paddingBottom: 3, paddingLeft: 1, paddingRight: 1 }}>
-                  <CardHeader
-                    avatar={
-                      <Avatar sx={{ bgcolor: theme.palette.primary.main, width: 48, height: 48 }} aria-label="person">
-                        A
-                      </Avatar>
-                    }
-                    title={item.author.name}
-                    titleTypographyProps={{ fontSize: 18 }}
-                    subheader={`Opublikowano: ${item.publicationDate.split("T")[0]}`}
-                    subheaderTypographyProps={{ fontSize: 16 }}
-                    action={
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <Rating name="read-only" value={item.rate} readOnly precision={0.1} />
-                        <Typography variant='h6'>{item.rate.toPrecision(2)}</Typography>
-                      </Stack>
-                    }
-                  />
-                  <CardContent>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 3 }} flexWrap="wrap">
-                      <Stack direction="row" spacing={1} alignItems="center" my={1}>
-                        <BedOutlinedIcon fontSize='small' color="disabled" />
-                        <Typography variant="body2" color="text.secondary">
-                          {item.reservation.roomOption[0].room.name}
-                        </Typography>
-                      </Stack>
-                      <Divider orientation="vertical" flexItem />
-                      <Stack direction="row" spacing={1} alignItems="center" my={1}>
-                        <CalendarMonthOutlinedIcon fontSize='small' color="disabled" />
-                        <Typography variant="body2" color="text.secondary">
-                          {item.reservation.checkOutDate.split("T")[0]}
-                        </Typography>
-                      </Stack>
-                      <Divider orientation="vertical" flexItem />
-                      <Stack direction="row" spacing={1} alignItems="center" my={1}>
-                        <BedtimeOutlinedIcon fontSize='small' color="disabled" />
-                        <Typography variant="body2" color="text.secondary">
-                          {calculateDuration(item.reservation.checkInDate.split("T")[0], item.reservation.checkOutDate.split("T")[0])}
-                          {calculateDuration(item.reservation.checkInDate.split("T")[0], item.reservation.checkOutDate.split("T")[0]) === 1 ? " dzień" : " dni"}
-                        </Typography>
-                      </Stack>
-                      <Divider orientation="vertical" flexItem />
-                      <Stack direction="row" spacing={1} alignItems="center" my={1}>
-                        <FamilyRestroomIcon fontSize='small' color="disabled" />
-                        <Typography variant="body2" color="text.secondary">
-                          {item.reservation.kids + item.reservation.adults}
-                        </Typography>
-                      </Stack>
-
+          {reviews.map((item) => (
+            <ListItem key={`item-${item.id}`}>
+              <Card
+                sx={{
+                  width: '100%',
+                  mb: 1,
+                  paddingTop: 3,
+                  paddingBottom: 3,
+                  paddingLeft: 1,
+                  paddingRight: 1,
+                }}
+              >
+                <CardHeader
+                  avatar={
+                    <Avatar
+                      sx={{
+                        bgcolor: theme.palette.primary.main,
+                        width: 48,
+                        height: 48,
+                      }}
+                      aria-label="person"
+                    >
+                      A
+                    </Avatar>
+                  }
+                  title={item.author.name}
+                  titleTypographyProps={{ fontSize: 18 }}
+                  subheader={`Opublikowano: ${
+                    item.publicationDate.split('T')[0]
+                  }`}
+                  subheaderTypographyProps={{ fontSize: 16 }}
+                  action={
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Rating
+                        name="read-only"
+                        value={item.rate}
+                        readOnly
+                        precision={0.1}
+                      />
+                      <Typography variant="h6">
+                        {item.rate.toPrecision(2)}
+                      </Typography>
                     </Stack>
-                    <Typography variant="h5" component="div" gutterBottom>
-                      {item.title}
-                    </Typography>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      {item.content}
-                    </Typography>
-                  </CardContent>
-                  <CardActions sx={{ justifyContent: "right" }}>
-                    <Button variant="text" startIcon={<ThumbUpOffAltIcon />}>
-                      Pomocna {item.helpful !== 0 ? "(" + item.helpful + ")" : ""}
-                    </Button>
-                    <Button variant="text" startIcon={<ThumbDownOffAltIcon />}>
-                      Niezbyt pomocna {item.notHelpful !== 0 ? "(" + item.notHelpful + ")" : ""}
-                    </Button>
-                  </CardActions>
-                </Card>
-              </ListItem>
-            ))
-          }
+                  }
+                />
+                <CardContent>
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    alignItems="center"
+                    sx={{ mb: 3 }}
+                    flexWrap="wrap"
+                  >
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      my={1}
+                    >
+                      <BedOutlinedIcon fontSize="small" color="disabled" />
+                      <Typography variant="body2" color="text.secondary">
+                        {item.reservation.roomOption[0].room.name}
+                      </Typography>
+                    </Stack>
+                    <Divider orientation="vertical" flexItem />
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      my={1}
+                    >
+                      <CalendarMonthOutlinedIcon
+                        fontSize="small"
+                        color="disabled"
+                      />
+                      <Typography variant="body2" color="text.secondary">
+                        {item.reservation.checkOutDate.split('T')[0]}
+                      </Typography>
+                    </Stack>
+                    <Divider orientation="vertical" flexItem />
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      my={1}
+                    >
+                      <BedtimeOutlinedIcon fontSize="small" color="disabled" />
+                      <Typography variant="body2" color="text.secondary">
+                        {calculateDuration(
+                          item.reservation.checkInDate.split('T')[0],
+                          item.reservation.checkOutDate.split('T')[0]
+                        )}
+                        {calculateDuration(
+                          item.reservation.checkInDate.split('T')[0],
+                          item.reservation.checkOutDate.split('T')[0]
+                        ) === 1
+                          ? ' dzień'
+                          : ' dni'}
+                      </Typography>
+                    </Stack>
+                    <Divider orientation="vertical" flexItem />
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      my={1}
+                    >
+                      <FamilyRestroomIcon fontSize="small" color="disabled" />
+                      <Typography variant="body2" color="text.secondary">
+                        {item.reservation.kids + item.reservation.adults}
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                  <Typography variant="h5" component="div" gutterBottom>
+                    {item.title}
+                  </Typography>
+                  <Typography
+                    sx={{ fontSize: 14 }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    {item.content}
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: 'right' }}>
+                  <Button variant="text" startIcon={<ThumbUpOffAltIcon />}>
+                    Pomocna {item.helpful !== 0 ? '(' + item.helpful + ')' : ''}
+                  </Button>
+                  <Button variant="text" startIcon={<ThumbDownOffAltIcon />}>
+                    Niezbyt pomocna{' '}
+                    {item.notHelpful !== 0 ? '(' + item.notHelpful + ')' : ''}
+                  </Button>
+                </CardActions>
+              </Card>
+            </ListItem>
+          ))}
         </List>
       </Grid>
     </Grid>

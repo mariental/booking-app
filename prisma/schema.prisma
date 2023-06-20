@@ -33,12 +33,12 @@ model AccommodationType {
 }
 
 model Rate {
-  id               Int           @id @default(autoincrement())
-  name             String
+  name             String        
   value            Float
   quantity         Int
   accommondation   Accommodation @relation(fields: [accommondationId], references: [id])
   accommondationId Int
+  @@id([name, accommondationId], name: "rateId")
 }
 
 model Address {

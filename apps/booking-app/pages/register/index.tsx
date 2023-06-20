@@ -20,14 +20,12 @@ export function Register(props: RegisterProps) {
       const user = userCredential.user;
       saveUser(name, email)
       .then((data) => {
-        console.log(data);
         router.push("/profile");
       });
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorMessage, errorCode);
     });
   };
 

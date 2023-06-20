@@ -48,13 +48,13 @@ export function Reservation(props: ReservationProps) {
   const [confirmEmailError, setConfirmEmailError] = React.useState<boolean>(false);
   const [duration, setDuration] = React.useState<number>(0);
   const [open, setOpen] = React.useState(false);
+  const [dbUser, setDbUser] = React.useState<any>(null);
+  const [openProgress, setOpenProgress] = React.useState(false);
 
   const reservation = useAppSelector((state) => state.reservation);
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [openProgress, setOpenProgress] = React.useState(false);
   const [user, loading] = useAuthState(auth);
-  const [dbUser, setDbUser] = React.useState();
 
   const handleOpen = () => {
     setOpenProgress(true);
@@ -99,33 +99,33 @@ export function Reservation(props: ReservationProps) {
       emailConfirm: event.target.value
     });
     if (validateConfirmEmail(reservationData.email, event.target.value)) {
-      setConfirmEmailError(false)
+      setConfirmEmailError(false);
     } else {
-      setConfirmEmailError(true)
+      setConfirmEmailError(true);
     }
   }
 
 
   const validateData = () => {
     if(validateFirstName(reservationData.firstName)) {
-      setFirstNameError(false)
+      setFirstNameError(false);
     } else {
-      setFirstNameError(true)
+      setFirstNameError(true);
     }
     if (validateLastName(reservationData.lastName)) {
-      setLastNameError(false)
+      setLastNameError(false);
     } else {
-      setLastNameError(true)
+      setLastNameError(true);
     }
     if (validateEmail(reservationData.email)) {
-      setEmailError(false)
+      setEmailError(false);
     } else {
-      setEmailError(true)
+      setEmailError(true);
     }
     if (validateConfirmEmail(reservationData.email, reservationData.emailConfirm)) {
-      setConfirmEmailError(false)
+      setConfirmEmailError(false);
     } else {
-      setConfirmEmailError(true)
+      setConfirmEmailError(true);
     }
   }
 
@@ -163,23 +163,24 @@ export function Reservation(props: ReservationProps) {
   }
 
   const saveReservation = async () => {
-    const options = [];
-    reservation.selectedOptions.map((option) => {
-      options.push({id: option.roomOption.id});
-    })
-    const data = {
-      checkInDate: new Date(reservation.checkInDate), 
-      checkOutDate: new Date(reservation.checkOutDate), 
-      roomOptions: options, 
-      adults: reservation.adults, 
-      kids: reservation.kids, 
-      userId: dbUser.id
-    }
-    const resonse = await fetch(`/api/reservation`, {
-      method: "POST",
-      body: JSON.stringify(data)
-    });
-    return resonse.json();
+    if(dbUser) {
+      const options = [];
+      reservation.selectedOptions.map((option) => {
+        options.push({id: option.roomOption.id});
+      })
+      const data = {
+        checkInDate: new Date(reservation.checkInDate), 
+        checkOutDate: new Date(reservation.checkOutDate), 
+        roomOptions: options, 
+        adults: reservation.adults, 
+        kids: reservation.kids, 
+        userId: dbUser.id
+      }
+      const resonse = await fetch(`/api/reservation`, {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
+      return resonse.json();
   }
   const handleClose = async () => {
     setOpen(false);
