@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Tab, AppBar, Tabs, Container } from '@mui/material';
 import Dashboard from 'apps/booking-app/components/dashboard/dashboard';
 import UserReviews from 'apps/booking-app/components/user-reviews/user-reviews';
+import UserFavorites from 'apps/booking-app/components/user-favorites/user-favorites';
 
 export interface ProfileProps {}
 
@@ -61,9 +62,7 @@ export function Profile(props: ProfileProps) {
     setValue(newValue);
   };
 
-  if (!user) {
-    router.push('/');
-  } else {
+  if (user) {
     return (
       <Box sx={{ width: '100%' }}>
         <AppBar position="static">
@@ -99,14 +98,15 @@ export function Profile(props: ProfileProps) {
             <UserReviews />
           </Container>
         </TabPanel>
-        <TabPanel value={value} index={2}></TabPanel>
-        <TabPanel value={value} index={3}>
+        <TabPanel value={value} index={2}>
           <Container
             maxWidth="xl"
             sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}
-          ></Container>
+          >
+            <UserFavorites/>
+          </Container>
         </TabPanel>
-        <TabPanel value={value} index={4}>
+        <TabPanel value={value} index={3}>
           <Container
             maxWidth="xl"
             sx={{ mx: 'auto', display: 'flex', flexDirection: 'column' }}

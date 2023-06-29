@@ -43,7 +43,7 @@ export function Navbar() {
             user ?
               <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
                 <Button variant="outlined" onClick={() => router.push("/profile")} color='primary'>Profil</Button>
-                <Button variant="outlined" onClick={() => signOut(auth)} color='primary'>Wyloguj się</Button>
+                <Button variant="outlined" onClick={() => {signOut(auth); router.push("/")}} color='primary'>Wyloguj się</Button>
               </Stack>
               :
               <Stack direction="row" spacing={1} justifyContent="center">

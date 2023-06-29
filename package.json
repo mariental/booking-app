@@ -2,7 +2,7 @@
   "name": "projects",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {  
+  "scripts": {
     "postinstall": "prisma generate"
   },
   "private": true,
@@ -17,7 +17,7 @@
     "@mui/x-date-pickers": "^5.0.20",
     "@next-auth/prisma-adapter": "^1.0.6",
     "@nrwl/next": "15.8.1",
-    "@prisma/client": "^4.14.0",
+    "@prisma/client": "^4.16.1",
     "@reduxjs/toolkit": "^1.9.3",
     "dayjs": "^1.11.7",
     "firebase": "^9.22.0",
@@ -64,7 +64,7 @@
     "jest-environment-jsdom": "^29.4.1",
     "nx": "15.8.1",
     "prettier": "^2.6.2",
-    "prisma": "^4.14.1",
+    "prisma": "^4.16.1",
     "react-test-renderer": "18.2.0",
     "ts-jest": "^29.0.5",
     "ts-node": "10.9.1",

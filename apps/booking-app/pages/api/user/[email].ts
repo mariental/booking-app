@@ -8,7 +8,18 @@ export default async function handle(req, res) {
         include: {
             reviews: true,
             reservations: true,
-            favorites: true
+            favorites: {
+                include: {
+                    address: true,
+                    images: {
+                        where: {
+                            mainImage: {
+                                equals: true
+                            }
+                        }
+                    }
+                }
+            }
         }
     });
     return res.json(user);

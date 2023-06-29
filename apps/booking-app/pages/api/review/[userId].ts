@@ -2,31 +2,30 @@ import prisma from "apps/booking-app/lib/prisma";
 
 export default async function handle(req, res) {
     try {
-        const reservations = await prisma.reservation.findMany({
+        const reviews = await prisma.review.findMany({
             where: {
-                userId: {
+                authorId: {
                     equals: Number(req.query.userId)
                 }
             },
             include: {
-                roomOption: {
+                author: true,
+                reservation: {
                     include: {
-                        room: {
-                            include: {
-                                accommondation: {
+                        roomOption: {
+                            select: {
+                                room: {
                                     select: {
-                                        id: true,
-                                        name: true
+                                        name: true,
                                     }
-                                },
-                                images: true
+                                }
                             }
                         }
                     }
                 }
             }
         });
-        return res.status(200).json(reservations);
+        return res.status(200).json(reviews);
     } catch (err) {
         return res.status(500).json({error: err.message});
     }

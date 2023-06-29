@@ -3,7 +3,7 @@ import prisma from "apps/booking-app/lib/prisma";
 export default async function handle(req, res) {
     const { name, value, accommondationId } = JSON.parse(req.body);
     try {
-        const oldRating = await prisma.rate.upsert({
+        const oldRating = await prisma.rate.findUnique({
             where: {
                 rateId: {
                     name: name,
@@ -11,7 +11,7 @@ export default async function handle(req, res) {
                 }
             }
         });
-        const newValue = oldRating.value/(oldRating.quantity+1);
+        const newValue = Number((((oldRating.value*oldRating.quantity)+value)/(oldRating.quantity+1)).toFixed(2));
         const rating = await prisma.rate.upsert({
             where: {
                 rateId: {
