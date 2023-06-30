@@ -234,9 +234,9 @@ export function Reservation(props: ReservationProps) {
     const handleClose = async () => {
       setOpen(false);
       saveReservation();
-      //await dispatch(removeReservation());
-      //handleOpen();
-      //router.push("/")
+      await dispatch(removeReservation());
+      handleOpen();
+      router.push("/");
     };
 
     return (

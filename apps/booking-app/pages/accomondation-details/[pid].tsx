@@ -14,8 +14,6 @@ import SearchBarHorizontal from 'apps/booking-app/components/search-bar-horizont
 import { SearchParams } from '../search-result';
 import { styled } from "@mui/material/styles";
 import { CircularProgress } from '@mui/material';
-import { useAppDispatch } from 'apps/booking-app/store';
-import { setAccommondationInfo, setReservationInfo } from 'apps/booking-app/store/reservationSlice';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -67,8 +65,8 @@ export function AccomondationDetails() {
   const [value, setValue] = React.useState(0);
   const [accommodation, setAccommodation] = React.useState(null)
   const [rooms, setRooms] = React.useState([])
-  const [reviews, setReviews] = React.useState<any[]>([]);
-  const [accRatings, setAccRatings] = React.useState<any[]>([]);
+  const [reviews, setReviews] = React.useState<any[]>(null);
+  const [accRatings, setAccRatings] = React.useState<any[]>(null);
   const [pid, setPid] = React.useState<string>();
   const [searchParams, setSearchParams] = React.useState<SearchParams>(null);
 
@@ -106,9 +104,10 @@ export function AccomondationDetails() {
         setAccommodation(accommondations);
         getRooms().then((rooms) => {
           setRooms(rooms);
-          getReviews().then((reviews) => {
-            setReviews(reviews);
+          getReviews().then((rev) => {
+            setReviews(rev);
             getRatings().then((ratings) => setAccRatings(ratings));
+            console.log('reviews outside', rev)
           });
         });
       });

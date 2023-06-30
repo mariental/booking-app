@@ -8,6 +8,8 @@ import {
   Avatar,
   Button,
   CardActions,
+  CircularProgress,
+  Container,
   Divider,
   FormControl,
   InputLabel,
@@ -64,8 +66,8 @@ export interface GuestReviewsProps {
 export function GuestReviews(props: GuestReviewsProps) {
   const [sort, setSort] = React.useState('');
   const [open, setOpen] = React.useState(false);
-  const [reviews, setReviews] = React.useState<any[]>([]);
-  const [accRatings, setAccRatings] = React.useState<any[]>([]);
+  const [reviews, setReviews] = React.useState<any[]>(null);
+  const [accRatings, setAccRatings] = React.useState<any[]>(null);
   const [ratings, setRatings] = React.useState([
     {
       name: 'Personel',
@@ -92,18 +94,25 @@ export function GuestReviews(props: GuestReviewsProps) {
       value: 0,
     },
   ]);
+  const [loading, setLoading] = React.useState(true);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const theme = useTheme();
   const router = useRouter();
-  const [user, loading] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   React.useEffect(() => {
     setReviews(props.reviews);
     setAccRatings(props.ratings);
-  });
+    console.log('reviews inside', props.reviews)
+  }, []);
+
+  React.useEffect(() => {
+    if(reviews && ratings){
+      setLoading(false);
+    }
+  }, [reviews, ratings]);
 
   const handleChange = (event, newValue) => {
     const updatedRatings = ratings.map((item) => {
@@ -170,170 +179,178 @@ export function GuestReviews(props: GuestReviewsProps) {
 
   const handleSubmit = () => {};
 
-  return (
-    <Grid
-      container
-      spacing={2}
-      columns={{ xs: 2, md: 12 }}
-      justifyContent="center"
-      sx={{ mb: 6 }}
-    >
-      <Grid item xs="auto">
-        <Card>
-          <CardContent>
-            <Stack alignItems="center">
-              <Typography variant="h3">4.8</Typography>
-              <Rating
-                name="read-only"
-                value={Number(calculateRate(accRatings).value)}
-                readOnly
-                precision={0.1}
-              />
-              <Typography color="text.secondary" variant="body2">
-                {calculateRate(accRatings).quantity} opinie
-              </Typography>
-            </Stack>
-            <Divider variant="middle" sx={{ my: 3 }} />
-            <Stack spacing={1}>
-              {accRatings.map((item) => (
-                <Stack direction="row" justifyContent="space-between">
-                  <Typography color="text.secondary" variant="body2">
-                    {item.name}
-                  </Typography>
+  if (loading) {
+    return (
+      <Container maxWidth="xl" sx={{ mx: 'auto', my: 2 }}>
+        <CircularProgress></CircularProgress>
+      </Container>
+    );
+  } else {
+    return (
+      <Grid
+        container
+        spacing={2}
+        columns={{ xs: 2, md: 12 }}
+        justifyContent="center"
+        sx={{ mb: 6 }}
+      >
+        <Grid item xs="auto">
+          <Card>
+            <CardContent>
+              <Stack alignItems="center">
+                <Typography variant="h3">4.8</Typography>
+                <Rating
+                  name="read-only"
+                  value={Number(calculateRate(accRatings).value)}
+                  readOnly
+                  precision={0.1}
+                />
+                <Typography color="text.secondary" variant="body2">
+                  {calculateRate(accRatings).quantity} opinie
+                </Typography>
+              </Stack>
+              <Divider variant="middle" sx={{ my: 3 }} />
+              <Stack spacing={1}>
+                {accRatings.map((item) => (
                   <Stack direction="row" justifyContent="space-between">
-                    <Rating
-                      name="read-only"
-                      value={item.value}
-                      readOnly
-                      sx={{ mr: 2 }}
-                      size="small"
-                      precision={0.1}
-                    />
-                    <Typography>{item.value}</Typography>
-                  </Stack>
-                </Stack>
-              ))}
-            </Stack>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item xs={2} md={9}>
-        <List
-          sx={{
-            width: '100%',
-            bgcolor: 'background.paper',
-            overflow: 'auto',
-            maxHeight: '55vh',
-            boxShadow: 1,
-            paddingTop: 2,
-          }}
-        >
-          <Stack
-            direction="row"
-            sx={{ px: 2, mb: 1 }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Button
-              variant="outlined"
-              endIcon={<AddIcon />}
-              sx={{ height: 56 }}
-              onClick={handleOpen}
-            >
-              Napisz opinię
-            </Button>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                {user ? (
-                  <>
-                    <Typography
-                      id="modal-modal-title"
-                      variant="h6"
-                      component="h2"
-                      mb={2}
-                    >
-                      Chcesz dodać opinię?
-                    </Typography>
-                    <Stack direction="row" spacing={2}>
-                      <Button
-                        onClick={() => router.push('/profile')}
-                        variant="contained"
-                        autoFocus
-                      >
-                        Tak, przejdź do strony
-                      </Button>
-                      <Button
-                        onClick={handleClose}
-                        variant="contained"
-                        autoFocus
-                      >
-                        Nie
-                      </Button>
-                    </Stack>
-                  </>
-                ) : (
-                  <>
-                    <Typography
-                      id="modal-modal-title"
-                      variant="h6"
-                      component="h2"
-                      mb={2}
-                    >
-                      Chcesz dodać opinię?
-                    </Typography>
                     <Typography color="text.secondary" variant="body2">
-                      Możesz wystawić opinię jeśli zarezerwowałeś pobyt w tym
-                      obiekcie.
+                      {item.name}
                     </Typography>
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      mt={2}
-                    >
-                      <Button onClick={handleClose}>Ok</Button>
-                      <Button
-                        onClick={() => router.push('/login')}
-                        variant="contained"
-                        autoFocus
-                      >
-                        Przejdź do strony logowania
-                      </Button>
+                    <Stack direction="row" justifyContent="space-between">
+                      <Rating
+                        name="read-only"
+                        value={item.value}
+                        readOnly
+                        sx={{ mr: 2 }}
+                        size="small"
+                        precision={0.1}
+                      />
+                      <Typography>{item.value}</Typography>
                     </Stack>
-                  </>
-                )}
-              </Box>
-            </Modal>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <FormControl sx={{ m: 1, minWidth: 200 }}>
-                <InputLabel id="demo-simple-select-label">
-                  Sortuj według
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={sort}
-                  label="Sortuj według"
-                  onChange={handleSortChange}
-                >
-                  {sortOptions.map((item) => (
-                    <MenuItem value={item}>{item}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                  </Stack>
+                ))}
+              </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={2} md={9}>
+          <List
+            sx={{
+              width: '100%',
+              bgcolor: 'background.paper',
+              overflow: 'auto',
+              maxHeight: '55vh',
+              boxShadow: 1,
+              paddingTop: 2,
+            }}
+          >
+            <Stack
+              direction="row"
+              sx={{ px: 2, mb: 1 }}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Button
+                variant="outlined"
+                endIcon={<AddIcon />}
+                sx={{ height: 56 }}
+                onClick={handleOpen}
+              >
+                Napisz opinię
+              </Button>
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  {user ? (
+                    <>
+                      <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                        mb={2}
+                      >
+                        Chcesz dodać opinię?
+                      </Typography>
+                      <Stack direction="row" spacing={2}>
+                        <Button
+                          onClick={() => router.push('/profile')}
+                          variant="contained"
+                          autoFocus
+                        >
+                          Tak, przejdź do strony
+                        </Button>
+                        <Button
+                          onClick={handleClose}
+                          variant="contained"
+                          autoFocus
+                        >
+                          Nie
+                        </Button>
+                      </Stack>
+                    </>
+                  ) : (
+                    <>
+                      <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                        mb={2}
+                      >
+                        Chcesz dodać opinię?
+                      </Typography>
+                      <Typography color="text.secondary" variant="body2">
+                        Możesz wystawić opinię jeśli zarezerwowałeś pobyt w tym
+                        obiekcie.
+                      </Typography>
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        mt={2}
+                      >
+                        <Button onClick={handleClose}>Ok</Button>
+                        <Button
+                          onClick={() => router.push('/login')}
+                          variant="contained"
+                          autoFocus
+                        >
+                          Przejdź do strony logowania
+                        </Button>
+                      </Stack>
+                    </>
+                  )}
+                </Box>
+              </Modal>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <FormControl sx={{ m: 1, minWidth: 200 }}>
+                  <InputLabel id="demo-simple-select-label">
+                    Sortuj według
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={sort}
+                    label="Sortuj według"
+                    onChange={handleSortChange}
+                  >
+                    {sortOptions.map((item) => (
+                      <MenuItem value={item}>{item}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Stack>
             </Stack>
-          </Stack>
-          {reviews.map((item) => (
-            <Review review={item}/>
-          ))}
-        </List>
+            {reviews.map((item) => (
+              <Review review={item} />
+            ))}
+          </List>
+        </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+  }
 }
 
 export default GuestReviews;

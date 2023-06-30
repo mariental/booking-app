@@ -157,12 +157,14 @@ export function DetailsInfo(props: DetailsInfoProps) {
             .map((image) => (
               <Grid item xs={1} sm={2} key={image.id}>
                 <Box
+                  component="img"
                   sx={{
                     height: 320,
                     backgroundImage: `url(${image.src})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                   }}
+                  alt={image.alt}
                 />
               </Grid>
             ))}
