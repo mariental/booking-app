@@ -256,14 +256,15 @@ export function SearchResult() {
   }, [router]);
 
   const getData = async () => {
-    const resonse = await fetch(`/api/allAccommondations/`, {
-      method: "POST"
+    const response = await fetch(`/api/allAccommondations/`, {
+      method: "GET"
     });
-    return resonse.json();
+    return response.json();
   }
   React.useEffect(() => {
     if (searchParams !== null) {
       getData().then((data) => {
+        console.log(data)
         setAccommondations(data.filter((item) => item.address.country === searchParams.location));
       });
     }
